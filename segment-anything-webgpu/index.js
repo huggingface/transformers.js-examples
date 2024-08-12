@@ -23,6 +23,7 @@ const EXAMPLE_URL =
   "https://huggingface.co/datasets/Xenova/transformers.js-docs/resolve/main/corgi.jpg";
 
 // State variables
+let isEncoding = false;
 let isDecoding = false;
 let decodePending = false;
 let lastPoints = null;
@@ -135,6 +136,7 @@ resetButton.addEventListener("click", () => {
   imageInput = null;
   imageProcessed = null;
   imageEmbeddings = null;
+  isEncoding = false;
   isDecoding = false;
 
   // Clear points and mask (if present)
@@ -147,10 +149,12 @@ resetButton.addEventListener("click", () => {
   statusLabel.textContent = "Ready";
 });
 
-async function segment(url) {
-  imageInput = await RawImage.fromURL(url);
-
+async function encode(url) {
+  if (isEncoding) return;
+  isEncoding = true;
   statusLabel.textContent = "Extracting image embedding...";
+
+  imageInput = await RawImage.fromURL(url);
 
   // Update UI
   imageContainer.style.backgroundImage = `url(${url})`;
@@ -162,6 +166,7 @@ async function segment(url) {
   imageEmbeddings = await model.get_image_embeddings(imageProcessed);
 
   statusLabel.textContent = "Embedding extracted!";
+  isEncoding = false;
 }
 
 // Handle file selection
@@ -172,14 +177,14 @@ fileUpload.addEventListener("change", function (e) {
   const reader = new FileReader();
 
   // Set up a callback when the file is loaded
-  reader.onload = (e2) => segment(e2.target.result);
+  reader.onload = (e2) => encode(e2.target.result);
 
   reader.readAsDataURL(file);
 });
 
 example.addEventListener("click", (e) => {
   e.preventDefault();
-  segment(EXAMPLE_URL);
+  encode(EXAMPLE_URL);
 });
 
 // Attach hover event to image container
