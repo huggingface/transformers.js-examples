@@ -1,6 +1,6 @@
 # Transformers.js Examples
 
-A collection of [Transformers.js](http://github.com/xenova/transformers.js) demo applications.
+A collection of [🤗 Transformers.js](https://huggingface.co/docs/transformers.js) demos and example applications.
 
 | Name                                                  | Description                   | Links                                                                         |
 | ----------------------------------------------------- | ----------------------------- | ----------------------------------------------------------------------------- |
