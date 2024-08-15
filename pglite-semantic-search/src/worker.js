@@ -1,7 +1,4 @@
-import { pipeline, env } from '@huggingface/transformers';
-
-// Skip local model check
-env.allowLocalModels = false;
+import { pipeline } from '@huggingface/transformers';
 
 // Use the Singleton pattern to enable lazy construction of the pipeline.
 class PipelineSingleton {
