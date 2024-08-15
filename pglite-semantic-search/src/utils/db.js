@@ -1,5 +1,5 @@
-import { PGlite } from '@electric-sql/pglite';
-import { vector } from '@electric-sql/pglite/vector';
+import { PGlite } from "@electric-sql/pglite";
+import { vector } from "@electric-sql/pglite/vector";
 
 let dbInstance;
 
@@ -7,7 +7,7 @@ export async function getDB() {
   if (dbInstance) {
     return dbInstance;
   }
-  const metaDb = new PGlite('idb://supa-semantic-search', {
+  const metaDb = new PGlite("idb://supa-semantic-search", {
     extensions: {
       vector,
     },
@@ -41,7 +41,7 @@ export const search = async (
   db,
   embedding,
   match_threshold = 0.8,
-  limit = 3
+  limit = 3,
 ) => {
   const res = await db.query(
     `
@@ -58,7 +58,7 @@ export const search = async (
     order by embeddings.embedding <#> $1
     limit $3;
     `,
-    [JSON.stringify(embedding), -Number(match_threshold), Number(limit)]
+    [JSON.stringify(embedding), -Number(match_threshold), Number(limit)],
   );
   return res.rows;
 };

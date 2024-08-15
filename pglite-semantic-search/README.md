@@ -15,5 +15,4 @@ short_description: In-browser Semantic Search
 
 100% in-browser Semantic Search with [Transformers.js](https://huggingface.co/docs/transformers.js), [PGlite](https://github.com/electric-sql/pglite) + [pgvector](https://github.com/pgvector/pgvector)!
 
-
 Check out the configuration reference at https://huggingface.co/docs/hub/spaces-config-reference
