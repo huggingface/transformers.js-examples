@@ -4,6 +4,7 @@ A collection of [🤗 Transformers.js](https://huggingface.co/docs/transformers.
 
 | Name                                                  | Description                   | Links                                                                         |
 | ----------------------------------------------------- | ----------------------------- | ----------------------------------------------------------------------------- |
+| [SmolLM WebGPU](./smollm-webgpu/) | Conversational small language model | [Demo](https://huggingface.co/spaces/webml-community/smollm-webgpu) |
 | [Segment Anything WebGPU](./segment-anything-webgpu/) | In-browser image segmentation | [Demo](https://huggingface.co/spaces/webml-community/segment-anything-webgpu) |
 | [Bun](./bun/) | Compute text embeddings in [Bun](https://bun.sh/) | n/a |
 
