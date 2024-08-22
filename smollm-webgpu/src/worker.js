@@ -72,7 +72,9 @@ async function generate(messages) {
     past_key_values: past_key_values_cache,
 
     // Sampling
-    do_sample: true, top_k: 3, temperature: 0.2,
+    do_sample: true,
+    top_k: 3,
+    temperature: 0.2,
 
     max_new_tokens: 1024,
     streamer,

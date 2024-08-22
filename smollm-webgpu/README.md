@@ -7,7 +7,7 @@ sdk: static
 pinned: false
 license: apache-2.0
 models:
-- HuggingFaceTB/SmolLM-360M-Instruct
+  - HuggingFaceTB/SmolLM-360M-Instruct
 short_description: A powerful AI chatbot that runs locally in your browser
 thumbnail: https://huggingface.co/spaces/webml-community/smollm-webgpu/resolve/main/banner.png
 ---
@@ -53,4 +53,3 @@ npm run dev
 ```
 
 The application should now be running locally. Open your browser and go to `http://localhost:5173` to see it in action.
-
