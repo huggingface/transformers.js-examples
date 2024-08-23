@@ -30,10 +30,10 @@ git clone https://github.com/huggingface/transformers.js-examples.git
 
 ### 2. Navigate to the Project Directory
 
-Change your working directory to the `smollm-webgpu` folder:
+Change your working directory to the `phi-3.5-webgpu` folder:
 
 ```sh
-cd transformers.js-examples/smollm-webgpu
+cd transformers.js-examples/phi-3.5-webgpu
 ```
 
 ### 3. Install Dependencies
