@@ -2,7 +2,7 @@
 title: Phi-3.5 WebGPU
 emoji: ⚡
 colorFrom: yellow
-colorTo: orange
+colorTo: red
 sdk: static
 pinned: false
 license: apache-2.0
