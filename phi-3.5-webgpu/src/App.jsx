@@ -234,6 +234,17 @@ function App() {
               and ONNX Runtime Web, meaning your conversations aren&#39;t sent
               to a server. You can even disconnect from the internet after the
               model has loaded!
+              <br />
+              Want to learn more? Check out the demo's source code on{" "}
+              <a
+                href="https://github.com/huggingface/transformers.js-examples/tree/main/phi-3.5-webgpu"
+                target="_blank"
+                rel="noreferrer"
+                className="underline"
+              >
+                GitHub
+              </a>
+              !
             </p>
 
             {error && (
