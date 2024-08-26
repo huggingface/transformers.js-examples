@@ -1,6 +1,11 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { useDropzone } from "react-dropzone";
-import { AutoModel, AutoProcessor, RawImage } from "@huggingface/transformers";
+import {
+  env,
+  AutoModel,
+  AutoProcessor,
+  RawImage,
+} from "@huggingface/transformers";
 
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
@@ -18,11 +23,11 @@ export default function App() {
   useEffect(() => {
     (async () => {
       const model_id = "Xenova/modnet";
+      env.backends.onnx.wasm.proxy = false;
       modelRef.current ??= await AutoModel.from_pretrained(model_id, {
         device: "webgpu",
       });
       processorRef.current ??= await AutoProcessor.from_pretrained(model_id);
-
       setIsLoading(false);
     })();
   }, []);
