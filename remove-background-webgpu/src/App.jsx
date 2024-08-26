@@ -141,10 +141,22 @@ export default function App() {
     setIsDownloadReady(false);
   };
 
-  const copyToClipboard = (url) => {
-    navigator.clipboard.writeText(url).then(() => {
-      console.log("Image URL copied to clipboard");
-    });
+  const copyToClipboard = async (url) => {
+    try {
+      // Fetch the image from the URL and convert it to a Blob
+      const response = await fetch(url);
+      const blob = await response.blob();
+
+      // Create a clipboard item with the image blob
+      const clipboardItem = new ClipboardItem({ [blob.type]: blob });
+
+      // Write the clipboard item to the clipboard
+      await navigator.clipboard.write([clipboardItem]);
+
+      console.log("Image copied to clipboard");
+    } catch (err) {
+      console.error("Failed to copy image: ", err);
+    }
   };
 
   const downloadImage = (url) => {
@@ -231,22 +243,26 @@ export default function App() {
                 alt={`Image ${index + 1}`}
                 className="rounded-lg object-cover w-full h-48"
               />
-              <div className="absolute inset-0 bg-black bg-opacity-70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg flex items-center justify-center">
-                <button
-                  onClick={() => copyToClipboard(processedImages[index] || src)}
-                  className="mx-2 px-3 py-1 bg-white text-gray-900 rounded-md hover:bg-gray-200 transition-colors duration-200 text-sm"
-                  aria-label={`Copy image ${index + 1} URL to clipboard`}
-                >
-                  Copy URL
-                </button>
-                <button
-                  onClick={() => downloadImage(processedImages[index] || src)}
-                  className="mx-2 px-3 py-1 bg-white text-gray-900 rounded-md hover:bg-gray-200 transition-colors duration-200 text-sm"
-                  aria-label={`Download image ${index + 1}`}
-                >
-                  Download
-                </button>
-              </div>
+              {processedImages[index] && (
+                <div className="absolute inset-0 bg-black bg-opacity-70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg flex items-center justify-center">
+                  <button
+                    onClick={() =>
+                      copyToClipboard(processedImages[index] || src)
+                    }
+                    className="mx-2 px-3 py-1 bg-white text-gray-900 rounded-md hover:bg-gray-200 transition-colors duration-200 text-sm"
+                    aria-label={`Copy image ${index + 1} to clipboard`}
+                  >
+                    Copy
+                  </button>
+                  <button
+                    onClick={() => downloadImage(processedImages[index] || src)}
+                    className="mx-2 px-3 py-1 bg-white text-gray-900 rounded-md hover:bg-gray-200 transition-colors duration-200 text-sm"
+                    aria-label={`Download image ${index + 1}`}
+                  >
+                    Download
+                  </button>
+                </div>
+              )}
               <button
                 onClick={() => removeImage(index)}
                 className="absolute top-2 right-2 bg-black bg-opacity-50 text-white w-6 h-6 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:bg-opacity-70"
