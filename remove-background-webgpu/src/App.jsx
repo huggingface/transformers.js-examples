@@ -1,20 +1,19 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { useDropzone } from "react-dropzone";
 import { AutoModel, AutoProcessor, RawImage } from "@huggingface/transformers";
-import type { PreTrainedModel, Processor } from "@huggingface/transformers";
 
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
 
 export default function App() {
-  const [images, setImages] = useState<string[]>([]);
-  const [processedImages, setProcessedImages] = useState<string[]>([]);
+  const [images, setImages] = useState([]);
+  const [processedImages, setProcessedImages] = useState([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isDownloadReady, setIsDownloadReady] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  const modelRef = useRef<PreTrainedModel | null>(null);
-  const processorRef = useRef<Processor | null>(null);
+  const modelRef = useRef(null);
+  const processorRef = useRef(null);
 
   useEffect(() => {
     (async () => {
@@ -28,7 +27,7 @@ export default function App() {
     })();
   }, []);
 
-  const onDrop = useCallback((acceptedFiles: File[]) => {
+  const onDrop = useCallback((acceptedFiles) => {
     setImages((prevImages) => [
       ...prevImages,
       ...acceptedFiles.map((file) => URL.createObjectURL(file)),
@@ -48,7 +47,7 @@ export default function App() {
     },
   });
 
-  const removeImage = (index: number) => {
+  const removeImage = (index) => {
     setImages((prevImages) => prevImages.filter((_, i) => i !== index));
     setProcessedImages((prevProcessed) =>
       prevProcessed.filter((_, i) => i !== index),
@@ -59,13 +58,14 @@ export default function App() {
     setIsProcessing(true);
     setProcessedImages([]);
 
-    const model = modelRef.current!;
-    const processor = processorRef.current!;
+    const model = modelRef.current;
+    const processor = processorRef.current;
 
     for (let i = 0; i < images.length; ++i) {
-      // Pre-process image
+      // Load image
       const ri = await RawImage.fromURL(images[i]);
 
+      // Pre-process image
       const { pixel_values } = await processor(ri);
 
       // Predict alpha matte
@@ -82,7 +82,7 @@ export default function App() {
       const canvas = document.createElement("canvas");
       canvas.width = ri.width;
       canvas.height = ri.height;
-      const ctx = canvas.getContext("2d")!;
+      const ctx = canvas.getContext("2d");
 
       // Draw original image output to canvas
       ctx.drawImage(ri.toCanvas(), 0, 0);
@@ -108,7 +108,7 @@ export default function App() {
 
     for (let i = 0; i < images.length; i++) {
       const canvas = document.createElement("canvas");
-      const ctx = canvas.getContext("2d")!;
+      const ctx = canvas.getContext("2d");
       const img = new Image();
       img.src = processedImages[i] || images[i];
       await new Promise((resolve) => {
@@ -136,13 +136,13 @@ export default function App() {
     setIsDownloadReady(false);
   };
 
-  const copyToClipboard = (url: string) => {
+  const copyToClipboard = (url) => {
     navigator.clipboard.writeText(url).then(() => {
       console.log("Image URL copied to clipboard");
     });
   };
 
-  const downloadImage = (url: string) => {
+  const downloadImage = (url) => {
     const link = document.createElement("a");
     link.href = url;
     link.download = "image.png";
