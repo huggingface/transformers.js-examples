@@ -185,7 +185,7 @@ export default function App() {
         <h1 className="text-4xl font-bold mb-2 text-center">
           Remove Background WebGPU
         </h1>
-        <h2 className="text-lg font-semibold mb-8 text-center">
+        <h2 className="text-lg font-semibold mb-2 text-center">
           In-browser background removal, powered by{" "}
           <a
             className="underline"
@@ -195,6 +195,30 @@ export default function App() {
             🤗 Transformers.js
           </a>
         </h2>
+        <div className="flex justify-center mb-8 gap-8">
+          <a
+            className="underline"
+            target="_blank"
+            href="https://github.com/huggingface/transformers.js-examples/blob/main/LICENSE"
+          >
+            License (Apache 2.0)
+          </a>
+          <a
+            className="underline"
+            target="_blank"
+            href="https://huggingface.co/Xenova/modnet"
+          >
+            Model (MODNet)
+          </a>
+          <a
+            className="underline"
+            target="_blank"
+            // TODO: Update link once merged
+            href="https://github.com/huggingface/transformers.js-examples/pull/4"
+          >
+            Code (GitHub)
+          </a>
+        </div>
         <div
           {...getRootProps()}
           className={`p-8 mb-8 border-2 border-dashed rounded-lg text-center cursor-pointer transition-colors duration-300 ease-in-out
