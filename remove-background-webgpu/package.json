@@ -1,5 +1,5 @@
 {
-  "name": "phi-3.5-webgpu",
+  "name": "remove-background-webgpu",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -11,10 +11,11 @@
   },
   "dependencies": {
     "@huggingface/transformers": "^3.0.0-alpha.10",
-    "dompurify": "^3.1.2",
-    "marked": "^12.0.2",
+    "file-saver": "^2.0.5",
+    "jszip": "^3.10.1",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "react-dropzone": "^14.2.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",
