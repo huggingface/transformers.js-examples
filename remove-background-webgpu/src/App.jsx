@@ -16,18 +16,26 @@ export default function App() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [isDownloadReady, setIsDownloadReady] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const modelRef = useRef(null);
   const processorRef = useRef(null);
 
   useEffect(() => {
     (async () => {
-      const model_id = "Xenova/modnet";
-      env.backends.onnx.wasm.proxy = false;
-      modelRef.current ??= await AutoModel.from_pretrained(model_id, {
-        device: "webgpu",
-      });
-      processorRef.current ??= await AutoProcessor.from_pretrained(model_id);
+      try {
+        if (!navigator.gpu) {
+          throw new Error("WebGPU is not supported in this browser.");
+        }
+        const model_id = "Xenova/modnet";
+        env.backends.onnx.wasm.proxy = false;
+        modelRef.current ??= await AutoModel.from_pretrained(model_id, {
+          device: "webgpu",
+        });
+        processorRef.current ??= await AutoProcessor.from_pretrained(model_id);
+      } catch (err) {
+        setError(err);
+      }
       setIsLoading(false);
     })();
   }, []);
@@ -68,32 +76,32 @@ export default function App() {
 
     for (let i = 0; i < images.length; ++i) {
       // Load image
-      const ri = await RawImage.fromURL(images[i]);
+      const img = await RawImage.fromURL(images[i]);
 
       // Pre-process image
-      const { pixel_values } = await processor(ri);
+      const { pixel_values } = await processor(img);
 
       // Predict alpha matte
       const { output } = await model({ input: pixel_values });
 
       const maskData = (
         await RawImage.fromTensor(output[0].mul(255).to("uint8")).resize(
-          ri.width,
-          ri.height,
+          img.width,
+          img.height,
         )
       ).data;
 
       // Create new canvas
       const canvas = document.createElement("canvas");
-      canvas.width = ri.width;
-      canvas.height = ri.height;
+      canvas.width = img.width;
+      canvas.height = img.height;
       const ctx = canvas.getContext("2d");
 
       // Draw original image output to canvas
-      ctx.drawImage(ri.toCanvas(), 0, 0);
+      ctx.drawImage(img.toCanvas(), 0, 0);
 
       // Update alpha channel
-      const pixelData = ctx.getImageData(0, 0, ri.width, ri.height);
+      const pixelData = ctx.getImageData(0, 0, img.width, img.height);
       for (let i = 0; i < maskData.length; ++i) {
         pixelData.data[4 * i + 3] = maskData[i];
       }
@@ -110,26 +118,29 @@ export default function App() {
 
   const downloadAsZip = async () => {
     const zip = new JSZip();
+    const promises = images.map((image, i) =>
+      new Promise((resolve) => {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
 
-    for (let i = 0; i < images.length; i++) {
-      const canvas = document.createElement("canvas");
-      const ctx = canvas.getContext("2d");
-      const img = new Image();
-      img.src = processedImages[i] || images[i];
-      await new Promise((resolve) => {
+        const img = new Image();
+        img.src = processedImages[i] || image;
+
         img.onload = () => {
           canvas.width = img.width;
           canvas.height = img.height;
           ctx.drawImage(img, 0, 0);
           canvas.toBlob((blob) => {
             if (blob) {
-              zip.file(`image${i + 1}.png`, blob);
+              zip.file(`image-${i + 1}.png`, blob);
             }
             resolve(null);
           }, "image/png");
         };
-      });
-    }
+      })
+    );
+
+    await Promise.all(promises);
 
     const content = await zip.generateAsync({ type: "blob" });
     saveAs(content, "images.zip");
@@ -167,6 +178,17 @@ export default function App() {
     link.click();
     document.body.removeChild(link);
   };
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-black text-white flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-4xl mb-2">ERROR</h2>
+          <p className="text-xl max-w-[500px]">{error.message}</p>
+        </div>
+      </div>
+    );
+  }
 
   if (isLoading) {
     return (
