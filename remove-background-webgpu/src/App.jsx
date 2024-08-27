@@ -236,8 +236,7 @@ export default function App() {
           <a
             className="underline"
             target="_blank"
-            // TODO: Update link once merged
-            href="https://github.com/huggingface/transformers.js-examples/pull/4"
+            href="https://github.com/huggingface/transformers.js-examples/tree/main/remove-background-webgpu/"
           >
             Code (GitHub)
           </a>
