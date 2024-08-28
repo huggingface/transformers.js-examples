@@ -9,6 +9,6 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "@huggingface/transformers": "latest"
+    "@huggingface/transformers": "3.0.0-alpha.13"
   }
 }
