@@ -23,7 +23,7 @@ const updateDependency = (projectPath, version) => {
     ) {
       console.log(`Updating @huggingface/transformers in ${projectPath}`);
       packageJson.dependencies["@huggingface/transformers"] = version;
-      writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
+      writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2) + "\n");
     }
 
     // Detect lock file and run appropriate command
@@ -44,10 +44,12 @@ const updateDependency = (projectPath, version) => {
 // Get the latest version of @huggingface/transformers
 let version = "latest";
 try {
-  version = execSync('npm view @huggingface/transformers version', { encoding: 'utf-8' }).trim();
+  version = execSync("npm view @huggingface/transformers version", {
+    encoding: "utf-8",
+  }).trim();
   console.log(`Version: ${version}`);
 } catch (error) {
-    console.error(`Error: ${error.message}`);
+  console.error(`Error: ${error.message}`);
 }
 
 // Iterate over all directories in the monorepo
