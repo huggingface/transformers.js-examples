@@ -1,0 +1,11 @@
+{
+  "name": "node-cjs",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Hugging Face",
+  "license": "Apache-2.0",
+  "description": "",
+  "dependencies": {
+    "@huggingface/transformers": "^3.0.0-alpha.12"
+  }
+}
