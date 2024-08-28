@@ -1,4 +1,20 @@
 {
+  "name": "transformers.js-examples",
+  "version": "1.0.0",
+  "description": "A collection of [🤗 Transformers.js](https://huggingface.co/docs/transformers.js) demos and example applications.",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "transformers",
+    "transformers.js",
+    "hugging face",
+    "huggingface",
+    "machine learning",
+    "ai"
+  ],
+  "author": "Hugging Face",
+  "license": "Apache-2.0",
   "devDependencies": {
     "prettier": "3.3.3"
   }
