@@ -23,7 +23,10 @@ const updateDependency = (projectPath, version) => {
     ) {
       console.log(`Updating @huggingface/transformers in ${projectPath}`);
       packageJson.dependencies["@huggingface/transformers"] = version;
-      writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2) + "\n");
+      writeFileSync(
+        packageJsonPath,
+        JSON.stringify(packageJson, null, 2) + "\n",
+      );
     }
 
     // Detect lock file and run appropriate command
