@@ -2,8 +2,11 @@
   "name": "transformers.js-examples",
   "version": "1.0.0",
   "description": "A collection of [🤗 Transformers.js](https://huggingface.co/docs/transformers.js) demos and example applications.",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "update": "node .scripts/update.js",
+    "build": "node .scripts/build.js",
+    "format": "prettier --write ."
   },
   "keywords": [
     "transformers",
