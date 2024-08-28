@@ -9,7 +9,7 @@ import { join } from "path";
 import { execSync } from "child_process";
 
 // Function to update the @huggingface/transformers version
-const updateDependency = (projectPath) => {
+const updateDependency = (projectPath, version) => {
   const packageJsonPath = join(projectPath, "package.json");
 
   try {
@@ -19,10 +19,10 @@ const updateDependency = (projectPath) => {
     // Update @huggingface/transformers to the latest version
     if (
       packageJson.dependencies &&
-      packageJson.dependencies["@huggingface/transformers"] !== "latest"
+      packageJson.dependencies["@huggingface/transformers"] !== version
     ) {
       console.log(`Updating @huggingface/transformers in ${projectPath}`);
-      packageJson.dependencies["@huggingface/transformers"] = "latest";
+      packageJson.dependencies["@huggingface/transformers"] = version;
       writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
     }
 
@@ -41,13 +41,22 @@ const updateDependency = (projectPath) => {
   }
 };
 
+// Get the latest version of @huggingface/transformers
+let version = "latest";
+try {
+  version = execSync('npm view @huggingface/transformers version', { encoding: 'utf-8' }).trim();
+  console.log(`Version: ${version}`);
+} catch (error) {
+    console.error(`Error: ${error.message}`);
+}
+
 // Iterate over all directories in the monorepo
 readdirSync(".").forEach((project) => {
   if (
     lstatSync(project).isDirectory() &&
     existsSync(join(project, "package.json"))
   ) {
-    updateDependency(project);
+    updateDependency(project, version);
   }
 });
 
