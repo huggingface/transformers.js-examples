@@ -67,7 +67,7 @@ let maxAbsNormal = -Infinity;
 for (let i = 0; i < depth_map_data.length; ++i) {
   if (segmentation.data[i] === 0) {
     // Background
-    depth_map_data[i] = -Infinity;
+    depth_map_data[i] = Infinity;
 
     for (let j = 0; j < 3; ++j) {
       normal_map_data[j * stride + i] = -Infinity;
@@ -88,7 +88,8 @@ for (let i = 0; i < depth_map_data.length; ++i) {
 // Normalize the depth map to [0, 1]
 const depth_tensor = depth_map
   .sub_(minDepth)
-  .div_(maxDepth - minDepth)
+  .div_(-(maxDepth - minDepth)) // Flip for visualization purposes
+  .add_(1)
   .clamp_(0, 1)
   .mul_(255)
   .round_()
