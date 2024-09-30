@@ -5,6 +5,7 @@ A collection of [🤗 Transformers.js](https://huggingface.co/docs/transformers.
 | Name                                                    | Description                                                 | Links                                                                          |
 | ------------------------------------------------------- | ----------------------------------------------------------- | ------------------------------------------------------------------------------ |
 | [Phi-3.5 WebGPU](./phi-3.5-webgpu/)                     | Conversational large language model                         | [Demo](https://huggingface.co/spaces/webml-community/phi-3.5-webgpu)           |
+| [Llama-3.2 WebGPU](./llama-3.2-webgpu/)                 | Conversational small language model                         | [Demo](https://huggingface.co/spaces/webml-community/llama-3.2-webgpu)         |
 | [SmolLM WebGPU](./smollm-webgpu/)                       | Conversational small language model                         | [Demo](https://huggingface.co/spaces/webml-community/smollm-webgpu)            |
 | [Segment Anything WebGPU](./segment-anything-webgpu/)   | WebGPU image segmentation                                   | [Demo](https://huggingface.co/spaces/webml-community/segment-anything-webgpu)  |
 | [Remove Background WebGPU](./remove-background-webgpu/) | WebGPU image background removal                             | [Demo](https://huggingface.co/spaces/webml-community/remove-background-webgpu) |
