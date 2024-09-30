@@ -31,10 +31,10 @@ const updateDependency = (projectPath, version) => {
 
     // Detect lock file and run appropriate command
     if (existsSync(join(projectPath, "package-lock.json"))) {
-      console.log(`Running npm install in ${projectPath}`);
-      execSync("npm install", { cwd: projectPath, stdio: "inherit" });
+      console.log(`Running "npm audit fix" in ${projectPath}`);
+      execSync("npm audit fix", { cwd: projectPath, stdio: "inherit" });
     } else if (existsSync(join(projectPath, "bun.lockb"))) {
-      console.log(`Running bun install in ${projectPath}`);
+      console.log(`Running "bun install" in ${projectPath}`);
       execSync("bun install", { cwd: projectPath, stdio: "inherit" });
     } else {
       console.log(`No lock file detected in ${projectPath}`);
