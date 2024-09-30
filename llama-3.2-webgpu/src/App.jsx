@@ -199,13 +199,13 @@ function App() {
             ></img>
             <h1 className="text-4xl font-bold mb-1">Llama-3.2 WebGPU</h1>
             <h2 className="font-semibold">
-            A private and powerful AI chatbot <br/>
-            that runs locally in your browser.
+              A private and powerful AI chatbot <br />
+              that runs locally in your browser.
             </h2>
           </div>
 
           <div className="flex flex-col items-center px-4">
-          <p className="max-w-[514px] mb-4">
+            <p className="max-w-[514px] mb-4">
               <br />
               You are about to load{" "}
               <a

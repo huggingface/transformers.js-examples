@@ -3,7 +3,7 @@ import { pipeline } from "@huggingface/transformers";
 // Create a text-generation pipeline
 const generator = await pipeline(
   "text-generation",
-  "onnx-community/Llama-3.2-1B-Instruct"
+  "onnx-community/Llama-3.2-1B-Instruct",
 );
 
 // Define the list of messages
