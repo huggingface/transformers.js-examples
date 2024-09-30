@@ -11,6 +11,6 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@huggingface/transformers": "3.0.0-alpha.15"
+    "@huggingface/transformers": "3.0.0-alpha.19"
   }
 }
