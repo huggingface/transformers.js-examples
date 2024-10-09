@@ -20,7 +20,7 @@ const inputs = await processor(image);
 // Run depth estimation model
 const { predicted_depth, focallength_px } = await depth(inputs);
 
-// Visualize the depth map
+// Normalize the depth map to [0, 1]
 const depth_map_data = predicted_depth.data;
 let minDepth = Infinity;
 let maxDepth = -Infinity;
@@ -28,8 +28,6 @@ for (let i = 0; i < depth_map_data.length; ++i) {
   minDepth = Math.min(minDepth, depth_map_data[i]);
   maxDepth = Math.max(maxDepth, depth_map_data[i]);
 }
-
-// Normalize the depth map to [0, 1]
 const depth_tensor = predicted_depth
   .sub_(minDepth)
   .div_(-(maxDepth - minDepth)) // Flip for visualization purposes
