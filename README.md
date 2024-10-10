@@ -12,6 +12,7 @@ A collection of [🤗 Transformers.js](https://huggingface.co/docs/transformers.
 | [PGlite Semantic Search](./pglite-semantic-search/)     | Semantic search                                             | [Demo](https://huggingface.co/spaces/thorwebdev/pglite-semantic-search)        |
 | [Sapiens](./sapiens-node/)                              | Image segmentation, depth, and normal estimation in Node.js | n/a                                                                            |
 | [Bun](./bun/)                                           | Compute text embeddings in [Bun](https://bun.sh/)           | n/a                                                                            |
+| [Deno](./deno-embed/)                                   | Compute text embeddings in [Deno](https://deno.com/)        | n/a                                                                            |
 | [Node.js (ESM)](./node-esm/)                            | Sentiment analysis in Node.js w/ ECMAScript modules         | n/a                                                                            |
 | [Node.js (CJS)](./node-cjs/)                            | Sentiment analysis in Node.js w/ CommonJS                   | n/a                                                                            |
 
