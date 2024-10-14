@@ -14,7 +14,6 @@ const updateDependency = (projectPath, version) => {
   const denoJsonPath = join(projectPath, "deno.json");
 
   try {
-
     if (existsSync(packageJsonPath)) {
       // Read and parse package.json
       const packageJson = JSON.parse(readFileSync(packageJsonPath, "utf-8"));
@@ -34,7 +33,7 @@ const updateDependency = (projectPath, version) => {
     } else if (existsSync(denoJsonPath)) {
       // Read and parse deno.json
       const denoJson = JSON.parse(readFileSync(denoJsonPath, "utf-8"));
-      const denoVersion = `npm:@huggingface/transformers@${version}`
+      const denoVersion = `npm:@huggingface/transformers@${version}`;
       // Update @huggingface/transformers to the latest version
       if (
         denoJson.imports &&
@@ -42,12 +41,8 @@ const updateDependency = (projectPath, version) => {
       ) {
         console.log(`Updating @huggingface/transformers in ${projectPath}`);
         denoJson.imports["@huggingface/transformers"] = denoVersion;
-        writeFileSync(
-          denoJsonPath,
-          JSON.stringify(denoJson, null, 2) + "\n",
-        );
+        writeFileSync(denoJsonPath, JSON.stringify(denoJson, null, 2) + "\n");
       }
-
     } else {
       throw new Error("No package.json or deno.json found");
     }
@@ -85,7 +80,8 @@ try {
 readdirSync(".").forEach((project) => {
   if (
     lstatSync(project).isDirectory() &&
-    (existsSync(join(project, "package.json")) || existsSync(join(project, "deno.json")))
+    (existsSync(join(project, "package.json")) ||
+      existsSync(join(project, "deno.json")))
   ) {
     updateDependency(project, version);
   }
