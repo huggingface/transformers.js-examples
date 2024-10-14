@@ -17,6 +17,7 @@ This project demonstrates how to compute text embeddings with Transformers.js in
    ```
 
 3. Install the dependencies:
+
    ```sh
    deno install --allow-scripts
    ```
