@@ -10,7 +10,7 @@ This project demonstrates how to use [Llama 3.2 1B](https://huggingface.co/onnx-
    ```
 2. Change directory to the `llama-3.2-node` project:
    ```sh
-   cd cd transformers.js-examples/llama-3.2-node
+   cd transformers.js-examples/llama-3.2-node
    ```
 3. Install the dependencies:
    ```sh

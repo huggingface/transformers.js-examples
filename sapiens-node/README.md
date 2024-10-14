@@ -10,7 +10,7 @@ This project demonstrates how to use [Sapiens](https://github.com/facebookresear
    ```
 2. Change directory to the `sapiens-node` project:
    ```sh
-   cd cd transformers.js-examples/sapiens-node
+   cd transformers.js-examples/sapiens-node
    ```
 3. Install the dependencies:
    ```sh
