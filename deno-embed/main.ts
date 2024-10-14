@@ -1,4 +1,4 @@
-import { pipeline } from "npm:@huggingface/transformers";
+import { pipeline } from "@huggingface/transformers";
 
 if (import.meta.main) {
   // Create a feature-extraction pipeline

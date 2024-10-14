@@ -16,7 +16,12 @@ This project demonstrates how to compute text embeddings with Transformers.js in
    cd transformers.js-examples/deno-embed
    ```
 
-3. Run the example:
+3. Install the dependencies:
    ```sh
-   deno run --allow-net --allow-ffi --allow-env --allow-read main.ts
+   deno install --allow-scripts
+   ```
+
+4. Run the example:
+   ```sh
+   deno run --allow-net --allow-ffi --allow-env --allow-read --allow-write main.ts
    ```
