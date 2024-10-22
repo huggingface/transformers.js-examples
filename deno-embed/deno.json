@@ -3,7 +3,7 @@
     "dev": "deno run --watch main.ts"
   },
   "imports": {
-    "@huggingface/transformers": "npm:@huggingface/transformers@3.0.0-alpha.21"
+    "@huggingface/transformers": "npm:@huggingface/transformers@3.0.0"
   },
   "nodeModulesDir": "auto"
 }
