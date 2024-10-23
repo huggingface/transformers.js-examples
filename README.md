@@ -15,5 +15,6 @@ A collection of [🤗 Transformers.js](https://huggingface.co/docs/transformers.
 | [Deno](./deno-embed/)                                   | Compute text embeddings in [Deno](https://deno.com/)        | n/a                                                                            |
 | [Node.js (ESM)](./node-esm/)                            | Sentiment analysis in Node.js w/ ECMAScript modules         | n/a                                                                            |
 | [Node.js (CJS)](./node-cjs/)                            | Sentiment analysis in Node.js w/ CommonJS                   | n/a                                                                            |
+| [Next.js](./next-server/)                               | Sentiment analysis in Next.js                               | [Demo](https://huggingface.co/spaces/webml-community/next-server-template)     |
 
 Check out the Transformers.js [template](https://huggingface.co/new-space?template=static-templates%2Ftransformers.js) on Hugging Face to get started in one click!
