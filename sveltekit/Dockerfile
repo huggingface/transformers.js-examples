@@ -7,7 +7,7 @@ RUN apt-get update && apt-get install -y git
 
 # Clone the repository and navigate to the sveltekit folder
 WORKDIR /app
-RUN git clone -b sveltekit https://github.com/huggingface/transformers.js-examples .
+RUN git clone https://github.com/huggingface/transformers.js-examples .
 
 # Set the working directory to the sveltekit folder
 WORKDIR /app/sveltekit
