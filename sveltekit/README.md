@@ -1,38 +1,35 @@
-# create-svelte
+---
+title: SvelteKit + Transformers.js Server Template
+emoji: 🧩
+colorFrom: yellow
+colorTo: red
+sdk: docker
+pinned: false
+app_port: 4173
+---
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
+# sveltekit
 
-## Creating a project
+This project, bootstrapped using [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte), demonstrates how to use `@huggingface/transformers` in [SvelteKit](https://svelte.dev/).
 
-If you're seeing this, you've probably already done this step. Congrats!
+## Instructions
 
-```bash
-# create a new project in the current directory
-npx sv create
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/huggingface/transformers.js-examples.git
+   ```
+2. Change directory to the `sveltekit` project:
+   ```sh
+   cd transformers.js-examples/sveltekit
+   ```
+3. Install the dependencies:
+   ```sh
+   npm install
+   ```
+4. Run the development server:
+   ```sh
+   npm run dev
+   ```
+5. Open [http://localhost:5173](http://localhost:5173) with your browser to see the result.
 
-# create a new project in my-app
-npx sv create my-app
-```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+6. You can start editing the page by modifying `src/routes/+page.svelte` (SvelteKit) and `src/routes/api/classify/+server.js` (Transformers.js). The page auto-updates as you edit the file.
