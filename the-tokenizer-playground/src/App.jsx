@@ -105,7 +105,7 @@ function App() {
           Experiment with different tokenizers (running{" "}
           <a
             className="text-gray-900 underline"
-            href="https://github.com/xenova/transformers.js"
+            href="https://github.com/huggingface/transformers.js"
           >
             locally
           </a>{" "}
