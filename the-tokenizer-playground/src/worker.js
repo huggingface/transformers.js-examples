@@ -18,7 +18,8 @@ self.addEventListener("message", async (event) => {
     tokenizerPromise = AutoTokenizer.from_pretrained(model_id).then(
       (tokenizer) => {
         // NOTE: We just remove the StripDecoder from the llama tokenizer
-        switch (tokenizer.constructor.name) {
+        const tokenizer_class = (tokenizer._tokenizer_config?.tokenizer_class ?? '').replace(/Fast$/, '');
+        switch (tokenizer_class) {
           case "LlamaTokenizer":
           case "Grok1Tokenizer":
             // tokenizer.decoder.decoders.at(-1).constructor.name === 'StripDecoder'
