@@ -17,15 +17,16 @@ const image = await RawImage.read(url);
 
 // Run detection
 const detections = await detector.predict(image, {
-  confidence_threshold: 0.25,
+  confidence_threshold: 0.05,
   iou_threshold: 0.7,
 });
 
 for (const { x1, x2, y1, y2, score } of detections) {
+  const bbox = [x1, y1, x2, y2].map(Math.round);
   // Crop image
-  const cropped_image = await image.crop([x1, y1, x2, y2].map(Math.round));
+  const cropped_image = await image.crop(bbox);
 
   // Run captioning
   const text = await captioning.describe(cropped_image);
-  console.log(JSON.stringify({ text, box: [x1, x2, y1, y2], score }, null, 2));
+  console.log({ text, bbox, score });
 }
