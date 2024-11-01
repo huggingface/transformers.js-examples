@@ -22,8 +22,8 @@ const detections = await detector.predict(image, {
 });
 
 for (const { x1, x2, y1, y2, score } of detections) {
-  const bbox = [x1, y1, x2, y2].map(Math.round);
   // Crop image
+  const bbox = [x1, y1, x2, y2].map(Math.round);
   const cropped_image = await image.crop(bbox);
 
   // Run captioning
