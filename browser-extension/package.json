@@ -1,0 +1,21 @@
+{
+  "name": "browser-extension",
+  "version": "0.0.1",
+  "description": "Transformers.js | Sample browser extension",
+  "scripts": {
+    "build": "webpack",
+    "dev": "webpack --watch"
+  },
+  "type": "module",
+  "author": "Hugging Face",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@huggingface/transformers": "^3.0.2"
+  },
+  "devDependencies": {
+    "copy-webpack-plugin": "^12.0.2",
+    "html-webpack-plugin": "^5.6.3",
+    "webpack": "^5.96.1",
+    "webpack-cli": "^5.1.4"
+  }
+}
