@@ -12,8 +12,8 @@ import { CONTEXT_MENU_ITEM_ID } from "./constants.js";
 class Singleton {
   static async getInstance(progress_callback) {
     // Return a function which does the following:
-    //  - Load the pipeline if it hasn't been loaded yet
-    //  - Run the pipeline on the input text, waiting for the previous execution to finish if needed
+    // - Load the pipeline if it hasn't been loaded yet
+    // - Run the pipeline, waiting for previous executions to finish if needed
     return (this.fn ??= async (...args) => {
       this.instance ??= pipeline(
         "text-classification",
