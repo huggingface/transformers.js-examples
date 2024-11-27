@@ -190,14 +190,14 @@ function App() {
     <div className="flex flex-col h-screen mx-auto items justify-end text-gray-800 dark:text-gray-200 bg-white dark:bg-gray-900">
       {status === null && messages.length === 0 && (
         <div className="h-full overflow-auto scrollbar-thin flex justify-center items-center flex-col relative">
-          <div className="flex flex-col items-center mb-1 max-w-[300px] text-center">
+          <div className="flex flex-col items-center mb-1 max-w-[320px] text-center">
             <img
               src="logo.png"
-              width="85%"
+              width="80%"
               height="auto"
               className="block"
             ></img>
-            <h1 className="text-4xl font-bold mb-1">SmolLM WebGPU</h1>
+            <h1 className="text-4xl font-bold mb-1">SmolLM2 WebGPU</h1>
             <h2 className="font-semibold">
               A blazingly fast and powerful AI chatbot that runs locally in your
               browser.
@@ -209,14 +209,14 @@ function App() {
               <br />
               You are about to load{" "}
               <a
-                href="https://huggingface.co/HuggingFaceTB/SmolLM-360M-Instruct"
+                href="https://huggingface.co/HuggingFaceTB/SmolLM2-1.7B-Instruct"
                 target="_blank"
                 rel="noreferrer"
                 className="font-medium underline"
               >
-                SmolLM-360M-Instruct
+                SmolLM2-1.7B-Instruct
               </a>
-              , a 360M parameter LLM optimized for in-browser inference.
+              , a 1.7B parameter LLM optimized for in-browser inference.
               Everything runs entirely in your browser with{" "}
               <a
                 href="https://huggingface.co/docs/transformers.js"
@@ -238,11 +238,6 @@ function App() {
                 GitHub
               </a>
               .
-              <br />
-              <br />
-              <em>Disclaimer:</em> This model handles general knowledge,
-              creative writing, and basic Python. It is English-only and may
-              struggle with arithmetic, editing, and complex reasoning.
             </p>
 
             {error && (
