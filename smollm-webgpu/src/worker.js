@@ -6,10 +6,29 @@ import {
 } from "@huggingface/transformers";
 
 /**
+ * Helper function to perform feature detection for WebGPU
+ */
+// let fp16_supported = false;
+async function check() {
+  try {
+    const adapter = await navigator.gpu.requestAdapter();
+    if (!adapter) {
+      throw new Error("WebGPU is not supported (no adapter found)");
+    }
+    // fp16_supported = adapter.features.has("shader-f16")
+  } catch (e) {
+    self.postMessage({
+      status: "error",
+      data: e.toString(),
+    });
+  }
+}
+
+/**
  * This class uses the Singleton pattern to enable lazy-loading of the pipeline
  */
 class TextGenerationPipeline {
-  static model_id = "HuggingFaceTB/SmolLM-360M-Instruct";
+  static model_id = "HuggingFaceTB/SmolLM2-1.7B-Instruct";
 
   static async getInstance(progress_callback = null) {
     this.tokenizer ??= AutoTokenizer.from_pretrained(this.model_id, {
@@ -17,7 +36,7 @@ class TextGenerationPipeline {
     });
 
     this.model ??= AutoModelForCausalLM.from_pretrained(this.model_id, {
-      dtype: "q4",
+      dtype: "q4f16", // TODO: use "q4" as fallback when fixed
       device: "webgpu",
       progress_callback,
     });
@@ -69,12 +88,13 @@ async function generate(messages) {
 
   const { past_key_values, sequences } = await model.generate({
     ...inputs,
-    past_key_values: past_key_values_cache,
+    // TODO: Add back when fixed
+    // past_key_values: past_key_values_cache,
 
     // Sampling
-    do_sample: true,
-    top_k: 3,
-    temperature: 0.2,
+    // do_sample: true,
+    // top_k: 3,
+    // temperature: 0.2,
 
     max_new_tokens: 1024,
     streamer,
@@ -92,20 +112,6 @@ async function generate(messages) {
     status: "complete",
     output: decoded,
   });
-}
-
-async function check() {
-  try {
-    const adapter = await navigator.gpu.requestAdapter();
-    if (!adapter) {
-      throw new Error("WebGPU is not supported (no adapter found)");
-    }
-  } catch (e) {
-    self.postMessage({
-      status: "error",
-      data: e.toString(),
-    });
-  }
 }
 
 async function load() {
