@@ -152,7 +152,6 @@ async function generate(messages) {
       max_new_tokens: num_image_tokens,
       do_sample: true,
       streamer,
-      stopping_criteria,
     });
 
     const blob = await outputs[0].toBlob();
