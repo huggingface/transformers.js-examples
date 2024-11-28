@@ -9,12 +9,6 @@ import ImagePreview from "./components/ImagePreview";
 
 const IS_WEBGPU_AVAILABLE = !!navigator.gpu;
 const STICKY_SCROLL_THRESHOLD = 120;
-const EXAMPLsES = [
-  // "/imagine A cute and adorable baby fox with big brown eyes, autumn leaves in the background enchanting, immortal, fluffy, shiny mane, Petals, fairyism, unreal engine 5 and Octane Render, highly detailed, photorealistic, cinematic, natural colors.",
-  // "What is the difference between AI and ML?",
-  // "Write python code to compute the nth fibonacci number.",
-];
-
 const EXAMPLES = [
   {
     display: "Generate an image of a cute baby fox.",
