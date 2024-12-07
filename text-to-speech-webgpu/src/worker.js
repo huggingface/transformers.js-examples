@@ -35,7 +35,7 @@ self.addEventListener("message", async (e) => {
     const { text, speaker_id } = e.data;
 
     // Load a default speaker
-    const speaker = tts_interface.load_default_speaker(speaker_id);
+    const speaker = speaker_id === "random" ? null : tts_interface.load_default_speaker(speaker_id);
 
     // Generate speech
     const output = await tts_interface.generate({

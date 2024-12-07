@@ -140,6 +140,7 @@ export default function App() {
                 <option value="male_4">Male 4</option>
                 <option value="female_1">Female 1</option>
                 <option value="female_2">Female 2</option>
+                <option value="random">Random</option>
               </select>
               <button
                 type="submit"
