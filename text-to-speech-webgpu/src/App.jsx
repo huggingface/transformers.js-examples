@@ -71,13 +71,15 @@ export default function App() {
     e.preventDefault();
     setStatus('running');
 
-    const text = inputText.trim();
-
-    worker.current.postMessage({ type: "generate", text, speaker_id: selectedSpeaker }); // Do a feature check
+    worker.current.postMessage({
+      type: "generate",
+      text: inputText.trim(),
+      speaker_id: selectedSpeaker,
+     });
   };
 
   return (
-    <div className="relative w-full h-screen bg-gradient-to-br from-gray-900 to-gray-700 flex flex-col items-center justify-center px-4 relative overflow-hidden font-sans">
+    <div className="relative w-full min-h-screen bg-gradient-to-br from-gray-900 to-gray-700 flex flex-col items-center justify-center p-4 relative overflow-hidden font-sans">
       <motion.div
         initial={{ opacity: 1 }}
         animate={{ opacity: status === null ? 1 : 0 }}
@@ -88,10 +90,10 @@ export default function App() {
         <div className="w-[250px] h-[250px] border-4 border-white shadow-[0_0_0_5px_#4973ff] rounded-full overflow-hidden">
           <div className="loading-wave"></div>
         </div>
-        <p className="text-3xl text-white my-5">{loadingMessage}</p>
+        <p className={`text-3xl my-5 text-center ${error ? "text-red-500" : "text-white"}`}>{error ?? loadingMessage}</p>
       </motion.div>
 
-      <div className="max-w-3xl w-full space-y-8 relative">
+      <div className="max-w-3xl w-full space-y-8 relative z-[2]">
         <div className="text-center">
           <h1 className="text-5xl font-extrabold text-gray-100 mb-2 drop-shadow-lg font-heading">
             WebGPU Text-to-Speech
