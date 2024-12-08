@@ -47,17 +47,6 @@ self.addEventListener("message", async (e) => {
         // Optional: Use a speaker profile for consistent voice characteristics
         // Without a speaker profile, the model will generate a voice with random characteristics
         speaker,
-
-        additional_gen_config: {
-            streamer: {
-                put: (text) => {
-                    console.log(text);
-                },
-                end: () => {
-                    console.log("end");
-                }
-            }
-        }
     });
 
     // Send the audio file back to the main thread
