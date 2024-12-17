@@ -9,14 +9,9 @@ import { SAMPLE_RATE } from "./constants";
 
 function App() {
   const [error, setError] = useState(null);
-  const [outputs, setOutputs] = useState([]);
+  const [messages, setMessages] = useState([]);
   const [frequency, setFrequency] = useState(0);
   const worker = useRef(null);
-  const params = {
-    threshold: 0,
-    strength: 0.2 + frequency / 1000,
-    radius: 1,
-  };
 
   useEffect(() => {
     // Initialize worker on mount
@@ -32,14 +27,14 @@ function App() {
       }
 
       if (data.message) {
-        setOutputs((prev) => [
+        setMessages((prev) => [
           ...prev,
           {
             text: data.message,
           },
         ]);
       } else if (data.output) {
-        setOutputs((prev) => [...prev, data.output]);
+        setMessages((prev) => [...prev, data.output]);
       }
     };
     const onError = (error) => setError(error.message);
@@ -156,18 +151,21 @@ function App() {
       ) : (
         <>
           <div className="bottom-0 text-5xl absolute text-center w-full z-10 text-white overflow-hidden pb-8">
-            {outputs.map((output, index) => (
+            {messages.map((output, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, y: 50 }}
+                initial={{ opacity: 0, y: 25 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 50 }}
                 transition={{ duration: 0.2 }}
                 className="mb-1"
               >
                 <motion.div
                   initial={{ opacity: 1 }}
-                  animate={{ opacity: 0 }}
+                  animate={{
+                    opacity: 0,
+                    pointerEvents: "none",
+                    userSelect: "none",
+                  }}
                   transition={{
                     delay: 1 + output.text.length / 20,
                     duration: 1,
@@ -180,7 +178,7 @@ function App() {
           </div>
           <Canvas camera={{ position: [0, 0, 8] }}>
             <ambientLight intensity={0.5} />
-            <BloomScene params={params} />
+            <BloomScene frequency={frequency} />
             <AnimatedMesh frequency={frequency} />
           </Canvas>
         </>

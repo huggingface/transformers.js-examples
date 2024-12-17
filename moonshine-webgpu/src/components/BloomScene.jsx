@@ -8,7 +8,7 @@ import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPa
 
 extend({ EffectComposer, RenderPass, UnrealBloomPass, OutputPass });
 
-function BloomScene({ params }) {
+function BloomScene({ frequency }) {
   const { gl, scene, camera, size } = useThree();
 
   const renderPass = useRef();
@@ -23,9 +23,9 @@ function BloomScene({ params }) {
     composer.current = new EffectComposer(gl);
     bloomPass.current = new UnrealBloomPass(
       new Vector2(size.width, size.height),
-      params.strength,
-      params.radius,
-      params.threshold,
+      0.2,
+      1,
+      0,
     );
 
     composer.current.addPass(renderPass.current);
@@ -44,10 +44,8 @@ function BloomScene({ params }) {
   }, [size]);
 
   useEffect(() => {
-    bloomPass.current.threshold = params.threshold;
-    bloomPass.current.strength = params.strength;
-    bloomPass.current.radius = params.radius;
-  }, [params]);
+    bloomPass.current.strength = 0.2 + frequency / 1000;
+  }, [frequency]);
 
   useFrame(() => {
     composer.current.render();
