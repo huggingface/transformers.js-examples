@@ -10,6 +10,8 @@ import {
   MIN_SPEECH_DURATION_SAMPLES,
 } from "./constants";
 
+self.postMessage({ type: "info", message: "Loading models..." });
+
 // Load models
 const silero_vad = await AutoModel.from_pretrained(
   "onnx-community/silero-vad",
@@ -23,9 +25,6 @@ const silero_vad = await AutoModel.from_pretrained(
 });
 
 self.postMessage({ type: "info", message: "VAD model ready" });
-console.log("vad ready");
-
-console.log("asr loading");
 
 const DEVICE_DTYPE_CONFIGS = {
   webgpu: {
