@@ -14,19 +14,45 @@ import {
 const silero_vad = await AutoModel.from_pretrained('onnx-community/silero-vad', {
     config: { model_type: 'custom' },
     dtype: 'fp32', // Full-precision
+})
+.catch((error) => {
+    self.postMessage({ error });
+    throw error;
 });
+
+self.postMessage({ type: 'info', message: 'VAD model ready' });
 console.log('vad ready');
 
 console.log('asr loading');
+
+const DEVICE_DTYPE_CONFIGS = {
+    webgpu: {
+        encoder_model: 'fp32',
+        decoder_model_merged: 'q4',
+    },
+    wasm: {
+        encoder_model: 'fp32',
+        decoder_model_merged: 'q8',
+    }
+}
+
+// TODO: Auto-detect device
+const device = 'webgpu'; // 'wasm'
 const transcriber = await pipeline(
     "automatic-speech-recognition",
     "onnx-community/moonshine-base-ONNX", // or "onnx-community/whisper-tiny.en",
     {
-        device: 'webgpu',
-        dtype: 'fp32',
+        device,
+        dtype: DEVICE_DTYPE_CONFIGS[device],
     }
-);
-console.log('asr ready');
+)
+.catch((error) => {
+    self.postMessage({ error });
+    throw error;
+});
+
+await transcriber(new Float32Array(SAMPLE_RATE)); // Compile shaders
+self.postMessage({ type: 'info', message: 'ASR model ready' });
 
 // Transformers.js currently doesn't support simultaneous inference,
 // so we need to chain the inference promises.

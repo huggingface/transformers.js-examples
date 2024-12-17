@@ -115,6 +115,7 @@ const AnimatedMesh = ({ frequency }) => {
 
 
 const Scene = (props) => {
+  const [error, setError] = useState(null);
   const [outputs, setOutputs] = useState([]);
   const [frequency, setFrequency] = useState(0);
   const worker = useRef(null);
@@ -130,23 +131,32 @@ const Scene = (props) => {
       type: "module",
     });
 
+    // NOTE: Certain browsers handle error messages differently, so to ensure
+    // compatibility, we need to handle errors in both `message` and `error` events.
     const onMessage = ({ data }) => {
-      setOutputs((prev) => [...prev, data.output]);
-    }
+      if (data.error) {
+        return onError(data.error);
+      }
 
-    const onError = (error) => {
-      console.error(error);
-      console.log(error.toString());
-    };
+      if (data.message) {
+        setOutputs((prev) => [...prev, {
+          text: data.message,
+        }]);
+      } else if (data.output) {
+        setOutputs((prev) => [...prev, data.output]);
+      }
+
+    }
+    const onError = (error) => setError(error.message);
+
     // Attach the callback function as an event listener.
     worker.current.addEventListener("message", onMessage);
     worker.current.addEventListener("error", onError);
-
+    
     // Define a cleanup function for when the component is unmounted.
     return () => {
       worker.current.removeEventListener("message", onMessage);
       worker.current.removeEventListener("error", onError);
-      // worker.current = null;
     };
   }, []);
 
@@ -179,6 +189,11 @@ const Scene = (props) => {
         const analyser = audioContext.createAnalyser();
         analyser.fftSize = 32;
 
+        // NOTE: In Firefox, the following line may throw an error:
+        // "AudioContext.createMediaStreamSource: Connecting AudioNodes from AudioContexts with different sample-rate is currently not supported."
+        // See the following bug reports for more information:
+        //  - https://bugzilla.mozilla.org/show_bug.cgi?id=1674892
+        //  - https://bugzilla.mozilla.org/show_bug.cgi?id=1674892
         source = audioContext.createMediaStreamSource(stream);
         source.connect(analyser);
 
@@ -218,6 +233,7 @@ const Scene = (props) => {
         };
       })
       .catch((err) => {
+        setError(err.message);
         console.error(err);
       });
 
@@ -232,33 +248,42 @@ const Scene = (props) => {
 
   return (
     <div {...props}>
-      <div
-        className="bottom-0 text-5xl absolute text-center w-full z-10 text-white overflow-hidden pb-8"
-      >
-        {outputs.map((output, index) => (
-          <motion.div
-            key={index}
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 50 }}
-            transition={{ duration: 0.2 }}
-            className="mb-1"
+      {error ? (
+        <div className="text-center p-2">
+          <div className="text-white text-4xl mb-1 font-semibold">An error has occurred</div>
+          <div className="text-red-300 text-xl">{error}</div>
+        </div>
+      ) : (
+        <>
+          <div
+            className="bottom-0 text-5xl absolute text-center w-full z-10 text-white overflow-hidden pb-8"
           >
-            <motion.div
-              initial={{ opacity: 1 }}
-              animate={{ opacity: 0 }}
-              transition={{ delay: 1 + output.text.length / 20, duration: 1 }}
-            >
-              {output.text}
-            </motion.div>
-          </motion.div>
-        ))}
-      </div>
-      <Canvas camera={{ position: [0, 0, 8] }}>
-        <ambientLight intensity={0.5} />
-        <BloomScene params={params} />
-        <AnimatedMesh frequency={frequency} />
-      </Canvas>
+            {outputs.map((output, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 50 }}
+                transition={{ duration: 0.2 }}
+                className="mb-1"
+              >
+                <motion.div
+                  initial={{ opacity: 1 }}
+                  animate={{ opacity: 0 }}
+                  transition={{ delay: 1 + output.text.length / 20, duration: 1 }}
+                >
+                  {output.text}
+                </motion.div>
+              </motion.div>
+            ))}
+          </div>
+          <Canvas camera={{ position: [0, 0, 8] }}>
+            <ambientLight intensity={0.5} />
+            <BloomScene params={params} />
+            <AnimatedMesh frequency={frequency} />
+          </Canvas>
+        </>
+      )}
     </div>
   );
 };
