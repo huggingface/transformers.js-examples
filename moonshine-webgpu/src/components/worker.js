@@ -1,59 +1,14 @@
 import { AutoModel, Tensor, pipeline } from '@huggingface/transformers';
-
-/**
- * Sample rate of the audio.
- * Coindicentally, this is the same for both models (Moonshine and Silero VAD)
- */
-const SAMPLE_RATE = 16000;
-
-/**
- * Probabilities ABOVE this value are considered as SPEECH
- */
-const SPEECH_THRESHOLD = 0.3;
-
-/**
- * If current state is SPEECH, and the probability of the next state
- * is below this value, it is considered as NON-SPEECH. Also known as
- * the exit threshold.
- */
-const EXIT_THRESHOLD = 0.1;
-
-/**
- * After each speech chunk, wait for at least this amount of silence
- * before considering the next chunk as a new speech chunk
- */
-const MIN_SILENCE_DURATION_SAMPLES = 500 / 1000 * SAMPLE_RATE; // 500 ms
-
-/**
- * Pad the speech chunk with this amount each side
- */
-const SPEECH_PAD_SAMPLES = 80 / 1000 * SAMPLE_RATE; // 80 ms
-
-/**
- * Final speech chunks below this duration are discarded
- */
-const MIN_SPEECH_DURATION_SAMPLES = 250 / 1000 * SAMPLE_RATE; // 250 ms
-
-/**
- * Maximum duration of audio that can be handled by Moonshine
- */
-const MAX_BUFFER_DURATION = 30;
-
-/**
- * Size of the incoming buffers
- */
-const NEW_BUFFER_SIZE = 512;
-
-/**
- * The number of previous buffers to keep, to ensure the audio is padded correctly
- */
-const MAX_NUM_PREV_BUFFERS = Math.ceil(SPEECH_PAD_SAMPLES / NEW_BUFFER_SIZE);
-
-/**
- * Global audio buffer to store incoming audio
- */
-const BUFFER = new Float32Array(MAX_BUFFER_DURATION * SAMPLE_RATE);
-let bufferPointer = 0;
+import {
+    MAX_BUFFER_DURATION,
+    SAMPLE_RATE,
+    SPEECH_THRESHOLD,
+    EXIT_THRESHOLD,
+    SPEECH_PAD_SAMPLES,
+    MAX_NUM_PREV_BUFFERS,
+    MIN_SILENCE_DURATION_SAMPLES,
+    MIN_SPEECH_DURATION_SAMPLES,
+} from './constants';
 
 // Load models
 const silero_vad = await AutoModel.from_pretrained('onnx-community/silero-vad', {
@@ -77,13 +32,16 @@ console.log('asr ready');
 // so we need to chain the inference promises.
 let inferenceChain = Promise.resolve();
 
+
+// Global audio buffer to store incoming audio
+const BUFFER = new Float32Array(MAX_BUFFER_DURATION * SAMPLE_RATE);
+let bufferPointer = 0;
+
 // Initial state for VAD
 const sr = new Tensor('int64', [SAMPLE_RATE], []);
 let state = new Tensor('float32', new Float32Array(2 * 1 * 128), [2, 1, 128]);
 
-/**
- * Whether we are in the process of adding audio to the buffer
- */
+// Whether we are in the process of adding audio to the buffer
 let isRecording = false;
 
 /**
