@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useMemo } from "react";
 import { Canvas, useFrame, extend, useThree } from "@react-three/fiber";
 import {
   IcosahedronGeometry,
@@ -71,47 +71,48 @@ const BloomScene = ({ params }) => {
 
 const clock = new Clock();
 
-const AnimatedMesh = ({ frequency, colors }) => {
+const AnimatedMesh = ({ frequency }) => {
+  const colors = {
+    red: 1.0,
+    green: 1.0,
+    blue: 0,
+  }
   const meshRef = useRef();
-  const geometry = useRef();
-  const material = useRef();
-  const uniforms = useRef();
-
-  useEffect(() => {
-    uniforms.current = {
-      u_time: { value: 0.0 },
-      u_frequency: { value: 0.0 },
-      u_red: { value: colors.red },
-      u_green: { value: colors.green },
-      u_blue: { value: colors.blue },
-    };
-    geometry.current = new IcosahedronGeometry(3, 20)
-    material.current =
-      new ShaderMaterial({
-        uniforms: uniforms.current,
-        vertexShader: document.getElementById("vertexshader").textContent,
-        fragmentShader: document.getElementById("fragmentshader").textContent,
-        wireframe: true,
-      });
-
+  const geometry = useMemo(() => new IcosahedronGeometry(3, 20), []);
+  const material = useMemo(() => {
+    return new ShaderMaterial({
+      uniforms: {
+        u_time: { value: 0.0 },
+        u_frequency: { value: 0.0 },
+        u_red: { value: 0.0 },
+        u_green: { value: 0.0 },
+        u_blue: { value: 0.0 },
+      },
+      vertexShader: document.getElementById("vertexshader").textContent,
+      fragmentShader: document.getElementById("fragmentshader").textContent,
+      wireframe: true,
+    });
   }, []);
 
-  const scale = Math.min(frequency, MAX_WAVE_SIZE) / MAX_WAVE_SIZE;
+  const uniforms = material.uniforms;
 
   useFrame(() => {
     const time = clock.getElapsedTime();
-    uniforms.current.u_time.value = time;
-    uniforms.current.u_frequency.value = Math.min(
+    const scale = Math.min(frequency, MAX_WAVE_SIZE) / MAX_WAVE_SIZE;
+
+    uniforms.u_time.value = time;
+    uniforms.u_frequency.value = Math.min(
       MIN_WAVE_SIZE + AUDIO_SCALE * frequency,
-      MAX_WAVE_SIZE,
+      MAX_WAVE_SIZE
     );
-    uniforms.current.u_red.value = colors.red * (1 - scale);
-    uniforms.current.u_green.value = colors.green;
-    uniforms.current.u_blue.value = colors.blue * (1 - scale);
+    uniforms.u_red.value = colors.red * (1 - scale);
+    uniforms.u_green.value = colors.green;
+    uniforms.u_blue.value = colors.blue * (1 - scale);
   });
 
-  return <primitive object={new Mesh(geometry.current, material.current)} ref={meshRef} />;
+  return <primitive object={new Mesh(geometry, material)} ref={meshRef} />;
 };
+
 
 const Scene = (props) => {
   const [outputs, setOutputs] = useState([]);
@@ -122,41 +123,30 @@ const Scene = (props) => {
     strength: 0.2 + frequency / 1000,
     radius: 1,
   };
-  const colors = {
-    red: 1.0,
-    green: 1.0,
-    blue: 0,
-  };
 
   useEffect(() => {
-    // Allocate memory for audio buffer and initialize worker on mount
+    // Initialize worker on mount
     worker.current ??= new Worker(new URL("./worker.js", import.meta.url), {
       type: "module",
     });
 
-    const onMessageReceived = ({data}) => {
-      const { buffer, output } = data;
-      setOutputs((prev) => [...prev, output]);
-
-      // Useful for debugging: play the audio buffer
-      // const audioContext = new (window.AudioContext || window.webkitAudioContext)({
-      //   sampleRate: SAMPLE_RATE,
-      //   latencyHint: "interactive",
-      // });
-      // const source = audioContext.createBufferSource();
-      // const audioBuffer = audioContext.createBuffer(1, buffer.length, SAMPLE_RATE);
-      // audioBuffer.getChannelData(0).set(buffer);
-      // source.buffer = audioBuffer;
-      // source.connect(audioContext.destination);
-      // source.start();
+    const onMessage = ({ data }) => {
+      setOutputs((prev) => [...prev, data.output]);
     }
 
+    const onError = (error) => {
+      console.error(error);
+      console.log(error.toString());
+    };
     // Attach the callback function as an event listener.
-    worker.current.addEventListener("message", onMessageReceived);
+    worker.current.addEventListener("message", onMessage);
+    worker.current.addEventListener("error", onError);
 
     // Define a cleanup function for when the component is unmounted.
     return () => {
-      worker.current.removeEventListener("message", onMessageReceived);
+      worker.current.removeEventListener("message", onMessage);
+      worker.current.removeEventListener("error", onError);
+      // worker.current = null;
     };
   }, []);
 
@@ -239,7 +229,7 @@ const Scene = (props) => {
       audioContext?.close();
     };
   }, []);
-  
+
   return (
     <div {...props}>
       <div
@@ -267,7 +257,7 @@ const Scene = (props) => {
       <Canvas camera={{ position: [0, 0, 8] }}>
         <ambientLight intensity={0.5} />
         <BloomScene params={params} />
-        <AnimatedMesh frequency={frequency} colors={colors} />
+        <AnimatedMesh frequency={frequency} />
       </Canvas>
     </div>
   );
