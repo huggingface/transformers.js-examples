@@ -1,4 +1,3 @@
-
 /**
  * Sample rate of the audio.
  * Coindicentally, this is the same for both models (Moonshine and Silero VAD)
@@ -20,17 +19,17 @@ export const EXIT_THRESHOLD = 0.1;
  * After each speech chunk, wait for at least this amount of silence
  * before considering the next chunk as a new speech chunk
  */
-export const MIN_SILENCE_DURATION_SAMPLES = 500 / 1000 * SAMPLE_RATE; // 500 ms
+export const MIN_SILENCE_DURATION_SAMPLES = (500 / 1000) * SAMPLE_RATE; // 500 ms
 
 /**
  * Pad the speech chunk with this amount each side
  */
-export const SPEECH_PAD_SAMPLES = 80 / 1000 * SAMPLE_RATE; // 80 ms
+export const SPEECH_PAD_SAMPLES = (80 / 1000) * SAMPLE_RATE; // 80 ms
 
 /**
  * Final speech chunks below this duration are discarded
  */
-export const MIN_SPEECH_DURATION_SAMPLES = 250 / 1000 * SAMPLE_RATE; // 250 ms
+export const MIN_SPEECH_DURATION_SAMPLES = (250 / 1000) * SAMPLE_RATE; // 250 ms
 
 /**
  * Maximum duration of audio that can be handled by Moonshine
@@ -45,4 +44,6 @@ export const NEW_BUFFER_SIZE = 512;
 /**
  * The number of previous buffers to keep, to ensure the audio is padded correctly
  */
-export const MAX_NUM_PREV_BUFFERS = Math.ceil(SPEECH_PAD_SAMPLES / NEW_BUFFER_SIZE);
+export const MAX_NUM_PREV_BUFFERS = Math.ceil(
+  SPEECH_PAD_SAMPLES / NEW_BUFFER_SIZE,
+);

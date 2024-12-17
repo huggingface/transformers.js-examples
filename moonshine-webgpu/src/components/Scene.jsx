@@ -11,8 +11,7 @@ import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer
 import { OutputPass } from "three/examples/jsm/postprocessing/OutputPass";
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass";
 import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass";
-
-import { motion } from "motion/react"
+import { motion } from "motion/react";
 
 const SAMPLE_RATE = 16_000;
 const MIN_WAVE_SIZE = 10;
@@ -76,7 +75,7 @@ const AnimatedMesh = ({ frequency }) => {
     red: 1.0,
     green: 1.0,
     blue: 0,
-  }
+  };
   const meshRef = useRef();
   const geometry = useMemo(() => new IcosahedronGeometry(3, 20), []);
   const material = useMemo(() => {
@@ -103,7 +102,7 @@ const AnimatedMesh = ({ frequency }) => {
     uniforms.u_time.value = time;
     uniforms.u_frequency.value = Math.min(
       MIN_WAVE_SIZE + AUDIO_SCALE * frequency,
-      MAX_WAVE_SIZE
+      MAX_WAVE_SIZE,
     );
     uniforms.u_red.value = colors.red * (1 - scale);
     uniforms.u_green.value = colors.green;
@@ -112,7 +111,6 @@ const AnimatedMesh = ({ frequency }) => {
 
   return <primitive object={new Mesh(geometry, material)} ref={meshRef} />;
 };
-
 
 const Scene = (props) => {
   const [error, setError] = useState(null);
@@ -139,27 +137,28 @@ const Scene = (props) => {
       }
 
       if (data.message) {
-        setOutputs((prev) => [...prev, {
-          text: data.message,
-        }]);
+        setOutputs((prev) => [
+          ...prev,
+          {
+            text: data.message,
+          },
+        ]);
       } else if (data.output) {
         setOutputs((prev) => [...prev, data.output]);
       }
-
-    }
+    };
     const onError = (error) => setError(error.message);
 
     // Attach the callback function as an event listener.
     worker.current.addEventListener("message", onMessage);
     worker.current.addEventListener("error", onError);
-    
+
     // Define a cleanup function for when the component is unmounted.
     return () => {
       worker.current.removeEventListener("message", onMessage);
       worker.current.removeEventListener("error", onError);
     };
   }, []);
-
 
   useEffect(() => {
     // https://react.dev/learn/synchronizing-with-effects#fetching-data
@@ -201,7 +200,9 @@ const Scene = (props) => {
 
         const getAverageFrequency = () => {
           analyser.getByteFrequencyData(dataArray);
-          return dataArray.reduce((sum, value) => sum + value, 0) / dataArray.length;
+          return (
+            dataArray.reduce((sum, value) => sum + value, 0) / dataArray.length
+          );
         };
 
         const updateFrequency = () => {
@@ -212,7 +213,7 @@ const Scene = (props) => {
         updateFrequency();
 
         await audioContext.audioWorklet.addModule(
-          new URL("./processor.js", import.meta.url)
+          new URL("./processor.js", import.meta.url),
         );
 
         worklet = new AudioWorkletNode(audioContext, "vad-processor", {
@@ -239,7 +240,9 @@ const Scene = (props) => {
 
     return () => {
       ignore = true; // Mark the effect as cleaned up
-      audioStream.then((stream) => stream.getTracks().forEach((track) => track.stop()));
+      audioStream.then((stream) =>
+        stream.getTracks().forEach((track) => track.stop()),
+      );
       source?.disconnect();
       worklet?.disconnect();
       audioContext?.close();
@@ -250,14 +253,14 @@ const Scene = (props) => {
     <div {...props}>
       {error ? (
         <div className="text-center p-2">
-          <div className="text-white text-4xl mb-1 font-semibold">An error has occurred</div>
+          <div className="text-white text-4xl mb-1 font-semibold">
+            An error has occurred
+          </div>
           <div className="text-red-300 text-xl">{error}</div>
         </div>
       ) : (
         <>
-          <div
-            className="bottom-0 text-5xl absolute text-center w-full z-10 text-white overflow-hidden pb-8"
-          >
+          <div className="bottom-0 text-5xl absolute text-center w-full z-10 text-white overflow-hidden pb-8">
             {outputs.map((output, index) => (
               <motion.div
                 key={index}
@@ -270,7 +273,10 @@ const Scene = (props) => {
                 <motion.div
                   initial={{ opacity: 1 }}
                   animate={{ opacity: 0 }}
-                  transition={{ delay: 1 + output.text.length / 20, duration: 1 }}
+                  transition={{
+                    delay: 1 + output.text.length / 20,
+                    duration: 1,
+                  }}
                 >
                   {output.text}
                 </motion.div>

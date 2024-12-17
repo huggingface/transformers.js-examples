@@ -1,4 +1,3 @@
-
 const MIN_CHUNK_SIZE = 512;
 let globalPointer = 0;
 let globalBuffer = new Float32Array(MIN_CHUNK_SIZE);
@@ -16,7 +15,7 @@ class VADProcessor extends AudioWorkletProcessor {
       if (buffer.length >= remaining) {
         // If the buffer is larger than (or equal to) the remaining space in the global buffer, copy the remaining space
         globalBuffer.set(buffer.subarray(0, remaining), globalPointer);
-        
+
         // Send the global buffer
         this.port.postMessage({ buffer: globalBuffer });
 
