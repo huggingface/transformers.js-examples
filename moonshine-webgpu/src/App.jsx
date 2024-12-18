@@ -151,10 +151,21 @@ function App() {
 
   return (
     <div className="flex flex-col items-center justify-center w-screen supports-[height:100cqh]:h-[100cqh] supports-[height:100svh]:h-[100svh] bg-gray-900">
+      <motion.div
+        initial={{ opacity: 1 }}
+        animate={{ opacity: 0, display: "none" }}
+        transition={{ delay: 1, duration: 2 }}
+        className="p-2 fixed inset-0 flex flex-col items-center justify-center bg-black/90 backdrop-blur-md z-20 text-center w-full h-full"
+      >
+        <h1 className="text-6xl sm:text-7xl lg:text-8xl text-white font-bold">Moonshine Web</h1>
+        <h2 className="text-2xl text-white">
+          Real-time in-browser speech recognition, powered by Transformers.js
+        </h2>
+      </motion.div>
       {error ? (
         <div className="text-center p-2">
-          <div className="text-white text-4xl mb-1 font-semibold">
-            An error has occurred
+          <div className="text-white text-4xl md:text-5xl mb-1 font-semibold">
+            An error occurred
           </div>
           <div className="text-red-300 text-xl">{error}</div>
         </div>
@@ -167,14 +178,13 @@ function App() {
                 initial={{ opacity: 0, y: 25 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.2 }}
-                className={`mb-1 ${output.type === "output" ? "text-5xl font-semibold" : "text-4xl text-green-300 font-thin"}`}
+                className={`mb-1 ${output.type === "output" ? "text-5xl" : "text-4xl text-green-300 font-light"}`}
               >
                 <motion.div
                   initial={{ opacity: 1 }}
                   animate={{
                     opacity: 0,
-                    pointerEvents: "none",
-                    userSelect: "none",
+                    display: "none",
                   }}
                   transition={{
                     delay: 1 + output.message.length / 20,
@@ -198,7 +208,7 @@ function App() {
               title="Download"
             >
               <svg
-                className="w-7 h-7 cursor-pointer text-gray-800 dark:text-white"
+                className="w-7 h-7 cursor-pointer text-gray-800"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="currentColor"
@@ -223,7 +233,7 @@ function App() {
               title="GitHub"
             >
               <svg
-                className="w-7 h-7 text-gray-800 dark:text-white"
+                className="w-7 h-7 text-gray-800"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="currentColor"
@@ -243,7 +253,7 @@ function App() {
               title="Settings"
             >
               <svg
-                className="w-6 h-6 text-gray-800 dark:text-white"
+                className="w-6 h-6 text-gray-800"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="currentColor"
