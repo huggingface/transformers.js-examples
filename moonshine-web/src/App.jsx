@@ -29,7 +29,7 @@ function App() {
       }
       if (data.type === "status") {
         setStatus(data.message);
-        setMessages((prev) => [...prev, data]); // TODO REMOVE
+        setMessages((prev) => [...prev, data]);
       } else {
         setMessages((prev) => [...prev, data]);
       }
