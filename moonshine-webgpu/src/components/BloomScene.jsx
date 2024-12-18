@@ -36,6 +36,9 @@ function BloomScene({ frequency }) {
       composer.current.removePass(renderPass.current);
       composer.current.removePass(bloomPass.current);
       composer.current.removePass(outputPass.current);
+      renderPass.current.dispose();
+      outputPass.current.dispose();
+      bloomPass.current.dispose();
     };
   }, [gl, scene, camera, size]);
 
