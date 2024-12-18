@@ -4,15 +4,15 @@ import { IcosahedronGeometry, ShaderMaterial, Clock, Mesh } from "three";
 
 const MIN_WAVE_SIZE = 10;
 const AUDIO_SCALE = 0.5;
-const MAX_WAVE_SIZE = 100;
+const MAX_WAVE_SIZE = 60;
 
 const clock = new Clock();
 
-function AnimatedMesh({ frequency }) {
+function AnimatedMesh({ ready, active, frequency }) {
   const colors = {
-    red: 1.0,
-    green: 1.0,
-    blue: 0,
+    red: ready ? (active ? 1 : 0) : 0.1,
+    green: ready ? (active ? 0 : 1) : 0.1,
+    blue: ready ? (active ? 1 : 0) : 0.1,
   };
   const meshRef = useRef();
   const geometry = useMemo(() => new IcosahedronGeometry(3, 20), []);
@@ -35,16 +35,15 @@ function AnimatedMesh({ frequency }) {
 
   useFrame(() => {
     const time = clock.getElapsedTime();
-    const scale = Math.min(frequency, MAX_WAVE_SIZE) / MAX_WAVE_SIZE;
 
     uniforms.u_time.value = time;
     uniforms.u_frequency.value = Math.min(
       MIN_WAVE_SIZE + AUDIO_SCALE * frequency,
       MAX_WAVE_SIZE,
     );
-    uniforms.u_red.value = colors.red * (1 - scale);
+    uniforms.u_red.value = colors.red;
     uniforms.u_green.value = colors.green;
-    uniforms.u_blue.value = colors.blue * (1 - scale);
+    uniforms.u_blue.value = colors.blue;
   });
 
   return <primitive object={new Mesh(geometry, material)} ref={meshRef} />;

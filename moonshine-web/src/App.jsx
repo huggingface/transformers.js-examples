@@ -9,6 +9,7 @@ import { SAMPLE_RATE } from "./constants";
 import { formatDate } from "./utils";
 
 function App() {
+  const [status, setStatus] = useState(null);
   const [error, setError] = useState(null);
   const [messages, setMessages] = useState([]);
   const [frequency, setFrequency] = useState(0);
@@ -26,7 +27,12 @@ function App() {
       if (data.error) {
         return onError(data.error);
       }
-      setMessages((prev) => [...prev, data]);
+      if (data.type === "status") {
+        setStatus(data.message);
+        setMessages((prev) => [...prev, data]); // TODO REMOVE
+      } else {
+        setMessages((prev) => [...prev, data]);
+      }
     };
     const onError = (error) => setError(error.message);
 
@@ -153,7 +159,7 @@ function App() {
       <motion.div
         initial={{ opacity: 1, display: "flex" }}
         animate={{ opacity: 0, display: "none" }}
-        transition={{ delay: 1, duration: 2 }}
+        transition={{ delay: 1.5, duration: 2 }}
         className="p-2 fixed inset-0 flex flex-col items-center justify-center bg-black/90 backdrop-blur-md z-20 text-center w-full h-full"
       >
         <h1 className="text-6xl sm:text-7xl lg:text-8xl text-white font-bold">
@@ -173,26 +179,31 @@ function App() {
       ) : (
         <>
           <div className="bottom-0 absolute text-center w-full z-10 text-white overflow-hidden pb-8">
-            {messages.map((output, index) => (
+            {messages.map(({ type, message, duration }, index) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, y: 25 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.2 }}
-                className={`mb-1 ${output.type === "output" ? "text-5xl" : "text-4xl text-green-300 font-light"}`}
+                className={`mb-1 ${type === "output" ? "text-5xl" : "text-2xl text-green-300 font-light"}`}
               >
                 <motion.div
                   initial={{ opacity: 1 }}
-                  animate={{
-                    opacity: 0,
-                    display: "none",
-                  }}
+                  animate={
+                    duration === "until_next" && index === messages.length - 1
+                      ? {}
+                      : {
+                          opacity: 0,
+                          display: "none",
+                        }
+                  }
                   transition={{
-                    delay: 1 + output.message.length / 20,
+                    delay:
+                      duration === "until_next" ? 0 : 1 + message.length / 20,
                     duration: 1,
                   }}
                 >
-                  {output.message}
+                  {message}
                 </motion.div>
               </motion.div>
             ))}
@@ -200,13 +211,17 @@ function App() {
           <Canvas camera={{ position: [0, 0, 8] }}>
             <ambientLight intensity={0.5} />
             <BloomScene frequency={frequency} />
-            <AnimatedMesh frequency={frequency} />
+            <AnimatedMesh
+              ready={status !== null}
+              active={status === "recording_start"}
+              frequency={frequency}
+            />
           </Canvas>
           <div className="absolute bottom-6 right-6 flex flex-col space-y-2 z-10">
             <button
               onClick={() => downloadTranscript()}
               className="w-10 h-10 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-gray-100"
-              title="Download"
+              title="Download Transcript"
             >
               <svg
                 className="w-7 h-7 cursor-pointer text-gray-800"
@@ -236,7 +251,7 @@ function App() {
                 )
               }
               className="w-10 h-10 cursor-pointer bg-white rounded-full shadow-md flex items-center justify-center hover:bg-gray-100"
-              title="GitHub"
+              title="Source Code"
             >
               <svg
                 className="w-7 h-7 text-gray-800"

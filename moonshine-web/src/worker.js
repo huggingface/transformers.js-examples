@@ -11,6 +11,7 @@ import {
 } from "./constants";
 import { supportsWebGPU } from "./utils";
 
+const device = (await supportsWebGPU()) ? "webgpu" : "wasm";
 self.postMessage({ type: "info", message: "Loading models..." });
 
 // Load models
@@ -25,8 +26,6 @@ const silero_vad = await AutoModel.from_pretrained(
   throw error;
 });
 
-self.postMessage({ type: "info", message: "VAD model ready" });
-
 const DEVICE_DTYPE_CONFIGS = {
   webgpu: {
     encoder_model: "fp32",
@@ -37,8 +36,7 @@ const DEVICE_DTYPE_CONFIGS = {
     decoder_model_merged: "q8",
   },
 };
-
-const device = (await supportsWebGPU()) ? "webgpu" : "wasm";
+self.postMessage({ type: "info", message: `Using device: "${device}"` });
 const transcriber = await pipeline(
   "automatic-speech-recognition",
   "onnx-community/moonshine-base-ONNX", // or "onnx-community/whisper-tiny.en",
@@ -52,7 +50,7 @@ const transcriber = await pipeline(
 });
 
 await transcriber(new Float32Array(SAMPLE_RATE)); // Compile shaders
-self.postMessage({ type: "info", message: "ASR model ready" });
+self.postMessage({ type: "status", status: "ready", message: "Ready!" });
 
 // Transformers.js currently doesn't support simultaneous inference,
 // so we need to chain the inference promises.
@@ -108,6 +106,12 @@ const transcribe = async (buffer, data) => {
 // Track the number of samples after the last speech chunk
 let postSpeechSamples = 0;
 const reset = (offset = 0) => {
+  self.postMessage({
+    type: "status",
+    status: "recording_end",
+    message: "Transcribing...",
+    duration: "until_next",
+  });
   BUFFER.fill(0, offset);
   bufferPointer = offset;
   isRecording = false;
@@ -181,6 +185,15 @@ self.onmessage = async (event) => {
   }
 
   if (isSpeech) {
+    if (!isRecording) {
+      // Indicate start of recording
+      self.postMessage({
+        type: "status",
+        status: "recording_start",
+        message: "Listening...",
+        duration: "until_next",
+      });
+    }
     // Start or continue recording
     isRecording = true;
     postSpeechSamples = 0; // Reset the post-speech samples
