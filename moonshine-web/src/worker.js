@@ -12,7 +12,12 @@ import {
 import { supportsWebGPU } from "./utils";
 
 const device = (await supportsWebGPU()) ? "webgpu" : "wasm";
-self.postMessage({ type: "info", message: "Loading models..." });
+self.postMessage({ type: "info", message: `Using device: "${device}"` });
+self.postMessage({
+  type: "info",
+  message: "Loading models...",
+  duration: "until_next",
+});
 
 // Load models
 const silero_vad = await AutoModel.from_pretrained(
@@ -36,7 +41,6 @@ const DEVICE_DTYPE_CONFIGS = {
     decoder_model_merged: "q8",
   },
 };
-self.postMessage({ type: "info", message: `Using device: "${device}"` });
 const transcriber = await pipeline(
   "automatic-speech-recognition",
   "onnx-community/moonshine-base-ONNX", // or "onnx-community/whisper-tiny.en",
