@@ -9,6 +9,7 @@ import {
   MIN_SILENCE_DURATION_SAMPLES,
   MIN_SPEECH_DURATION_SAMPLES,
 } from "./constants";
+import { supportsWebGPU } from "./utils";
 
 self.postMessage({ type: "info", message: "Loading models..." });
 
@@ -37,8 +38,7 @@ const DEVICE_DTYPE_CONFIGS = {
   },
 };
 
-// TODO: Auto-detect device
-const device = "webgpu"; // 'wasm'
+const device = (await supportsWebGPU()) ? "webgpu" : "wasm";
 const transcriber = await pipeline(
   "automatic-speech-recognition",
   "onnx-community/moonshine-base-ONNX", // or "onnx-community/whisper-tiny.en",

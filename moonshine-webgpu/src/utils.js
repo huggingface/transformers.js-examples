@@ -10,3 +10,13 @@ export function formatDate(timestamp) {
     fractionalSecondDigits: 3,
   });
 }
+
+export async function supportsWebGPU() {
+  try {
+    if (!navigator.gpu) return false;
+    await navigator.gpu.requestAdapter();
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
