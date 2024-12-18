@@ -96,12 +96,13 @@ async function vad(buffer) {
 /**
  * Transcribe the audio buffer
  * @param {Float32Array} buffer The audio buffer
+ * @param {Object} data Additional data
  */
-const transcribe = async (buffer) => {
-  const output = await (inferenceChain = inferenceChain.then((_) =>
+const transcribe = async (buffer, data) => {
+  const { text } = await (inferenceChain = inferenceChain.then((_) =>
     transcriber(buffer),
   ));
-  self.postMessage({ buffer, output });
+  self.postMessage({ type: "output", buffer, message: text, ...data });
 };
 
 // Track the number of samples after the last speech chunk
@@ -114,6 +115,12 @@ const reset = (offset = 0) => {
 };
 
 const dispatchForTranscriptionAndResetAudioBuffer = (overflow) => {
+  // Get start and end time of the speech segment, minus the padding
+  const now = Date.now();
+  const end =
+    now - ((postSpeechSamples + SPEECH_PAD_SAMPLES) / SAMPLE_RATE) * 1000;
+  const start = end - (bufferPointer / SAMPLE_RATE) * 1000;
+  const duration = end - start;
   const overflowLength = overflow?.length ?? 0;
 
   // Send the audio buffer to the worker
@@ -127,7 +134,7 @@ const dispatchForTranscriptionAndResetAudioBuffer = (overflow) => {
     offset += prev.length;
   }
   paddedBuffer.set(buffer, offset);
-  transcribe(paddedBuffer);
+  transcribe(paddedBuffer, { start, end, duration });
 
   // Set overflow (if present) and reset the rest of the audio buffer
   if (overflow) {
