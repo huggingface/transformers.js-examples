@@ -1,0 +1,22 @@
+{
+  "extends": "plasmo/templates/tsconfig.base",
+  "exclude": [
+    "node_modules"
+  ],
+  "include": [
+    ".plasmo/index.d.ts",
+    "./**/*.ts",
+    "./**/*.tsx"
+  ],
+  "compilerOptions": {
+    "paths": {
+      "~/*": [
+        "./*"
+      ],
+      "@huggingface/transformers": [
+        "/node_modules/@huggingface/transformers/src/transformers.js"
+      ]
+    },
+    "baseUrl": "."
+  }
+}
