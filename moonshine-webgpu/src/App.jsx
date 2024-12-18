@@ -9,7 +9,6 @@ import { SAMPLE_RATE } from "./constants";
 import { formatDate } from "./utils";
 
 function App() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [error, setError] = useState(null);
   const [messages, setMessages] = useState([]);
   const [frequency, setFrequency] = useState(0);
@@ -230,7 +229,12 @@ function App() {
             </button>
 
             <button
-              onClick={() => window.open("https://github.com/", "_blank")}
+              onClick={() =>
+                window.open(
+                  "https://github.com/huggingface/transformers.js-examples/tree/main/moonshine-web",
+                  "_blank",
+                )
+              }
               className="w-10 h-10 cursor-pointer bg-white rounded-full shadow-md flex items-center justify-center hover:bg-gray-100"
               title="GitHub"
             >
@@ -248,44 +252,8 @@ function App() {
                 />
               </svg>
             </button>
-
-            <button
-              onClick={() => setIsModalOpen(true)}
-              className="w-10 h-10 cursor-pointer bg-white rounded-full shadow-md flex items-center justify-center hover:bg-gray-100"
-              title="Settings"
-            >
-              <svg
-                className="w-6 h-6 text-gray-800"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="currentColor"
-                viewBox="0 0 16 16"
-              >
-                <path d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z" />
-              </svg>
-            </button>
           </div>
         </>
-      )}
-
-      {isModalOpen && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.1 }}
-          className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-10"
-        >
-          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-            <h2 className="text-lg font-semibold">Settings</h2>
-            <p className="mt-4">Settings content goes here.</p>
-            <button
-              onClick={() => setIsModalOpen(false)}
-              className="mt-6 bg-gray-200 hover:bg-gray-300 text-black py-2 px-4 rounded cursor-pointer"
-            >
-              Close
-            </button>
-          </div>
-        </motion.div>
       )}
     </div>
   );
