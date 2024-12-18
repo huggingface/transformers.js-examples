@@ -152,12 +152,14 @@ function App() {
   return (
     <div className="flex flex-col items-center justify-center w-screen supports-[height:100cqh]:h-[100cqh] supports-[height:100svh]:h-[100svh] bg-gray-900">
       <motion.div
-        initial={{ opacity: 1 }}
+        initial={{ opacity: 1, display: "flex" }}
         animate={{ opacity: 0, display: "none" }}
         transition={{ delay: 1, duration: 2 }}
         className="p-2 fixed inset-0 flex flex-col items-center justify-center bg-black/90 backdrop-blur-md z-20 text-center w-full h-full"
       >
-        <h1 className="text-6xl sm:text-7xl lg:text-8xl text-white font-bold">Moonshine Web</h1>
+        <h1 className="text-6xl sm:text-7xl lg:text-8xl text-white font-bold">
+          Moonshine Web
+        </h1>
         <h2 className="text-2xl text-white">
           Real-time in-browser speech recognition, powered by Transformers.js
         </h2>
