@@ -1,0 +1,17 @@
+{
+  "name": "node-audio-processing",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@huggingface/transformers": "^3.2.1",
+    "wavefile": "11.0.0"
+  }
+}
