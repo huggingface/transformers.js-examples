@@ -16,7 +16,6 @@ function App() {
 
   // Model loading
   const [ready, setReady] = useState(null);
-  const [disabled, setDisabled] = useState(false);
   const [progressItems, setProgressItems] = useState([]);
 
   // Inputs and outputs
@@ -79,11 +78,6 @@ function App() {
         case "update":
           // Generation update: update the output text.
           setCode((prev) => prev + e.data.output);
-          break;
-
-        case "complete":
-          // Generation complete: re-enable the "Generate" button
-          setDisabled(false);
           break;
       }
     };
