@@ -10,9 +10,6 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const config = {
   mode: "development",
   devtool: "inline-source-map",
-  // experiments: {
-  //   outputModule: true,
-  // },
   entry: {
     background: "./src/background.js",
     popup: "./src/popup.js",
@@ -31,11 +28,7 @@ const config = {
     filename: "[name].js",
 
     // Otherwise we get `Uncaught ReferenceError: document is not defined`
-    chunkLoading: false, //'import',
-
-    // Uncaught SyntaxError: Cannot use 'import.meta' outside a module
-    // publicPath:"auto",
-    // scriptType:"text/javascript",
+    chunkLoading: false,
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -55,13 +48,6 @@ const config = {
       ],
     }),
   ],
-  // module: {
-  //     parser: {
-  //       javascript: {
-  //         importMeta: false
-  //       }
-  //     }
-  //   }
 };
 
 export default config;
