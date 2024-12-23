@@ -21,6 +21,7 @@ class Singleton {
         {
           progress_callback,
           device: "webgpu",
+          dtype: "q4",
         },
       );
 
