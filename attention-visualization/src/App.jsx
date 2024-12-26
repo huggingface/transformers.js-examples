@@ -259,7 +259,7 @@ function AttentionVisualization() {
 
 export default function App() {
   return (
-    <div style={{ width: "100vw", height: "100vh", backgroundColor: "black" }}>
+    <div className="w-screen h-screen bg-black">
       <AttentionVisualization />
     </div>
   );
