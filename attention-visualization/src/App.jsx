@@ -24,8 +24,8 @@ const DEFAULT_CAMERA_POSITION = [
   3.5,
   CAMERA_DISTANCE * Math.sin(CAMERA_ANGLE),
 ];
-const TRANSLATE_ZONE_WIDTH = 0.1;
-const TRANSLATE_SPEED = 4;
+const TRANSLATE_ZONE_WIDTH = 0.5;
+const TRANSLATE_SPEED = 8;
 const NUM_LAYERS = 12;
 const NUM_HEADS = 6;
 
@@ -210,7 +210,7 @@ function SceneImage() {
   const texture = useLoader(THREE.TextureLoader, imageUrl);
   const ar = texture.source.data.width / texture.source.data.height;
   const image_height = 3;
-  const image_padding = 1;
+  const image_padding = 2;
 
   const handleClick = () => {
     const input = document.createElement("input");
@@ -269,34 +269,32 @@ function CameraAnimator({ activeHead, mouseActive, mousePosition }) {
 
   useFrame((state, delta) => {
     if (!mouseActive) return;
-    if (mousePosition.x < TRANSLATE_ZONE_WIDTH) {
+
+    const a = TRANSLATE_SPEED; // max speed
+    const b = TRANSLATE_ZONE_WIDTH; // deadzone
+    const c = 4; // acceleration
+    const f = (x) => a * ((x ** 2 - b ** 2) / (1 - b ** 2)) ** c;
+    if (Math.abs(mousePosition.x) >= b) {
+      const value = f(mousePosition.x);
       setSceneCenter((prev) => {
-        const val = [...prev];
-        val[0] = Math.max(
-          val[0] - TRANSLATE_SPEED * delta,
+        const center = [...prev];
+        center[0] += value * delta * Math.sign(mousePosition.x); // Update x position
+        center[0] = Math.max(
+          Math.min(center[0], ATTENTION_DATA.at(-1).position[0]),
           ATTENTION_DATA.at(0).position[0],
-        );
-        return val;
-      });
-    } else if (mousePosition.x > 1 - TRANSLATE_ZONE_WIDTH) {
-      setSceneCenter((prev) => {
-        const val = [...prev];
-        val[0] = Math.min(
-          val[0] + TRANSLATE_SPEED * delta,
-          ATTENTION_DATA.at(-1).position[0],
-        );
-        return val;
+        ); // Clamp x position
+        return center;
       });
     }
   });
 
   const spring = useSpring({
     pos: targetPosition,
-    config: { mass: 1, tension: 280, friction: 60 },
+    config: { mass: 1, tension: 280, friction: 20 },
   });
   const springLookAt = useSpring({
     lookAt: center,
-    config: { mass: 1, tension: 280, friction: 60 },
+    config: { mass: 1, tension: 280, friction: 20 },
   });
   const targetLookAt = useRef(new THREE.Vector3(0, 0, 0));
 
@@ -316,7 +314,7 @@ function CameraAnimator({ activeHead, mouseActive, mousePosition }) {
 
 function AttentionVisualization() {
   const [activeHead, setActiveHead] = useState(null);
-  const [mousePosition, setMousePosition] = useState({ x: 0.5, y: 0.5 });
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [mouseActive, setMouseActive] = useState(false);
 
   useEffect(() => {
@@ -325,9 +323,8 @@ function AttentionVisualization() {
       const width = window.innerWidth;
       const height = window.innerHeight;
       setMousePosition({
-        x: clientX / width,
-        y: clientY / height,
-        active: true,
+        x: (clientX / width - 0.5) * 2,
+        y: (clientY / height - 0.5) * 2,
       });
     };
     const handleMouseLeave = () => setMouseActive(false);
