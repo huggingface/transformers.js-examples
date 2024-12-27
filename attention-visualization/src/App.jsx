@@ -1,5 +1,5 @@
 import { useRef, useState, Suspense, useEffect, useMemo } from "react";
-import { Canvas, useThree, useFrame } from "@react-three/fiber";
+import { Canvas, useThree, useFrame, useLoader } from "@react-three/fiber";
 import { OrbitControls, Environment, Html } from "@react-three/drei";
 import { Bloom, EffectComposer } from "@react-three/postprocessing";
 import { a, useSpring } from "@react-spring/three";
@@ -17,7 +17,6 @@ const Y_SPACING = HEIGHT - 0.25;
 const Z_SPACING = 1;
 const HOVER_PADDING = Y_SPACING + 2;
 const ZOOM_DISTANCE = 3.5;
-
 const CAMERA_ANGLE = (Math.PI * 5) / 12;
 const CAMERA_DISTANCE = 16;
 const DEFAULT_CAMERA_POSITION = [
@@ -25,23 +24,9 @@ const DEFAULT_CAMERA_POSITION = [
   3.5,
   CAMERA_DISTANCE * Math.sin(CAMERA_ANGLE),
 ];
-
-const TRANSLATE_ZONE_WIDTH = 0.1; // 10%
+const TRANSLATE_ZONE_WIDTH = 0.1;
 const TRANSLATE_SPEED = 4;
-
-function useColorTexture(color) {
-  return useMemo(() => {
-    const canvas = document.createElement("canvas");
-    canvas.width = 256;
-    canvas.height = 256;
-    const ctx = canvas.getContext("2d");
-    ctx.fillStyle = color;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    return new THREE.CanvasTexture(canvas);
-  }, [color]);
-}
-
-const NUM_LAYERS = 12; // ADD THIS
+const NUM_LAYERS = 12;
 const NUM_HEADS = 6;
 
 const COLORS = [
@@ -62,17 +47,14 @@ const ATTENTION_DATA = Array.from(
   { length: NUM_HEADS * NUM_LAYERS },
   (_, i) => {
     const [layerIndex, headIndex] = [Math.floor(i / NUM_HEADS), i % NUM_HEADS];
-
     // Base color for the layer
     const baseColor = new THREE.Color(COLORS[layerIndex % COLORS.length]);
-
     // Slightly darken the color for each head
     baseColor.offsetHSL(0, 0, -0.05 * headIndex);
-
     const xOffset =
       (layerIndex - NUM_LAYERS / 2) * (WIDTH + LAYER_SPACING + X_SPACING);
     const zOffset = (headIndex - NUM_HEADS / 2) * Z_SPACING;
-    const data = {
+    return {
       color: `#${baseColor.getHexString()}`,
       label: `Layer ${layerIndex + 1} Head ${headIndex + 1}`,
       position: [
@@ -81,10 +63,20 @@ const ATTENTION_DATA = Array.from(
         zOffset + (headIndex - NUM_HEADS / 2) * Z_SPACING,
       ],
     };
-
-    return data;
   },
 );
+
+function useColorTexture(color) {
+  return useMemo(() => {
+    const canvas = document.createElement("canvas");
+    canvas.width = 256;
+    canvas.height = 256;
+    const ctx = canvas.getContext("2d");
+    ctx.fillStyle = color;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    return new THREE.CanvasTexture(canvas);
+  }, [color]);
+}
 
 function AttentionHead({
   position,
@@ -98,7 +90,6 @@ function AttentionHead({
   const groupRef = useRef();
   const texture = useColorTexture(color);
   const [hovered, setHovered] = useState(false);
-
   const active = useMemo(
     () => hovered || activeHead === index,
     [hovered, activeHead, index],
@@ -140,7 +131,6 @@ function AttentionHead({
           setActiveHead(null);
         }
         if (!visible) return;
-
         e.stopPropagation();
         setActiveHead(activeHead === index ? null : index);
       }}
@@ -213,6 +203,48 @@ function AttentionHeads({ activeHead, setActiveHead }) {
   );
 }
 
+function SceneImage() {
+  const [imageUrl, setImageUrl] = useState(
+    "https://huggingface.co/datasets/Xenova/transformers.js-docs/resolve/main/cats.jpg",
+  );
+  const texture = useLoader(THREE.TextureLoader, imageUrl);
+  const ar = texture.source.data.width / texture.source.data.height;
+  const image_height = 3;
+  const image_padding = 1;
+
+  const handleClick = () => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/*";
+    input.onchange = handleFileChange;
+    input.click();
+  };
+
+  const handleFileChange = (e) => {
+    if (e.target.files?.[0]) {
+      setImageUrl(URL.createObjectURL(e.target.files[0]));
+    }
+  };
+
+  const image_width = ar * image_height;
+
+  return (
+    <>
+      <mesh
+        position={[
+          ATTENTION_DATA[0].position[0] - image_width / 2 - image_padding,
+          image_height / 2,
+          0,
+        ]}
+        onClick={handleClick}
+      >
+        <planeGeometry args={[image_width, image_height]} />
+        <meshBasicMaterial map={texture} />
+      </mesh>
+    </>
+  );
+}
+
 function CameraAnimator({ activeHead, mouseActive, mousePosition }) {
   const { camera } = useThree();
   const [sceneCenter, setSceneCenter] = useState([0, 0, 0]);
@@ -229,7 +261,6 @@ function CameraAnimator({ activeHead, mouseActive, mousePosition }) {
     targetPosition[2] += ZOOM_DISTANCE;
   } else {
     targetPosition = DEFAULT_CAMERA_POSITION.slice();
-
     for (let i = 0; i < 3; i++) {
       center[i] += sceneCenter[i];
       targetPosition[i] += sceneCenter[i];
@@ -267,7 +298,6 @@ function CameraAnimator({ activeHead, mouseActive, mousePosition }) {
     lookAt: center,
     config: { mass: 1, tension: 280, friction: 60 },
   });
-
   const targetLookAt = useRef(new THREE.Vector3(0, 0, 0));
 
   useFrame(() => {
@@ -290,8 +320,6 @@ function AttentionVisualization() {
   const [mouseActive, setMouseActive] = useState(false);
 
   useEffect(() => {
-    // Added event listener
-
     const handleMouseMove = (event) => {
       const { clientX, clientY } = event;
       const width = window.innerWidth;
@@ -324,6 +352,7 @@ function AttentionVisualization() {
       <color attach="background" args={["#040b1b"]} />
       <gridHelper args={[100, 100, "white", "gray"]} />
       <Suspense fallback={null}>
+        <SceneImage />
         <AttentionHeads activeHead={activeHead} setActiveHead={setActiveHead} />
         <Environment preset="forest" />
         <EffectComposer>
