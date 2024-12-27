@@ -287,11 +287,11 @@ function CameraAnimator({ activeHead, mouseActive, mousePosition }) {
 
   const spring = useSpring({
     pos: targetPosition,
-    config: { mass: 1, tension: 280, friction: 20 },
+    config: { mass: 1, tension: 500, friction: 20 },
   });
   const springLookAt = useSpring({
     lookAt: center,
-    config: { mass: 1, tension: 280, friction: 20 },
+    config: { mass: 1, tension: 500, friction: 20 },
   });
   const targetLookAt = useRef(new THREE.Vector3(0, 0, 0));
 
