@@ -1,10 +1,11 @@
 import { useRef, useState, Suspense, useEffect, useMemo } from "react";
 import { Canvas, useThree, useFrame, useLoader } from "@react-three/fiber";
-import { OrbitControls, Environment, Html } from "@react-three/drei";
+import { OrbitControls, Environment, Text } from "@react-three/drei";
 import { Bloom, EffectComposer } from "@react-three/postprocessing";
 import { a, useSpring } from "@react-spring/three";
 import * as THREE from "three";
 
+const FONT_SIZE = 0.2;
 const TRANSITION_ALPHA = 0.05;
 const BOUNDING_BOX_OPACITY = 0; // For debug purposes
 const WIDTH = 2;
@@ -134,23 +135,19 @@ function AttentionHead({
         e.stopPropagation();
         setActiveHead(activeHead === index ? null : index);
       }}
-    >
-      <Html
-        position={[-WIDTH / 2, HEIGHT / 2, 0]}
-        transform
-        pointerEvents="none"
-      >
-        <div
-          style={{
-            color: "#fff",
-            fontSize: "8px",
-            transform: "translateX(50%) translateY(-50%)",
-            opacity: visible ? 1 : 0,
-          }}
         >
-          {text}
-        </div>
-      </Html>
+      <Text
+        position={[-WIDTH / 2, HEIGHT / 2 + FONT_SIZE, /* Small epsilon to prevent z-fighting */ 2e-3]}
+        fontSize={FONT_SIZE}
+        color="#fff"
+        anchorX="left"
+        anchorY="top"
+        fillOpacity={visible ? 1 : 0}
+        pointerEvents="none"
+        lineHeight={0.5}
+      >
+        {text}
+      </Text>
 
       <a.mesh position={[0, 0, 0]} pointerEvents="none">
         <planeGeometry
