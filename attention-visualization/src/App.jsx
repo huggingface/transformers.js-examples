@@ -26,7 +26,7 @@ const DEFAULT_CAMERA_POSITION = [
   CAMERA_DISTANCE * Math.sin(CAMERA_ANGLE),
 ];
 const TRANSLATE_ZONE_WIDTH = 0.5;
-const TRANSLATE_SPEED = 8;
+const TRANSLATE_SPEED = 10;
 const NUM_LAYERS = 12;
 const NUM_HEADS = 6;
 
@@ -226,7 +226,7 @@ function SceneImage() {
   const image_width = ar * image_height;
 
   return (
-    <>
+    <Suspense fallback={null}>
       <mesh
         position={[
           ATTENTION_DATA[0].position[0] - image_width / 2 - image_padding,
@@ -238,7 +238,7 @@ function SceneImage() {
         <planeGeometry args={[image_width, image_height]} />
         <meshBasicMaterial map={texture} />
       </mesh>
-    </>
+    </Suspense>
   );
 }
 
@@ -269,7 +269,7 @@ function CameraAnimator({ activeHead, mouseActive, mousePosition }) {
 
     const a = TRANSLATE_SPEED; // max speed
     const b = TRANSLATE_ZONE_WIDTH; // deadzone
-    const c = 4; // acceleration
+    const c = 2; // acceleration
     const f = (x) => a * ((x ** 2 - b ** 2) / (1 - b ** 2)) ** c;
     if (Math.abs(mousePosition.x) >= b) {
       const value = f(mousePosition.x);
@@ -337,7 +337,7 @@ function AttentionVisualization() {
   }, []);
 
   return (
-    <Canvas camera={{ fov: 45 }} gl={{ antialias: true }}>
+    <Canvas camera={{ fov: 45 }} gl={{ antialias: true, toneMapping: THREE.NoToneMapping }}>
       <CameraAnimator
         activeHead={activeHead}
         mouseActive={mouseActive}
@@ -348,15 +348,15 @@ function AttentionVisualization() {
       <Suspense fallback={null}>
         <SceneImage />
         <AttentionHeads activeHead={activeHead} setActiveHead={setActiveHead} />
-        <Environment preset="forest" />
-        <EffectComposer>
+        {/* <Environment preset="forest" /> */}
+        {/* <EffectComposer>
           <Bloom
             intensity={1.2}
             luminanceThreshold={0.1}
             luminanceSmoothing={0.8}
           />
-        </EffectComposer>
-        <ambientLight intensity={1} />
+        </EffectComposer> */}
+        <ambientLight intensity={2} />
       </Suspense>
       <OrbitControls enablePan={true} enableZoom={false} />
     </Canvas>
