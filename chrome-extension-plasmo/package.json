@@ -50,15 +50,9 @@
     "typescript": "5.3.3"
   },
   "manifest": {
-    "host_permissions": [
-      "https://*/*"
-    ],
     "permissions": [
       "sidePanel",
-      "tabs",
       "storage",
-      "activeTab",
-      "scripting",
       "unlimitedStorage"
     ],
     "content_security_policy": {

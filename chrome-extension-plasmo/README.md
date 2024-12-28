@@ -26,7 +26,7 @@ Here is the link to the [demo video](https://www.youtube.com/watch?v=yXZQ8FHtSes
 - [x] Change generation parameters (e.g. max_tokens, temperature, top_p etc.)
 - [x] Load LLaMA variants
 - [x] Load other LLM models
-- [ ] Release extension to Chrome Web Store
+- [x] Release extension to Chrome Web Store
 - [ ] Load multi modal LLM models
 - [ ] Load Whisper (Speech-to-Text), SAM (Segment Anything Model), etc.
 - [ ] Chat history (save to local storage, export to CSV)
@@ -52,7 +52,7 @@ Prompt: "Write python code to compute the nth fibonacci number."
 
 ### Chrome Web Store
 
-Work in progress.
+Install '[Private AI Assistant[(https://chromewebstore.google.com/detail/private-ai-assistant-runn/jojlpeliekadmokfnikappfadbjiaghp)]' from the Chrome Web Store.
 
 ### From source
 
