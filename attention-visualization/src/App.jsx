@@ -5,6 +5,8 @@ import { Bloom, EffectComposer } from "@react-three/postprocessing";
 import { a, useSpring } from "@react-spring/three";
 import * as THREE from "three";
 
+const EXAMPLE_URL =
+  "https://huggingface.co/datasets/Xenova/transformers.js-docs/resolve/main/cats.jpg";
 const FONT_SIZE = 0.2;
 const TRANSITION_ALPHA = 0.05;
 const BOUNDING_BOX_OPACITY = 0; // For debug purposes
@@ -15,7 +17,7 @@ const HEIGHT_SEGMENTS = 32;
 const LAYER_SPACING = 1;
 const X_SPACING = 0.25;
 const Y_SPACING = HEIGHT - 0.25;
-const Z_SPACING = 1;
+const Z_SPACING = 2;
 const HOVER_PADDING = Y_SPACING + 2;
 const ZOOM_DISTANCE = 3.5;
 const CAMERA_ANGLE = (Math.PI * 5) / 12;
@@ -27,69 +29,25 @@ const DEFAULT_CAMERA_POSITION = [
 ];
 const TRANSLATE_ZONE_WIDTH = 0.5;
 const TRANSLATE_SPEED = 10;
-const NUM_LAYERS = 12;
-const NUM_HEADS = 6;
+const START_PADDING = 0;
+const END_PADDING = 2.5;
+const TEXT_PADDING = 2;
+const IMAGE_HEIGHT = 3;
+const IMAGE_PADDING = 1;
 
-const COLORS = [
-  "#ff4444",
-  "#4444ff",
-  "#44ff44",
-  "#8888ff",
-  "#ff44ff",
-  "#44ffff",
-  "#ffff44",
-  "#ff8888",
-  "#88ff88",
-  "#8844ff",
-  "#ff7f0e",
-  "#ffffff",
-];
-const ATTENTION_DATA = Array.from(
-  { length: NUM_HEADS * NUM_LAYERS },
-  (_, i) => {
-    const [layerIndex, headIndex] = [Math.floor(i / NUM_HEADS), i % NUM_HEADS];
-    // Base color for the layer
-    const baseColor = new THREE.Color(COLORS[layerIndex % COLORS.length]);
-    // Slightly darken the color for each head
-    baseColor.offsetHSL(0, 0, -0.05 * headIndex);
-    const xOffset =
-      (layerIndex - NUM_LAYERS / 2) * (WIDTH + LAYER_SPACING + X_SPACING);
-    const zOffset = (headIndex - NUM_HEADS / 2) * Z_SPACING;
-    return {
-      color: `#${baseColor.getHexString()}`,
-      label: `Layer ${layerIndex + 1} Head ${headIndex + 1}`,
-      position: [
-        xOffset + (headIndex - NUM_HEADS / 2 - 1) * X_SPACING - WIDTH / 2,
-        0.5 * HEIGHT - 1,
-        zOffset + (headIndex - NUM_HEADS / 2) * Z_SPACING,
-      ],
-    };
-  },
-);
-
-function useColorTexture(color) {
-  return useMemo(() => {
-    const canvas = document.createElement("canvas");
-    canvas.width = 256;
-    canvas.height = 256;
-    const ctx = canvas.getContext("2d");
-    ctx.fillStyle = color;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    return new THREE.CanvasTexture(canvas);
-  }, [color]);
-}
+const GRID_SIZE = 250;
 
 function AttentionHead({
   position,
   rotation,
-  color,
   text,
   index,
   activeHead,
   setActiveHead,
+  image,
 }) {
   const groupRef = useRef();
-  const texture = useColorTexture(color);
+  const texture = useMemo(() => new THREE.CanvasTexture(image), [image]);
   const [hovered, setHovered] = useState(false);
   const active = useMemo(
     () => hovered || activeHead === index,
@@ -135,9 +93,13 @@ function AttentionHead({
         e.stopPropagation();
         setActiveHead(activeHead === index ? null : index);
       }}
-        >
+    >
       <Text
-        position={[-WIDTH / 2, HEIGHT / 2 + FONT_SIZE, /* Small epsilon to prevent z-fighting */ 2e-3]}
+        position={[
+          -WIDTH / 2,
+          HEIGHT / 2 + FONT_SIZE,
+          /* Small epsilon to prevent z-fighting */ 2e-3,
+        ]}
         fontSize={FONT_SIZE}
         color="#fff"
         anchorX="left"
@@ -181,10 +143,10 @@ function AttentionHead({
   );
 }
 
-function AttentionHeads({ activeHead, setActiveHead }) {
+function AttentionHeads({ attentionData, activeHead, setActiveHead }) {
   return (
     <group position-y={1}>
-      {ATTENTION_DATA.map((data, i) => (
+      {attentionData.map((data, i) => (
         <AttentionHead
           key={i}
           index={i}
@@ -192,62 +154,60 @@ function AttentionHeads({ activeHead, setActiveHead }) {
           setActiveHead={setActiveHead}
           position={data.position}
           rotation={[0, 0, 0]}
-          color={data.color}
           text={data.label}
+          image={data.image}
         />
       ))}
     </group>
   );
 }
 
-function SceneImage() {
-  const [imageUrl, setImageUrl] = useState(
-    "https://huggingface.co/datasets/Xenova/transformers.js-docs/resolve/main/cats.jpg",
+function SceneImage({ image, onImageChange }) {
+  const texture = useLoader(THREE.TextureLoader, image);
+  const ar = useMemo(
+    () => texture.source.data.width / texture.source.data.height,
+    [texture],
   );
-  const texture = useLoader(THREE.TextureLoader, imageUrl);
-  const ar = texture.source.data.width / texture.source.data.height;
-  const image_height = 3;
-  const image_padding = 2;
+  const image_width = useMemo(() => ar * IMAGE_HEIGHT, [ar]);
 
   const handleClick = () => {
     const input = document.createElement("input");
     input.type = "file";
-    input.accept = "image/*";
-    input.onchange = handleFileChange;
+    input.accept = ".png,.jpg,.jpeg,.gif,.bmp,.webp";
+    input.onchange = (e) => {
+      if (e.target.files?.[0]) {
+        onImageChange(URL.createObjectURL(e.target.files[0]));
+      }
+    };
     input.click();
   };
-
-  const handleFileChange = (e) => {
-    if (e.target.files?.[0]) {
-      setImageUrl(URL.createObjectURL(e.target.files[0]));
-    }
-  };
-
-  const image_width = ar * image_height;
 
   return (
     <Suspense fallback={null}>
       <mesh
-        position={[
-          ATTENTION_DATA[0].position[0] - image_width / 2 - image_padding,
-          image_height / 2,
-          0,
-        ]}
+        position={[0 - image_width / 2 - IMAGE_PADDING, IMAGE_HEIGHT / 2, 0]}
         onClick={handleClick}
       >
-        <planeGeometry args={[image_width, image_height]} />
+        <planeGeometry args={[image_width, IMAGE_HEIGHT]} />
         <meshBasicMaterial map={texture} />
       </mesh>
     </Suspense>
   );
 }
 
-function CameraAnimator({ activeHead, mouseActive, mousePosition }) {
+function CameraAnimator({
+  start,
+  end,
+  attentionData,
+  activeHead,
+  mouseActive,
+  mousePosition,
+}) {
   const { camera } = useThree();
   const [sceneCenter, setSceneCenter] = useState([0, 0, 0]);
   const center =
     activeHead !== null
-      ? ATTENTION_DATA[activeHead].position.slice()
+      ? attentionData[activeHead].position.slice()
       : [0, 0, 0];
 
   center[1] += Y_SPACING;
@@ -258,7 +218,7 @@ function CameraAnimator({ activeHead, mouseActive, mousePosition }) {
     targetPosition[2] += ZOOM_DISTANCE;
   } else {
     targetPosition = DEFAULT_CAMERA_POSITION.slice();
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < 3; ++i) {
       center[i] += sceneCenter[i];
       targetPosition[i] += sceneCenter[i];
     }
@@ -277,8 +237,8 @@ function CameraAnimator({ activeHead, mouseActive, mousePosition }) {
         const center = [...prev];
         center[0] += value * delta * Math.sign(mousePosition.x); // Update x position
         center[0] = Math.max(
-          Math.min(center[0], ATTENTION_DATA.at(-1).position[0]),
-          ATTENTION_DATA.at(0).position[0],
+          Math.min(center[0], end + END_PADDING),
+          start - START_PADDING,
         ); // Clamp x position
         return center;
       });
@@ -309,7 +269,26 @@ function CameraAnimator({ activeHead, mouseActive, mousePosition }) {
   return null;
 }
 
-function AttentionVisualization() {
+function AttentionVisualization({
+  label,
+  attentionData,
+  image,
+  onImageChange,
+}) {
+  const [start, end] = useMemo(
+    () =>
+      attentionData.length > 0
+        ? attentionData.reduce(
+            ([min, max], data) => [
+              Math.min(min, data.position[0]),
+              Math.max(max, data.position[0]),
+            ],
+            [Infinity, -Infinity],
+          )
+        : [0, 0],
+    [attentionData],
+  );
+
   const [activeHead, setActiveHead] = useState(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [mouseActive, setMouseActive] = useState(false);
@@ -337,17 +316,37 @@ function AttentionVisualization() {
   }, []);
 
   return (
-    <Canvas camera={{ fov: 45 }} gl={{ antialias: true, toneMapping: THREE.NoToneMapping }}>
+    <Canvas
+      camera={{ fov: 45 }}
+      gl={{ antialias: true, toneMapping: THREE.NoToneMapping }}
+    >
       <CameraAnimator
+        start={start}
+        end={end}
+        attentionData={attentionData}
         activeHead={activeHead}
         mouseActive={mouseActive}
         mousePosition={mousePosition}
       />
       <color attach="background" args={["#040b1b"]} />
-      <gridHelper args={[100, 100, "white", "gray"]} />
+      <gridHelper args={[GRID_SIZE, GRID_SIZE, "white", "gray"]} />
       <Suspense fallback={null}>
-        <SceneImage />
-        <AttentionHeads activeHead={activeHead} setActiveHead={setActiveHead} />
+        {image && <SceneImage image={image} onImageChange={onImageChange} />}
+        <AttentionHeads
+          attentionData={attentionData}
+          activeHead={activeHead}
+          setActiveHead={setActiveHead}
+        />
+        <Text
+          position={[end + TEXT_PADDING, 1.25 * HEIGHT, 0]}
+          fontSize={1}
+          color="#fff"
+          anchorX="left"
+          fillOpacity={1}
+          pointerEvents="none"
+        >
+          {label}
+        </Text>
         {/* <Environment preset="forest" /> */}
         {/* <EffectComposer>
           <Bloom
@@ -356,17 +355,99 @@ function AttentionVisualization() {
             luminanceSmoothing={0.8}
           />
         </EffectComposer> */}
-        <ambientLight intensity={2} />
       </Suspense>
+      <ambientLight intensity={2} />
       <OrbitControls enablePan={true} enableZoom={false} />
     </Canvas>
   );
 }
 
 export default function App() {
+  const [result, setResult] = useState(null);
+  const attentionData = useMemo(() => {
+    if (!result) return [];
+    return result.attentions.map(({ layer, head, num_heads, image }) => {
+      const xOffset = layer * (WIDTH + LAYER_SPACING + X_SPACING);
+      const position = [
+        xOffset - (head + num_heads / 2) * X_SPACING,
+        0.5 * HEIGHT - 1,
+        ((num_heads + 1) / 2 - head) * Z_SPACING,
+      ];
+      const label = `Layer ${layer}, Head ${head}`;
+      return { position, label, image };
+    });
+  }, [result]);
+  const label = useMemo(() => result?.label, [result]);
+
+  const [status, setStatus] = useState(null);
+  const [image, setImage] = useState(null);
+  const worker = useRef(null);
+
+  const handleImageChange = (image) => {
+    console.log("image changed", image);
+    // DO 2 things:
+    // - Update UI
+    // - Run neural network
+    setImage(image);
+    worker.current.postMessage({ image });
+  };
+
+  useEffect(() => {
+    // Initialize worker on mount
+    worker.current ??= new Worker(new URL("./worker.js", import.meta.url), {
+      type: "module",
+    });
+
+    // NOTE: Certain browsers handle error messages differently, so to ensure
+    // compatibility, we need to handle errors in both `message` and `error` events.
+    const onMessage = ({ data }) => {
+      console.log("got message", data);
+      if (data.error) {
+        return onError(data.error);
+      }
+      switch (data.type) {
+        case "status":
+          setStatus(data.status);
+          break;
+        case "output":
+          setResult(data.result);
+          break;
+      }
+    };
+    const onError = (error) => [
+      // setError(error.message)
+    ];
+
+    // Attach the callback function as an event listener.
+    worker.current.addEventListener("message", onMessage);
+    worker.current.addEventListener("error", onError);
+
+    // Define a cleanup function for when the component is unmounted.
+    return () => {
+      worker.current.removeEventListener("message", onMessage);
+      worker.current.removeEventListener("error", onError);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (status === "ready") {
+      if (image === null) {
+        // We are now ready
+        handleImageChange(EXAMPLE_URL);
+        console.log("sending FIRST message");
+      }
+      //
+    }
+  }, [status, image]);
+
   return (
     <div className="w-screen h-screen bg-black">
-      <AttentionVisualization />
+      <AttentionVisualization
+        label={label}
+        attentionData={attentionData}
+        image={image}
+        onImageChange={handleImageChange}
+      />
     </div>
   );
 }
