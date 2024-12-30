@@ -6,10 +6,21 @@ import {
   softmax,
 } from "@huggingface/transformers";
 
+export async function supportsWebGPU() {
+  try {
+    if (!navigator.gpu) return false;
+    return !!(await navigator.gpu.requestAdapter());
+  } catch (e) {
+    return false;
+  }
+}
+
+const webgpu = await supportsWebGPU();
 // Load model and processor
 const model_id = "onnx-community/dinov2-with-registers-small-with-attentions";
 const model = await AutoModelForImageClassification.from_pretrained(model_id, {
-  device: "webgpu",
+  device: webgpu ? "webgpu" : "wasm",
+  dtype: webgpu ? "q4" : "q8",
 });
 const processor = await AutoProcessor.from_pretrained(model_id);
 
