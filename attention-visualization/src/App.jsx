@@ -1,6 +1,6 @@
 import { useRef, useState, Suspense, useEffect, useMemo } from "react";
 import { Canvas, useThree, useFrame, useLoader } from "@react-three/fiber";
-import { OrbitControls, Environment, Text } from "@react-three/drei";
+import { Text } from "@react-three/drei";
 import { Bloom, EffectComposer } from "@react-three/postprocessing";
 import { a, useSpring } from "@react-spring/three";
 import * as THREE from "three";
@@ -10,13 +10,12 @@ const EXAMPLE_URL =
 const FONT_SIZE = 0.2;
 const TRANSITION_ALPHA = 0.05;
 const BOUNDING_BOX_OPACITY = 0; // For debug purposes
-const WIDTH = 2;
-const HEIGHT = 2;
+const ATTENTION_HEAD_HEIGHT = 2.4;
 const WIDTH_SEGMENTS = 32;
 const HEIGHT_SEGMENTS = 32;
-const LAYER_SPACING = 1;
-const X_SPACING = 0.25;
-const Y_SPACING = HEIGHT - 0.25;
+const LAYER_SPACING = 0.25;
+const X_SPACING = 0.4;
+const Y_SPACING = ATTENTION_HEAD_HEIGHT - 0.25;
 const Z_SPACING = 2;
 const HOVER_PADDING = Y_SPACING + 2;
 const ZOOM_DISTANCE = 3.5;
@@ -28,14 +27,17 @@ const DEFAULT_CAMERA_POSITION = [
   CAMERA_DISTANCE * Math.sin(CAMERA_ANGLE),
 ];
 const TRANSLATE_ZONE_WIDTH = 0.5;
-const TRANSLATE_SPEED = 10;
+const TRANSLATE_SPEED = 12;
 const START_PADDING = 0;
 const END_PADDING = 2.5;
 const TEXT_PADDING = 2;
-const IMAGE_HEIGHT = 3;
-const IMAGE_PADDING = 1;
 
-const GRID_SIZE = 250;
+const IMAGE_HEIGHT = 4;
+const MAX_IMAGE_WIDTH = 8;
+
+const IMAGE_PADDING = 1.5;
+
+const GRID_SIZE = 400;
 
 function AttentionHead({
   position,
@@ -48,6 +50,10 @@ function AttentionHead({
 }) {
   const groupRef = useRef();
   const texture = useMemo(() => new THREE.CanvasTexture(image), [image]);
+  const width = useMemo(
+    () => (ATTENTION_HEAD_HEIGHT * texture.image.width) / texture.image.height,
+    [texture],
+  );
   const [hovered, setHovered] = useState(false);
   const active = useMemo(
     () => hovered || activeHead === index,
@@ -96,8 +102,8 @@ function AttentionHead({
     >
       <Text
         position={[
-          -WIDTH / 2,
-          HEIGHT / 2 + FONT_SIZE,
+          -width / 2,
+          ATTENTION_HEAD_HEIGHT / 2 + FONT_SIZE,
           /* Small epsilon to prevent z-fighting */ 2e-3,
         ]}
         fontSize={FONT_SIZE}
@@ -105,29 +111,29 @@ function AttentionHead({
         anchorX="left"
         anchorY="top"
         fillOpacity={visible ? 1 : 0}
-        pointerEvents="none"
+        raycast={() => null}
         lineHeight={0.5}
       >
         {text}
       </Text>
 
-      <a.mesh position={[0, 0, 0]} pointerEvents="none">
+      <a.mesh position={[0, 0, 0]} raycast={() => null}>
         <planeGeometry
-          args={[WIDTH, HEIGHT, WIDTH_SEGMENTS, HEIGHT_SEGMENTS]}
+          args={[width, ATTENTION_HEAD_HEIGHT, WIDTH_SEGMENTS, HEIGHT_SEGMENTS]}
         />
         <meshStandardMaterial map={texture} side={THREE.DoubleSide} />
       </a.mesh>
       <a.mesh
         position={[
           0,
-          -(HOVER_PADDING - HEIGHT) / 2,
+          -(HOVER_PADDING - ATTENTION_HEAD_HEIGHT) / 2,
           /* Small epsilon to prevent z-fighting */ 1e-3,
         ]}
       >
         <planeGeometry
           args={[
-            WIDTH,
-            HEIGHT + HOVER_PADDING + HEIGHT,
+            width,
+            2 * ATTENTION_HEAD_HEIGHT + HOVER_PADDING,
             WIDTH_SEGMENTS,
             HEIGHT_SEGMENTS,
           ]}
@@ -164,11 +170,16 @@ function AttentionHeads({ attentionData, activeHead, setActiveHead }) {
 
 function SceneImage({ image, onImageChange }) {
   const texture = useLoader(THREE.TextureLoader, image);
-  const ar = useMemo(
-    () => texture.source.data.width / texture.source.data.height,
-    [texture],
-  );
-  const image_width = useMemo(() => ar * IMAGE_HEIGHT, [ar]);
+  const [image_width, image_height] = useMemo(() => {
+    const ar = texture.source.data.width / texture.source.data.height;
+    let w = ar * IMAGE_HEIGHT;
+    let h = IMAGE_HEIGHT;
+    if (w > MAX_IMAGE_WIDTH) {
+      w = MAX_IMAGE_WIDTH;
+      h = w / ar;
+    }
+    return [w, h];
+  }, [texture]);
 
   const handleClick = () => {
     const input = document.createElement("input");
@@ -185,10 +196,10 @@ function SceneImage({ image, onImageChange }) {
   return (
     <Suspense fallback={null}>
       <mesh
-        position={[0 - image_width / 2 - IMAGE_PADDING, IMAGE_HEIGHT / 2, 0]}
+        position={[0 - image_width / 2 - IMAGE_PADDING, image_height / 2, 0]}
         onClick={handleClick}
       >
-        <planeGeometry args={[image_width, IMAGE_HEIGHT]} />
+        <planeGeometry args={[image_width, image_height]} />
         <meshBasicMaterial map={texture} />
       </mesh>
     </Suspense>
@@ -223,6 +234,9 @@ function CameraAnimator({
       targetPosition[i] += sceneCenter[i];
     }
   }
+  useEffect(() => {
+    setSceneCenter([end + END_PADDING, 0, 0]);
+  }, [end]);
 
   useFrame((state, delta) => {
     if (!mouseActive) return;
@@ -271,6 +285,7 @@ function CameraAnimator({
 
 function AttentionVisualization({
   label,
+  score,
   attentionData,
   image,
   onImageChange,
@@ -280,8 +295,8 @@ function AttentionVisualization({
       attentionData.length > 0
         ? attentionData.reduce(
             ([min, max], data) => [
-              Math.min(min, data.position[0]),
-              Math.max(max, data.position[0]),
+              Math.min(min, data.position[0] - data.width / 2),
+              Math.max(max, data.position[0] + data.width / 2),
             ],
             [Infinity, -Infinity],
           )
@@ -337,27 +352,39 @@ function AttentionVisualization({
           activeHead={activeHead}
           setActiveHead={setActiveHead}
         />
-        <Text
-          position={[end + TEXT_PADDING, 1.25 * HEIGHT, 0]}
-          fontSize={1}
-          color="#fff"
-          anchorX="left"
-          fillOpacity={1}
-          pointerEvents="none"
-        >
-          {label}
-        </Text>
-        {/* <Environment preset="forest" /> */}
-        {/* <EffectComposer>
+        {label && (
+          <Text
+            position={[end + TEXT_PADDING, 1.25 * ATTENTION_HEAD_HEIGHT, 0]}
+            fontSize={1}
+            color="#fff"
+            anchorX="left"
+            fillOpacity={1}
+            raycast={() => null}
+          >
+            {label}
+          </Text>
+        )}
+        {score && (
+          <Text
+            position={[end + TEXT_PADDING, 0.75 * ATTENTION_HEAD_HEIGHT, 0]}
+            fontSize={0.8}
+            color="#fff"
+            anchorX="left"
+            fillOpacity={1}
+            raycast={() => null}
+          >
+            {" ".repeat(label.length - 4)}({score.toFixed(2)}%)
+          </Text>
+        )}
+        <EffectComposer>
           <Bloom
-            intensity={1.2}
+            intensity={0.2}
             luminanceThreshold={0.1}
             luminanceSmoothing={0.8}
           />
-        </EffectComposer> */}
+        </EffectComposer>
       </Suspense>
       <ambientLight intensity={2} />
-      <OrbitControls enablePan={true} enableZoom={false} />
     </Canvas>
   );
 }
@@ -367,27 +394,28 @@ export default function App() {
   const attentionData = useMemo(() => {
     if (!result) return [];
     return result.attentions.map(({ layer, head, num_heads, image }) => {
-      const xOffset = layer * (WIDTH + LAYER_SPACING + X_SPACING);
+      const width = (ATTENTION_HEAD_HEIGHT * image.width) / image.height;
+      const depthOffset = (num_heads - 1) * X_SPACING;
+      const xOffset =
+        width / 2 + depthOffset + layer * (width + depthOffset + LAYER_SPACING);
       const position = [
-        xOffset - (head + num_heads / 2) * X_SPACING,
-        0.5 * HEIGHT - 1,
-        ((num_heads + 1) / 2 - head) * Z_SPACING,
+        xOffset - head * X_SPACING,
+        0.5 * ATTENTION_HEAD_HEIGHT - 1,
+        ((num_heads + 1) / 2 - head - 1) * Z_SPACING,
       ];
-      const label = `Layer ${layer}, Head ${head}`;
-      return { position, label, image };
+      const label = `Layer ${layer + 1}, Head ${head + 1}`;
+      return { position, label, image, width };
     });
   }, [result]);
+
   const label = useMemo(() => result?.label, [result]);
+  const score = useMemo(() => result?.score, [result]);
 
   const [status, setStatus] = useState(null);
   const [image, setImage] = useState(null);
   const worker = useRef(null);
 
   const handleImageChange = (image) => {
-    console.log("image changed", image);
-    // DO 2 things:
-    // - Update UI
-    // - Run neural network
     setImage(image);
     worker.current.postMessage({ image });
   };
@@ -401,7 +429,6 @@ export default function App() {
     // NOTE: Certain browsers handle error messages differently, so to ensure
     // compatibility, we need to handle errors in both `message` and `error` events.
     const onMessage = ({ data }) => {
-      console.log("got message", data);
       if (data.error) {
         return onError(data.error);
       }
@@ -444,6 +471,7 @@ export default function App() {
     <div className="w-screen h-screen bg-black">
       <AttentionVisualization
         label={label}
+        score={score}
         attentionData={attentionData}
         image={image}
         onImageChange={handleImageChange}

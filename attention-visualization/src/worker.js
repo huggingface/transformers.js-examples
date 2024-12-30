@@ -46,9 +46,10 @@ self.onmessage = async (event) => {
 
   // Get the predicted class
   const scores = logits[0];
-  // const probabilities = softmax(scores.data);
+  const probabilities = softmax(scores.data);
   const cls = scores.argmax().item();
 
+  const score = probabilities[cls] * 100;
   const label = model.config.id2label[cls];
   console.log(`Predicted class: ${label}`);
 
@@ -57,7 +58,6 @@ self.onmessage = async (event) => {
   const [width, height] = inputs.pixel_values.dims.slice(-2);
   const w_featmap = Math.floor(width / patch_size);
   const h_featmap = Math.floor(height / patch_size);
-  const num_layers = model.config.num_hidden_layers;
   const num_heads = model.config.num_attention_heads;
   const num_cls_tokens = 1;
   const num_register_tokens = model.config.num_register_tokens ?? 0;
@@ -94,8 +94,8 @@ self.onmessage = async (event) => {
         },
       );
       output.push({
-        layer: i + 1,
-        head: j + 1,
+        layer: i,
+        head: j,
         num_heads,
         image,
       });
@@ -107,6 +107,7 @@ self.onmessage = async (event) => {
     result: {
       attentions: output,
       label,
+      score,
     },
   });
 };
