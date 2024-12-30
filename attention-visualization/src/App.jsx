@@ -6,7 +6,7 @@ import { a, useSpring } from "@react-spring/three";
 import * as THREE from "three";
 
 const EXAMPLE_URL =
-  "https://huggingface.co/datasets/Xenova/transformers.js-docs/resolve/main/cats.jpg";
+  "https://huggingface.co/datasets/Xenova/transformers.js-docs/resolve/main/tiger.jpg";
 const FONT_SIZE = 0.2;
 const TRANSITION_ALPHA = 0.05;
 const BOUNDING_BOX_OPACITY = 0; // For debug purposes
