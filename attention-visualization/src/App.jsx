@@ -5,19 +5,28 @@ import { Bloom, EffectComposer } from "@react-three/postprocessing";
 import { a, useSpring } from "@react-spring/three";
 import * as THREE from "three";
 
+// Input image
 const EXAMPLE_URL =
   "https://huggingface.co/datasets/Xenova/transformers.js-docs/resolve/main/tiger.jpg";
-const FONT_SIZE = 0.2;
-const TRANSITION_ALPHA = 0.05;
-const BOUNDING_BOX_OPACITY = 0; // For debug purposes
+const IMAGE_HEIGHT = 4;
+const MAX_IMAGE_WIDTH = 8;
+const IMAGE_PADDING = 1.5;
+
+// Attention heads
 const ATTENTION_HEAD_HEIGHT = 2.4;
-const WIDTH_SEGMENTS = 32;
-const HEIGHT_SEGMENTS = 32;
-const LAYER_SPACING = 0.25;
+const FONT_SIZE = 0.2;
 const X_SPACING = 0.4;
 const Y_SPACING = ATTENTION_HEAD_HEIGHT - 0.25;
 const Z_SPACING = 2;
 const HOVER_PADDING = Y_SPACING + 2;
+const LAYER_SPACING = 0.25;
+
+// Scene
+const START_PADDING = 0;
+const END_PADDING = 1;
+const TEXT_PADDING = 2;
+
+// Camera
 const ZOOM_DISTANCE = 3.5;
 const CAMERA_ANGLE = (Math.PI * 5) / 12;
 const CAMERA_DISTANCE = 16;
@@ -28,16 +37,10 @@ const DEFAULT_CAMERA_POSITION = [
 ];
 const TRANSLATE_ZONE_WIDTH = 0.5;
 const TRANSLATE_SPEED = 12;
-const START_PADDING = 0;
-const END_PADDING = 2.5;
-const TEXT_PADDING = 2;
 
-const IMAGE_HEIGHT = 4;
-const MAX_IMAGE_WIDTH = 8;
-
-const IMAGE_PADDING = 1.5;
-
+// Misc.
 const GRID_SIZE = 400;
+const TRANSITION_ALPHA = 0.05;
 
 function AttentionHead({
   position,
@@ -72,6 +75,7 @@ function AttentionHead({
   }, [active]);
 
   const visible = activeHead === null || activeHead === index;
+
   return (
     <a.group
       ref={groupRef}
@@ -92,7 +96,6 @@ function AttentionHead({
       }}
       onClick={(e) => {
         if (activeHead !== index) {
-          // Clicking on a different head/background
           setActiveHead(null);
         }
         if (!visible) return;
@@ -104,7 +107,7 @@ function AttentionHead({
         position={[
           -width / 2,
           ATTENTION_HEAD_HEIGHT / 2 + FONT_SIZE,
-          /* Small epsilon to prevent z-fighting */ 2e-3,
+          2e-3, // Small epsilon to prevent z-fighting
         ]}
         fontSize={FONT_SIZE}
         color="#fff"
@@ -118,30 +121,24 @@ function AttentionHead({
       </Text>
 
       <a.mesh position={[0, 0, 0]} raycast={() => null}>
-        <planeGeometry
-          args={[width, ATTENTION_HEAD_HEIGHT, WIDTH_SEGMENTS, HEIGHT_SEGMENTS]}
-        />
+        <planeGeometry args={[width, ATTENTION_HEAD_HEIGHT]} />
         <meshStandardMaterial map={texture} side={THREE.DoubleSide} />
       </a.mesh>
+
       <a.mesh
         position={[
           0,
           -(HOVER_PADDING - ATTENTION_HEAD_HEIGHT) / 2,
-          /* Small epsilon to prevent z-fighting */ 1e-3,
+          1e-3, // Small epsilon to prevent z-fighting
         ]}
       >
         <planeGeometry
-          args={[
-            width,
-            2 * ATTENTION_HEAD_HEIGHT + HOVER_PADDING,
-            WIDTH_SEGMENTS,
-            HEIGHT_SEGMENTS,
-          ]}
+          args={[width, 2 * ATTENTION_HEAD_HEIGHT + HOVER_PADDING]}
         />
         <meshStandardMaterial
           color="white"
           transparent
-          opacity={BOUNDING_BOX_OPACITY}
+          opacity={0}
           side={THREE.DoubleSide}
         />
       </a.mesh>
@@ -223,6 +220,7 @@ function CameraAnimator({
 
   center[1] += Y_SPACING;
   let targetPosition;
+
   if (activeHead !== null) {
     center[1] += 1;
     targetPosition = center.slice();
@@ -234,13 +232,13 @@ function CameraAnimator({
       targetPosition[i] += sceneCenter[i];
     }
   }
+
   useEffect(() => {
     setSceneCenter([end + END_PADDING, 0, 0]);
   }, [end]);
 
   useFrame((state, delta) => {
     if (!mouseActive) return;
-
     const a = TRANSLATE_SPEED; // max speed
     const b = TRANSLATE_ZONE_WIDTH; // deadzone
     const c = 2; // acceleration
@@ -248,13 +246,13 @@ function CameraAnimator({
     if (Math.abs(mousePosition.x) >= b) {
       const value = f(mousePosition.x);
       setSceneCenter((prev) => {
-        const center = [...prev];
-        center[0] += value * delta * Math.sign(mousePosition.x); // Update x position
-        center[0] = Math.max(
-          Math.min(center[0], end + END_PADDING),
+        const newCenter = [...prev];
+        newCenter[0] += value * delta * Math.sign(mousePosition.x); // Update x position
+        newCenter[0] = Math.max(
+          Math.min(newCenter[0], end + END_PADDING),
           start - START_PADDING,
         ); // Clamp x position
-        return center;
+        return newCenter;
       });
     }
   });
@@ -323,6 +321,7 @@ function AttentionVisualization({
     document.addEventListener("mouseleave", handleMouseLeave);
     document.addEventListener("mouseenter", handleMouseEnter);
     window.addEventListener("mousemove", handleMouseMove);
+
     return () => {
       document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseleave", handleMouseLeave);
@@ -373,7 +372,7 @@ function AttentionVisualization({
             fillOpacity={1}
             raycast={() => null}
           >
-            {" ".repeat(label.length - 4)}({score.toFixed(2)}%)
+            {" ".repeat((label?.length || 0) * (2 / 3))}({score.toFixed(2)}%)
           </Text>
         )}
         <EffectComposer>
@@ -459,11 +458,8 @@ export default function App() {
   useEffect(() => {
     if (status === "ready") {
       if (image === null) {
-        // We are now ready
         handleImageChange(EXAMPLE_URL);
-        console.log("sending FIRST message");
       }
-      //
     }
   }, [status, image]);
 
