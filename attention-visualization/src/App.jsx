@@ -344,45 +344,45 @@ function AttentionVisualization({
       />
       <color attach="background" args={["#040b1b"]} />
       <gridHelper args={[GRID_SIZE, GRID_SIZE, "white", "gray"]} />
+      {image && <SceneImage image={image} onImageChange={onImageChange} />}
       <Suspense fallback={null}>
-        {image && <SceneImage image={image} onImageChange={onImageChange} />}
         <AttentionHeads
           attentionData={attentionData}
           activeHead={activeHead}
           setActiveHead={setActiveHead}
         />
-        {label && (
-          <Text
-            position={[end + TEXT_PADDING, 1.25 * ATTENTION_HEAD_HEIGHT, 0]}
-            fontSize={1}
-            color="#fff"
-            anchorX="left"
-            fillOpacity={1}
-            raycast={() => null}
-          >
-            {label}
-          </Text>
-        )}
-        {score && (
-          <Text
-            position={[end + TEXT_PADDING, 0.75 * ATTENTION_HEAD_HEIGHT, 0]}
-            fontSize={0.8}
-            color="#fff"
-            anchorX="left"
-            fillOpacity={1}
-            raycast={() => null}
-          >
-            {" ".repeat((label?.length || 0) * (2 / 3))}({score.toFixed(2)}%)
-          </Text>
-        )}
-        <EffectComposer>
-          <Bloom
-            intensity={0.2}
-            luminanceThreshold={0.1}
-            luminanceSmoothing={0.8}
-          />
-        </EffectComposer>
       </Suspense>
+      {label && (
+        <Text
+          position={[end + TEXT_PADDING, 1.25 * ATTENTION_HEAD_HEIGHT, 0]}
+          fontSize={1}
+          color="#fff"
+          anchorX="left"
+          fillOpacity={1}
+          raycast={() => null}
+        >
+          {label}
+        </Text>
+      )}
+      {score && (
+        <Text
+          position={[end + TEXT_PADDING, 0.75 * ATTENTION_HEAD_HEIGHT, 0]}
+          fontSize={0.8}
+          color="#fff"
+          anchorX="left"
+          fillOpacity={1}
+          raycast={() => null}
+        >
+          {" ".repeat((label?.length || 0) * (2 / 3))}({score.toFixed(2)}%)
+        </Text>
+      )}
+      <EffectComposer>
+        <Bloom
+          intensity={0.2}
+          luminanceThreshold={0.1}
+          luminanceSmoothing={0.8}
+        />
+      </EffectComposer>
       <ambientLight intensity={2} />
     </Canvas>
   );
