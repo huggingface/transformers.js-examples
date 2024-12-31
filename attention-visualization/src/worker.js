@@ -21,8 +21,18 @@ const model_id = "onnx-community/dinov2-with-registers-small-with-attentions";
 const model = await AutoModelForImageClassification.from_pretrained(model_id, {
   device: webgpu ? "webgpu" : "wasm",
   dtype: webgpu ? "q4" : "q8",
+}).catch((error) => {
+  console.error(error);
+  self.postMessage({ type: "error", error: error.toString() });
+  throw error;
 });
-const processor = await AutoProcessor.from_pretrained(model_id);
+const processor = await AutoProcessor.from_pretrained(model_id).catch(
+  (error) => {
+    console.error(error);
+    self.postMessage({ type: "error", error: error.toString() });
+    throw error;
+  },
+);
 
 self.postMessage({ type: "status", status: "ready" });
 

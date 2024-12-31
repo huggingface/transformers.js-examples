@@ -288,6 +288,16 @@ function AttentionVisualization({
   image,
   onImageChange,
 }) {
+  const [dots, setDots] = useState(".");
+  useEffect(() => {
+    let idx = 1;
+    const timer = setInterval(() => {
+      idx = (idx % 3) + 1;
+      setDots(".".repeat(idx));
+    }, 500);
+    return () => clearInterval(timer);
+  }, []);
+
   const [start, end] = useMemo(
     () =>
       attentionData.length > 0
@@ -345,7 +355,20 @@ function AttentionVisualization({
       <color attach="background" args={["#040b1b"]} />
       <gridHelper args={[GRID_SIZE, GRID_SIZE, "white", "gray"]} />
       {image && <SceneImage image={image} onImageChange={onImageChange} />}
+
       <Suspense fallback={null}>
+        {!image && (
+          <Text
+            position={[-1.5, IMAGE_HEIGHT / 2, 0]}
+            fontSize={1}
+            color="#fff"
+            anchorX="left"
+            fillOpacity={1}
+            raycast={() => null}
+          >
+            Loading{dots}
+          </Text>
+        )}
         <AttentionHeads
           attentionData={attentionData}
           activeHead={activeHead}
@@ -410,7 +433,7 @@ export default function App() {
   const label = useMemo(() => result?.label, [result]);
   const score = useMemo(() => result?.score, [result]);
 
-  const [status, setStatus] = useState(null);
+  const [state, setState] = useState(null);
   const [image, setImage] = useState(null);
   const worker = useRef(null);
 
@@ -428,21 +451,17 @@ export default function App() {
     // NOTE: Certain browsers handle error messages differently, so to ensure
     // compatibility, we need to handle errors in both `message` and `error` events.
     const onMessage = ({ data }) => {
-      if (data.error) {
-        return onError(data.error);
-      }
       switch (data.type) {
         case "status":
-          setStatus(data.status);
+        case "error":
+          setState(data);
           break;
         case "output":
           setResult(data.result);
           break;
       }
     };
-    const onError = (error) => [
-      // setError(error.message)
-    ];
+    const onError = (e) => setState({ type: "error", error: e.message });
 
     // Attach the callback function as an event listener.
     worker.current.addEventListener("message", onMessage);
@@ -456,22 +475,32 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    if (status === "ready") {
-      if (image === null) {
-        handleImageChange(EXAMPLE_URL);
-      }
+    if (
+      state &&
+      state.type === "status" &&
+      state.status === "ready" &&
+      image === null
+    ) {
+      // Run on first load
+      handleImageChange(EXAMPLE_URL);
     }
-  }, [status, image]);
+  }, [state, image]);
 
   return (
-    <div className="w-screen h-screen bg-black">
-      <AttentionVisualization
-        label={label}
-        score={score}
-        attentionData={attentionData}
-        image={image}
-        onImageChange={handleImageChange}
-      />
+    <div className="w-screen supports-[height:100cqh]:h-[100cqh] supports-[height:100svh]:h-[100svh] bg-black">
+      {state?.type === "error" ? (
+        <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center z-1 text-red-600 text-3xl px-8 backdrop-blur-lg bg-black/75 text-center">
+          {state.error}
+        </div>
+      ) : (
+        <AttentionVisualization
+          label={label}
+          score={score}
+          attentionData={attentionData}
+          image={image}
+          onImageChange={handleImageChange}
+        />
+      )}
     </div>
   );
 }
