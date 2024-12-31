@@ -330,12 +330,12 @@ function AttentionVisualization({
     const handleMouseEnter = () => setMouseActive(true);
     document.addEventListener("mouseleave", handleMouseLeave);
     document.addEventListener("mouseenter", handleMouseEnter);
-    window.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mousemove", handleMouseMove);
 
     return () => {
-      document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseleave", handleMouseLeave);
-      window.removeEventListener("mouseenter", handleMouseEnter);
+      document.removeEventListener("mouseenter", handleMouseEnter);
+      document.removeEventListener("mousemove", handleMouseMove);
     };
   }, []);
 
