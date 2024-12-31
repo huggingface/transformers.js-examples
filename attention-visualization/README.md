@@ -1,3 +1,16 @@
+---
+title: Attention Visualization
+emoji: 🔥
+colorFrom: yellow
+colorTo: purple
+sdk: static
+pinned: false
+license: apache-2.0
+short_description: Vision Transformer Attention Visualization
+thumbnail: https://huggingface.co/spaces/webml-community/attention-visualization/resolve/main/banner.png
+header: mini
+---
+
 # Attention Visualization
 
 ## Getting Started
