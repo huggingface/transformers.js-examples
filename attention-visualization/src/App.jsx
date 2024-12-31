@@ -314,7 +314,7 @@ function AttentionVisualization({
 
   const [activeHead, setActiveHead] = useState(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [mouseActive, setMouseActive] = useState(false);
+  const [mouseActive, setMouseActive] = useState(true);
 
   useEffect(() => {
     const handleMouseMove = (event) => {
