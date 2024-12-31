@@ -335,9 +335,18 @@ function AttentionVisualization({
     document.documentElement.addEventListener("mousemove", handleMouseMove);
 
     return () => {
-      document.documentElement.removeEventListener("mouseleave", handleMouseLeave);
-      document.documentElement.removeEventListener("mouseenter", handleMouseEnter);
-      document.documentElement.removeEventListener("mousemove", handleMouseMove);
+      document.documentElement.removeEventListener(
+        "mouseleave",
+        handleMouseLeave,
+      );
+      document.documentElement.removeEventListener(
+        "mouseenter",
+        handleMouseEnter,
+      );
+      document.documentElement.removeEventListener(
+        "mousemove",
+        handleMouseMove,
+      );
     };
   }, []);
 
