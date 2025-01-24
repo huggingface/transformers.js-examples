@@ -1,5 +1,3 @@
-import "./style.css";
-
 import { AutoModel, AutoProcessor, RawImage } from "@huggingface/transformers";
 
 // Reference the elements that we will need
