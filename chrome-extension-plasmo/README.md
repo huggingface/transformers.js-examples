@@ -8,16 +8,14 @@ Please note that this project is still under development. The chrome extension p
 
 Here is the link to the [demo video](https://www.youtube.com/watch?v=yXZQ8FHtSes). Each example will be updated below.
 
-| Task                | Example                                                     |
-| ------------------- | ----------------------------------------------------------- |
-| Text Summarization  | ![Example Text Summarization](./docs/example-summarize.jpg) |
-| Code Generation     | ![Example Code Generation](./docs/example-write-code.jpg)   |
-| Multi Modal LLM     | WIP                                                         |
-| Text Classification | WIP                                                         |
-| Speech to Text      | WIP                                                         |
-| Image Segmentation  | WIP                                                         |
-| Remove Background   | WIP                                                         |
-| Image Generation    | WIP                                                         |
+| Task               | Example                                                                                                |
+| ------------------ | ------------------------------------------------------------------------------------------------------ |
+| Text Summarization | ![Example Text Summarization](./docs/example-summarize.jpg)                                            |
+| Code Generation    | ![Example Code Generation](./docs/example-write-code.jpg)                                              |
+| Multi Modal LLM    | [https://github.com/tantara/transformers.js-chrome](https://github.com/tantara/transformers.js-chrome) |
+| Speech to Text     | [https://github.com/tantara/transformers.js-chrome](https://github.com/tantara/transformers.js-chrome) |
+| Reasoning          | [https://github.com/tantara/transformers.js-chrome](https://github.com/tantara/transformers.js-chrome) |
+| Image Generation   | [https://github.com/tantara/transformers.js-chrome](https://github.com/tantara/transformers.js-chrome) |
 
 ## Features
 
@@ -27,12 +25,6 @@ Here is the link to the [demo video](https://www.youtube.com/watch?v=yXZQ8FHtSes
 - [x] Load LLaMA variants
 - [x] Load other LLM models
 - [x] Release extension to Chrome Web Store
-- [ ] Load multi modal LLM models
-- [ ] Load Whisper (Speech-to-Text), SAM (Segment Anything Model), etc.
-- [ ] Chat history (save to local storage, export to CSV)
-- [ ] Call 3rd party LLM APIs
-- [ ] Error handling
-- [ ] Resource management (e.g. orchestrate and stop generations, unload models)
 
 ## Performance
 
