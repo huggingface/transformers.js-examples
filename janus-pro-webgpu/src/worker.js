@@ -128,7 +128,7 @@ async function generate(messages) {
 
     const conversation = [
       {
-        role: "User", // uses title case
+        role: "<|User|>", // uses title case
         content: text,
       },
     ];
@@ -166,19 +166,19 @@ async function generate(messages) {
       message.image
         ? [
             {
-              role: "User",
+              role: "<|User|>",
               content: "<image_placeholder>\n" + message.content,
               images: [message.image],
             },
           ]
         : [
             {
-              role: "System",
+              role: "<|System|>",
               content:
                 "You are a helpful assistant. Answer the user's questions in a concise manner.",
             },
             {
-              role: "User",
+              role: "<|User|>",
               content: message.content,
             },
           ],
