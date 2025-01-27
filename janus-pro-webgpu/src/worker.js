@@ -37,7 +37,7 @@ async function check() {
  * This class uses the Singleton pattern to enable lazy-loading of the pipeline
  */
 class ImageGenerationPipeline {
-  static model_id = "onnx-community/Janus-1.3B-ONNX";
+  static model_id = "onnx-community/Janus-Pro-1B-ONNX";
 
   static async getInstance(progress_callback = null) {
     this.processor ??= AutoProcessor.from_pretrained(this.model_id, {
