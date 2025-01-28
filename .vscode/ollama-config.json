@@ -1,0 +1,7 @@
+{
+  "baseUrl": "http://localhost:11434",
+  "model": "llama3.2:1b",
+  "promptTemplate": "Given this ${language} code snippet, provide a brief and concise description of what it does in Traditional Chinese. Use a bullet-point format for the description:\n\n${code}\n\nDescription:",
+  "isEnabled": true,
+  "lastUpdated": 1738073339476
+}
