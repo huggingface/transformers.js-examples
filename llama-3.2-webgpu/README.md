@@ -1,55 +1,120 @@
----
-title: Llama 3.2 WebGPU
-emoji: 🦙
-colorFrom: green
-colorTo: pink
-sdk: static
-pinned: false
-license: apache-2.0
-models:
-  - onnx-community/Llama-3.2-1B-Instruct-q4f16
-short_description: A powerful AI chatbot that runs locally in your browser
-thumbnail: https://huggingface.co/spaces/webml-community/llama-3.2-webgpu/resolve/main/banner.png
----
+# Llama 3.2 WebGPU Desktop Service
 
-# Llama-3.2 WebGPU
+A desktop application built with Electron that provides a convenient interface for running the Llama 3.2 WebGPU service. This project is based on [transformers.js-examples](https://github.com/huggingface/transformers.js-examples) by Hugging Face.
 
-A simple React + Vite application for running [Llama-3.2-1B-Instruct](https://huggingface.co/onnx-community/Llama-3.2-1B-Instruct-q4f16), a powerful small language model, locally in the browser using Transformers.js and WebGPU-acceleration.
+## Key Features
 
-## Getting Started
+- Seamless system tray integration for minimal resource usage
+- Single-click web service activation
+- Intuitive control interface for service management
+- Chrome/Edge browser compatibility
+- Integrated development server
+- WebGPU hardware acceleration support
 
-Follow the steps below to set up and run the application.
+## Screenshots
 
-### 1. Clone the Repository
+Control Interface:
+![Control Interface](./doc/llama3.2-electron.png)
 
-Clone the examples repository from GitHub:
+Browser Interface:
+![Browser Interface](./doc/llama3.2-electron2.png)
 
-```sh
-git clone https://github.com/huggingface/transformers.js-examples.git
+## System Requirements
+
+- Node.js v20.18.1 or later
+- npm v11.0.0 or later
+- WebGPU-compatible browser (Chrome/Edge)
+- Graphics card with WebGPU support
+
+## Quick Start
+
+```bash
+# Clone the repository
+git clone [repository-url]
+cd llama-3.2-webgpu
+
+# Install dependencies
+npm install
+
+# Start development server
+npm run electron:dev
+
+# Build for production
+npm run build
+
+# Package application
+npm run make
 ```
 
-### 2. Navigate to the Project Directory
+## Using the Application
 
-Change your working directory to the `llama-3.2-webgpu` folder:
+1. Launch the application - it will minimize to system tray
+2. Access via system tray icon:
+   - Open control panel
+   - Launch web interface
+   - Exit application
+3. Control panel features:
+   - Service status monitoring
+   - Browser launch button
+   - Configuration options
 
-```sh
-cd transformers.js-examples/llama-3.2-webgpu
+## Technical Architecture
+
+### Core Components
+- Frontend: React + Vite
+- Desktop Framework: Electron
+- AI Processing: WebGPU
+- Build System: Electron Forge
+- Styling: Tailwind CSS
+
+### Directory Structure
+```
+llama-3.2-webgpu/
+├── src/
+│   ├── components/    # React UI components
+│   ├── main.js       # Electron main process
+│   └── worker.js     # WebGPU worker thread
+├── public/           # Static assets
+├── control.html      # Control interface
+└── package.json      # Project config
 ```
 
-### 3. Install Dependencies
+## Development Guide
 
-Install the necessary dependencies using npm:
-
-```sh
-npm i
+### Development Mode
+```bash
+npm run electron:dev
 ```
+This will:
+- Start Vite dev server
+- Launch Electron app
+- Enable hot reload
 
-### 4. Run the Development Server
-
-Start the development server:
-
-```sh
-npm run dev
+### Production Build
+```bash
+npm run build
+npm run make
 ```
+Packaged application will be in the `out` directory.
 
-The application should now be running locally. Open your browser and go to `http://localhost:5173` to see it in action.
+## Contributing
+
+1. Fork the repository
+2. Create feature branch (`git checkout -b feature/enhancement`)
+3. Commit changes (`git commit -m 'Add enhancement'`)
+4. Push to branch (`git push origin feature/enhancement`)
+5. Submit Pull Request
+
+## License and Attribution
+
+This project is a fork of [transformers.js-examples](https://github.com/huggingface/transformers.js-examples) by Hugging Face. The original code and its modifications are subject to the original license terms. All rights to the original code belong to Hugging Face and its contributors.
+
+Any additional modifications and new code in this fork are released under the terms of the original license.
+
+Please refer to the original repository for complete license information.
+
+## Acknowledgments
+
+- [Hugging Face](https://huggingface.co/) for the original transformers.js-examples
+- The Electron team for the desktop application framework
+- WebGPU working group for the hardware acceleration API

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Llama 3.2 WebGPU Service Control</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .status {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 4px;
+        }
+        .status.running {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+        .status.stopped {
+            background-color: #ffebee;
+            color: #c62828;
+        }
+        button {
+            background-color: #1976d2;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        button:hover {
+            background-color: #1565c0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Llama 3.2 WebGPU Service Control</h1>
+        <div id="serverStatus" class="status running">
+            Server Status: Running
+        </div>
+        <button id="openBrowser">Open in Browser</button>
+    </div>
+    <script>
+        document.getElementById('openBrowser').addEventListener('click', () => {
+            window.open('http://localhost:5173');
+        });
+    </script>
+</body>
+</html>

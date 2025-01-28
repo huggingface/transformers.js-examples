@@ -234,7 +234,7 @@ function App() {
               to a server. You can even disconnect from the internet after the
               model has loaded!
               <br />
-              Want to learn more? Check out the demo's source code on{" "}
+              Want to learn more? Check out the demo s source code on{" "}
               <a
                 href="https://github.com/huggingface/transformers.js-examples/tree/main/llama-3.2-webgpu"
                 target="_blank"

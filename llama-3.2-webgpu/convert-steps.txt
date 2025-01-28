@@ -1,0 +1,83 @@
+Steps to Convert Vite+React Project to Electron App
+
+1. Initialize Electron Forge
+```bash
+npm install --save-dev @electron-forge/cli
+npx electron-forge import
+```
+
+2. Create Main Process File (src/main.js)
+- Handle app lifecycle
+- Create system tray
+- Manage windows
+- Start development server
+
+3. Create Control Interface (control.html)
+- Simple status display
+- Browser launch button
+- Basic styling
+
+4. Update Package.json
+```json
+{
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "electron:dev": "electron .",
+    "package": "electron-forge package",
+    "make": "electron-forge make"
+  }
+}
+```
+
+5. Configure Vite (vite.config.js)
+```javascript
+export default defineConfig({
+  plugins: [react()],
+  server: {
+    port: 5173,
+    strictPort: true
+  },
+  build: {
+    outDir: 'dist',
+    assetsDir: 'assets'
+  }
+});
+```
+
+6. Add Forge Config (forge.config.js)
+```javascript
+export default {
+  packagerConfig: {
+    asar: true,
+  },
+  makers: [
+    {
+      name: '@electron-forge/maker-squirrel',
+      config: {},
+    },
+    {
+      name: '@electron-forge/maker-zip',
+      platforms: ['darwin'],
+    }
+  ],
+  plugins: [
+    {
+      name: '@electron-forge/plugin-auto-unpack-natives',
+      config: {},
+    },
+  ],
+};
+```
+
+Key Points:
+- Use ES modules syntax
+- Keep main process and renderer process separate
+- Handle process cleanup properly
+- Use proper path resolution for assets
+- Configure proper build output
+
+Development Workflow:
+1. npm run build (build Vite app)
+2. npm run electron:dev (run Electron with dev server)
+3. npm run make (package application)

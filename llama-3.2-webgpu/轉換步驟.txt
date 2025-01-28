@@ -1,0 +1,38 @@
+Vite+React 轉 Electron 核心步驟
+
+1. 安裝 Electron Forge
+```bash
+npm install --save-dev @electron-forge/cli
+npx electron-forge import
+```
+
+2. 主要檔案結構
+```
+src/main.js      - Electron主進程
+control.html     - 控制介面
+vite.config.js   - Vite配置
+forge.config.js  - Electron打包配置
+```
+
+3. 核心功能實現
+- main.js: 處理托盤、視窗和vite服務器
+- control.html: 簡單控制介面和瀏覽器開啟
+- 保持原有React專案結構不變
+
+4. 關鍵配置
+- package.json添加 "main": "src/main.js"
+- vite.config.js設置固定端口
+- 使用ES模組語法
+- 正確處理資源路徑
+
+5. 開發流程
+```bash
+npm run build        # 構建React
+npm run electron:dev # 開發模式
+npm run make        # 打包應用
+```
+
+注意事項：
+- 主進程和渲染進程分離
+- 正確清理進程
+- 路徑解析要考慮打包後情況
