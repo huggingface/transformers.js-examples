@@ -1,4 +1,4 @@
-import { app, BrowserWindow, Tray, Menu } from 'electron';
+import { app, BrowserWindow, Tray, Menu, ipcMain } from 'electron';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import { spawn } from 'child_process';
@@ -24,7 +24,15 @@ const createWindow = () => {
   mainWindow.loadFile('control.html');
 };
 
+const sendServerStatus = (status) => {
+  if (mainWindow && !mainWindow.isDestroyed()) {
+    mainWindow.webContents.send('server-status', status);
+  }
+};
+
 const startViteServer = () => {
+  if (viteProcess) return;
+  
   viteProcess = spawn('npm', ['run', 'dev'], {
     shell: true,
     stdio: 'ignore',
@@ -33,7 +41,10 @@ const startViteServer = () => {
   
   // 等待vite服務器啟動
   return new Promise((resolve) => {
-    setTimeout(resolve, 5178);
+    setTimeout(() => {
+      sendServerStatus(true);
+      resolve();
+    }, 5178);
   });
 };
 
@@ -41,6 +52,7 @@ const killViteServer = () => {
   if (viteProcess && viteProcess.pid) {
     treeKill(viteProcess.pid);
     viteProcess = null;
+    sendServerStatus(false);
   }
 };
 
@@ -51,9 +63,6 @@ const createTray = () => {
       label: '開啟控制介面',
       click: async () => {
         if (mainWindow === null) {
-          if (!viteProcess) {
-            await startViteServer();
-          }
           createWindow();
         } else {
           mainWindow.show();
@@ -72,6 +81,15 @@ const createTray = () => {
   tray.setContextMenu(contextMenu);
 };
 
+// IPC Handlers
+ipcMain.handle('start-server', async () => {
+  await startViteServer();
+});
+
+ipcMain.handle('stop-server', () => {
+  killViteServer();
+});
+
 app.whenReady().then(async () => {
   await startViteServer();
   createTray();
@@ -87,9 +105,6 @@ app.on('window-all-closed', () => {
 
 app.on('activate', async () => {
   if (BrowserWindow.getAllWindows().length === 0) {
-    if (!viteProcess) {
-      await startViteServer();
-    }
     createWindow();
   }
 });

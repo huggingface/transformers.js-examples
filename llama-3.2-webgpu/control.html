@@ -37,6 +37,11 @@
             background-color: #ffebee;
             color: #c62828;
         }
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
         button {
             background-color: #1976d2;
             color: white;
@@ -49,6 +54,22 @@
         button:hover {
             background-color: #1565c0;
         }
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        button.start {
+            background-color: #2e7d32;
+        }
+        button.start:hover {
+            background-color: #1b5e20;
+        }
+        button.stop {
+            background-color: #c62828;
+        }
+        button.stop:hover {
+            background-color: #b71c1c;
+        }
     </style>
 </head>
 <body>
@@ -58,11 +79,55 @@
         <div id="serverStatus" class="status running">
             Server Status: Running
         </div>
-        <button id="openBrowser">Open in Browser</button>
+        <div class="button-group">
+            <button id="startServer" class="start">Start Server</button>
+            <button id="stopServer" class="stop">Stop Server</button>
+            <button id="openBrowser">Open in Browser</button>
+        </div>
     </div>
     <script>
-        document.getElementById('openBrowser').addEventListener('click', () => {
-            window.open('http://localhost:5178');
+        const { ipcRenderer } = require('electron');
+        const startBtn = document.getElementById('startServer');
+        const stopBtn = document.getElementById('stopServer');
+        const openBtn = document.getElementById('openBrowser');
+        const statusDiv = document.getElementById('serverStatus');
+
+        // Initial state
+        let isServerRunning = true;
+        updateButtons();
+
+        function updateButtons() {
+            startBtn.disabled = isServerRunning;
+            stopBtn.disabled = !isServerRunning;
+            openBtn.disabled = !isServerRunning;
+            statusDiv.className = isServerRunning ? 'status running' : 'status stopped';
+            statusDiv.textContent = `Server Status: ${isServerRunning ? 'Running' : 'Stopped'}`;
+        }
+
+        startBtn.addEventListener('click', async () => {
+            startBtn.disabled = true;
+            await ipcRenderer.invoke('start-server');
+            isServerRunning = true;
+            updateButtons();
+        });
+
+        stopBtn.addEventListener('click', async () => {
+            stopBtn.disabled = true;
+            await ipcRenderer.invoke('stop-server');
+            isServerRunning = false;
+            updateButtons();
+        });
+
+        openBtn.addEventListener('click', () => {
+            if (isServerRunning) {
+                window.open('http://localhost:5178');
+            }
+        });
+
+        // Listen for server status updates
+        ipcRenderer.on('server-status', (event, running) => {
+            isServerRunning = running;
+            updateButtons();
         });
     </script>
 </body>
