@@ -70,6 +70,32 @@
         button.stop:hover {
             background-color: #b71c1c;
         }
+        
+        /* Loading animation */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .loading {
+            position: relative;
+            pointer-events: none;
+        }
+        
+        .loading::after {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            top: 50%;
+            left: 50%;
+            margin-top: -8px;
+            margin-left: -8px;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s linear infinite;
+        }
     </style>
 </head>
 <body>
@@ -106,9 +132,14 @@
 
         startBtn.addEventListener('click', async () => {
             startBtn.disabled = true;
-            await ipcRenderer.invoke('start-server');
-            isServerRunning = true;
-            updateButtons();
+            startBtn.classList.add('loading');
+            try {
+                await ipcRenderer.invoke('start-server');
+                isServerRunning = true;
+            } finally {
+                startBtn.classList.remove('loading');
+                updateButtons();
+            }
         });
 
         stopBtn.addEventListener('click', async () => {
