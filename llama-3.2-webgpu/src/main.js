@@ -2,6 +2,7 @@ import { app, BrowserWindow, Tray, Menu } from 'electron';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import { spawn } from 'child_process';
+import treeKill from 'tree-kill';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -26,13 +27,21 @@ const createWindow = () => {
 const startViteServer = () => {
   viteProcess = spawn('npm', ['run', 'dev'], {
     shell: true,
-    stdio: 'inherit'
+    stdio: 'ignore',
+    windowsHide: true
   });
   
   // 等待vite服務器啟動
   return new Promise((resolve) => {
-    setTimeout(resolve, 5173);
+    setTimeout(resolve, 5178);
   });
+};
+
+const killViteServer = () => {
+  if (viteProcess && viteProcess.pid) {
+    treeKill(viteProcess.pid);
+    viteProcess = null;
+  }
 };
 
 const createTray = () => {
@@ -40,8 +49,11 @@ const createTray = () => {
   const contextMenu = Menu.buildFromTemplate([
     {
       label: '開啟控制介面',
-      click: () => {
+      click: async () => {
         if (mainWindow === null) {
+          if (!viteProcess) {
+            await startViteServer();
+          }
           createWindow();
         } else {
           mainWindow.show();
@@ -51,9 +63,7 @@ const createTray = () => {
     {
       label: '退出',
       click: () => {
-        if (viteProcess) {
-          viteProcess.kill();
-        }
+        killViteServer();
         app.quit();
       }
     }
@@ -69,19 +79,21 @@ app.whenReady().then(async () => {
 });
 
 app.on('window-all-closed', () => {
+  killViteServer();
   if (process.platform !== 'darwin') {
     app.quit();
   }
 });
 
-app.on('activate', () => {
+app.on('activate', async () => {
   if (BrowserWindow.getAllWindows().length === 0) {
+    if (!viteProcess) {
+      await startViteServer();
+    }
     createWindow();
   }
 });
 
 app.on('before-quit', () => {
-  if (viteProcess) {
-    viteProcess.kill();
-  }
+  killViteServer();
 });

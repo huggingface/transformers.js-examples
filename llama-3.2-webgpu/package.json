@@ -20,7 +20,8 @@
     "electron-squirrel-startup": "^1.0.1",
     "marked": "^12.0.2",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "tree-kill": "^1.2.2"
   },
   "devDependencies": {
     "@electron-forge/cli": "^7.6.1",
