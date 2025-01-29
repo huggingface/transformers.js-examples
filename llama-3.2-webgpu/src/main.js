@@ -13,7 +13,7 @@ let viteProcess = null;
 const createWindow = () => {
   mainWindow = new BrowserWindow({
     width: 800,
-    height: 600,
+    height: 480,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false
@@ -31,7 +31,7 @@ const startViteServer = () => {
   
   // 等待vite服務器啟動
   return new Promise((resolve) => {
-    setTimeout(resolve, 3000);
+    setTimeout(resolve, 5173);
   });
 };
 

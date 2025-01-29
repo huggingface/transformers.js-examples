@@ -14,10 +14,10 @@ A desktop application built with Electron that provides a convenient interface f
 ## Screenshots
 
 Control Interface:
-![Control Interface](./doc/llama3.2-electron.png)
+
 
 Browser Interface:
-![Browser Interface](./doc/llama3.2-electron2.png)
+
 
 ## System Requirements
 
@@ -61,6 +61,7 @@ npm run make
 ## Technical Architecture
 
 ### Core Components
+
 - Frontend: React + Vite
 - Desktop Framework: Electron
 - AI Processing: WebGPU
@@ -68,6 +69,7 @@ npm run make
 - Styling: Tailwind CSS
 
 ### Directory Structure
+
 ```
 llama-3.2-webgpu/
 ├── src/
@@ -82,19 +84,24 @@ llama-3.2-webgpu/
 ## Development Guide
 
 ### Development Mode
+
 ```bash
 npm run electron:dev
 ```
+
 This will:
+
 - Start Vite dev server
 - Launch Electron app
 - Enable hot reload
 
 ### Production Build
+
 ```bash
 npm run build
 npm run make
 ```
+
 Packaged application will be in the `out` directory.
 
 ## Contributing
