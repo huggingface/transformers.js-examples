@@ -41,10 +41,10 @@ function App() {
 
   // We use the `useEffect` hook to set up the worker as soon as the `App` component is mounted.
   useEffect(() => {
-      // Create the worker if it does not yet exist.
-      worker.current ??= new Worker(new URL("./worker.js", import.meta.url), {
-        type: "module",
-      });
+    // Create the worker if it does not yet exist.
+    worker.current ??= new Worker(new URL("./worker.js", import.meta.url), {
+      type: "module",
+    });
 
     // Create a callback function for messages from the worker thread.
     const onMessageReceived = (e) => {

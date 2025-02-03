@@ -11,7 +11,6 @@ thumbnail: >-
   https://huggingface.co/spaces/webml-community/text-to-speech-webgpu/resolve/main/banner.png
 ---
 
-
 # Text-to-Speech WebGPU
 
 A simple React + Vite application for running [OuteTTS](https://github.com/edwko/OuteTTS), an experimental text-to-speech model that uses a pure language modeling approach to generate speech, using Transformers.js and WebGPU-acceleration.
