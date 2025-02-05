@@ -127,7 +127,7 @@ function App() {
             setMessages((prev) => {
               const cloned = [...prev];
               const last = cloned.at(-1);
-              cloned[cloned.length - 1] =  {
+              cloned[cloned.length - 1] = {
                 ...last,
                 content: last.content + output,
               };
@@ -200,7 +200,8 @@ function App() {
             ></img>
             <h1 className="text-4xl font-bold mb-1">TinySwallow WebGPU</h1>
             <h2 className="font-semibold">
-              A compact Japanese language model that runs locally in your browser with WebGPU acceleration.
+              A compact Japanese language model that runs locally in your
+              browser with WebGPU acceleration.
             </h2>
           </div>
 
