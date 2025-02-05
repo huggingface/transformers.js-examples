@@ -8,43 +8,48 @@ import {
 import { join } from "path";
 import { execSync } from "child_process";
 
+// Check if --audit_only is specified as an argument
+const auditOnly = process.argv.includes("--audit_only");
+
 // Function to update the @huggingface/transformers version
 const updateDependency = (projectPath, version) => {
   const packageJsonPath = join(projectPath, "package.json");
   const denoJsonPath = join(projectPath, "deno.json");
 
   try {
-    if (existsSync(packageJsonPath)) {
-      // Read and parse package.json
-      const packageJson = JSON.parse(readFileSync(packageJsonPath, "utf-8"));
+    if (!auditOnly) {
+      if (existsSync(packageJsonPath)) {
+        // Read and parse package.json
+        const packageJson = JSON.parse(readFileSync(packageJsonPath, "utf-8"));
 
-      // Update @huggingface/transformers to the latest version
-      if (
-        packageJson.dependencies &&
-        packageJson.dependencies["@huggingface/transformers"] !== version
-      ) {
-        console.log(`Updating @huggingface/transformers in ${projectPath}`);
-        packageJson.dependencies["@huggingface/transformers"] = version;
-        writeFileSync(
-          packageJsonPath,
-          JSON.stringify(packageJson, null, 2) + "\n",
-        );
+        // Update @huggingface/transformers to the latest version
+        if (
+          packageJson.dependencies &&
+          packageJson.dependencies["@huggingface/transformers"] !== version
+        ) {
+          console.log(`Updating @huggingface/transformers in ${projectPath}`);
+          packageJson.dependencies["@huggingface/transformers"] = version;
+          writeFileSync(
+            packageJsonPath,
+            JSON.stringify(packageJson, null, 2) + "\n",
+          );
+        }
+      } else if (existsSync(denoJsonPath)) {
+        // Read and parse deno.json
+        const denoJson = JSON.parse(readFileSync(denoJsonPath, "utf-8"));
+        const denoVersion = `npm:@huggingface/transformers@${version}`;
+        // Update @huggingface/transformers to the latest version
+        if (
+          denoJson.imports &&
+          denoJson.imports["@huggingface/transformers"] !== denoVersion
+        ) {
+          console.log(`Updating @huggingface/transformers in ${projectPath}`);
+          denoJson.imports["@huggingface/transformers"] = denoVersion;
+          writeFileSync(denoJsonPath, JSON.stringify(denoJson, null, 2) + "\n");
+        }
+      } else {
+        throw new Error("No package.json or deno.json found");
       }
-    } else if (existsSync(denoJsonPath)) {
-      // Read and parse deno.json
-      const denoJson = JSON.parse(readFileSync(denoJsonPath, "utf-8"));
-      const denoVersion = `npm:@huggingface/transformers@${version}`;
-      // Update @huggingface/transformers to the latest version
-      if (
-        denoJson.imports &&
-        denoJson.imports["@huggingface/transformers"] !== denoVersion
-      ) {
-        console.log(`Updating @huggingface/transformers in ${projectPath}`);
-        denoJson.imports["@huggingface/transformers"] = denoVersion;
-        writeFileSync(denoJsonPath, JSON.stringify(denoJson, null, 2) + "\n");
-      }
-    } else {
-      throw new Error("No package.json or deno.json found");
     }
 
     // Detect lock file and run appropriate command
@@ -67,13 +72,15 @@ const updateDependency = (projectPath, version) => {
 
 // Get the latest version of @huggingface/transformers
 let version = "latest";
-try {
-  version = execSync("npm view @huggingface/transformers version", {
-    encoding: "utf-8",
-  }).trim();
-  console.log(`Version: ${version}`);
-} catch (error) {
-  console.error(`Error: ${error.message}`);
+if (!auditOnly) {
+  try {
+    version = execSync("npm view @huggingface/transformers version", {
+      encoding: "utf-8",
+    }).trim();
+    console.log(`Version: ${version}`);
+  } catch (error) {
+    console.error(`Error: ${error.message}`);
+  }
 }
 
 // Iterate over all directories in the monorepo
