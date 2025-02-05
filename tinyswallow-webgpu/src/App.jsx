@@ -32,6 +32,7 @@ function App() {
   const [messages, setMessages] = useState([]);
   const [tps, setTps] = useState(null);
   const [numTokens, setNumTokens] = useState(null);
+  const [isCompositionOn, setIsCompositionOn] = useState(false);
 
   function onEnter(message) {
     setMessages((prev) => [...prev, { role: "user", content: message }]);
@@ -350,12 +351,15 @@ function App() {
               input.length > 0 &&
               !isRunning &&
               e.key === "Enter" &&
-              !e.shiftKey
+              !e.shiftKey &&
+              !isCompositionOn
             ) {
               e.preventDefault(); // Prevent default behavior of Enter key
               onEnter(input);
             }
           }}
+          onCompositionStart={() => setIsCompositionOn(true)}
+          onCompositionEnd={() => setIsCompositionOn(false)}
           onInput={(e) => setInput(e.target.value)}
         />
         {isRunning ? (
