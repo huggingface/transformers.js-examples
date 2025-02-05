@@ -248,7 +248,8 @@ function App() {
             ></img>
             <h1 className="text-5xl font-bold mb-1">Janus Pro WebGPU</h1>
             <h2 className="font-semibold">
-              A novel autoregressive framework for unified<br/>
+              A novel autoregressive framework for unified
+              <br />
               multimodal understanding and generation.
             </h2>
           </div>

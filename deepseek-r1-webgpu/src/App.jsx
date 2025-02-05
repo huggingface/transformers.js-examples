@@ -204,7 +204,8 @@ function App() {
             ></img>
             <h1 className="text-4xl font-bold mb-1">DeepSeek-R1 WebGPU</h1>
             <h2 className="font-semibold">
-              A next-generation reasoning model that runs locally in your browser with WebGPU acceleration.
+              A next-generation reasoning model that runs locally in your
+              browser with WebGPU acceleration.
             </h2>
           </div>
 
