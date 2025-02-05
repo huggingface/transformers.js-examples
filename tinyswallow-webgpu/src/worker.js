@@ -15,7 +15,7 @@ async function check() {
     if (!adapter) {
       throw new Error("WebGPU is not supported (no adapter found)");
     }
-    fp16_supported = adapter.features.has("shader-f16")
+    fp16_supported = adapter.features.has("shader-f16");
   } catch (e) {
     self.postMessage({
       status: "error",

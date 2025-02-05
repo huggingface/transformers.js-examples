@@ -32,6 +32,7 @@ function App() {
   const [messages, setMessages] = useState([]);
   const [tps, setTps] = useState(null);
   const [numTokens, setNumTokens] = useState(null);
+  const [isCompositionOn, setIsCompositionOn] = useState(false);
 
   function onEnter(message) {
     setMessages((prev) => [...prev, { role: "user", content: message }]);
@@ -126,7 +127,7 @@ function App() {
             setMessages((prev) => {
               const cloned = [...prev];
               const last = cloned.at(-1);
-              cloned[cloned.length - 1] =  {
+              cloned[cloned.length - 1] = {
                 ...last,
                 content: last.content + output,
               };
@@ -199,7 +200,8 @@ function App() {
             ></img>
             <h1 className="text-4xl font-bold mb-1">TinySwallow WebGPU</h1>
             <h2 className="font-semibold">
-              A compact Japanese language model that runs locally in your browser with WebGPU acceleration.
+              A compact Japanese language model that runs locally in your
+              browser with WebGPU acceleration.
             </h2>
           </div>
 
@@ -350,12 +352,15 @@ function App() {
               input.length > 0 &&
               !isRunning &&
               e.key === "Enter" &&
-              !e.shiftKey
+              !e.shiftKey &&
+              !isCompositionOn
             ) {
               e.preventDefault(); // Prevent default behavior of Enter key
               onEnter(input);
             }
           }}
+          onCompositionStart={() => setIsCompositionOn(true)}
+          onCompositionEnd={() => setIsCompositionOn(false)}
           onInput={(e) => setInput(e.target.value)}
         />
         {isRunning ? (
