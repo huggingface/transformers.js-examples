@@ -104,8 +104,9 @@ function App() {
         <h2 className="text-lg font-normal">
           Experiment with different tokenizers (running{" "}
           <a
-            className="text-gray-900 underline"
+            className="text-blue-500 underline"
             href="https://github.com/huggingface/transformers.js"
+            target="_blank"
           >
             locally
           </a>{" "}
@@ -173,7 +174,7 @@ function App() {
 
       <div
         ref={outputRef}
-        className="font-mono text-lg p-2.5 w-full bg-gray-100 rounded-lg border border-gray-200 whitespace-pre-wrap text-left h-[200px] overflow-y-auto"
+        className={`font-mono text-lg p-2.5 w-full bg-gray-100 rounded-lg border border-gray-200 whitespace-pre-wrap text-left h-[200px] overflow-y-auto text-gray-600`}
       >
         {outputOption === "text"
           ? decodedTokens.map((token, index) => (
