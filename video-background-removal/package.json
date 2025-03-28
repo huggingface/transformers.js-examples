@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "build": "vite build",
     "preview": "vite preview"
   },
@@ -12,6 +12,6 @@
     "vite": "^6.0.5"
   },
   "dependencies": {
-    "@huggingface/transformers": "^3.2.2"
+    "@huggingface/transformers": "^3.4.1"
   }
 }
