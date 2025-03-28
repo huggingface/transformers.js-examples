@@ -18,13 +18,44 @@ function setStreamSize(width, height) {
 
 status.textContent = "Loading model...";
 
+function getDeviceConfig(deviceParam) {
+  const defaultDevice = 'webgpu';
+  const webnnDevices = ['webnn-gpu', 'webnn-cpu', 'webnn-npu'];
+
+  const device = (deviceParam || defaultDevice).toLowerCase();
+  const dtype = webnnDevices.includes(device) ? 'fp16' : 'fp32';
+
+  const FREE_DIMENSION_HEIGHT = 256;
+  const FREE_DIMENSION_WIDTH = 320;
+
+  const sessionOptions = webnnDevices.includes(device)
+    ? {
+        freeDimensionOverrides: {
+          batch_size: 1,
+          height: FREE_DIMENSION_HEIGHT,
+          width: FREE_DIMENSION_WIDTH,
+        },
+      }
+    : {};
+
+  return { device, dtype, sessionOptions };
+}
+
+const urlParams = new URLSearchParams(window.location.search);
+let { device, dtype, sessionOptions } = getDeviceConfig(urlParams.get('device'));
+if (!['webgpu', 'webnn-gpu', 'webnn-cpu', 'webnn-npu'].includes(device)) {
+  status.textContent = `Unsupported device ${device}. Falling back to WebGPU.`;
+  device = 'webgpu';
+}
+
 // Load model and processor
 const model_id = "Xenova/modnet";
 let model;
 try {
   model = await AutoModel.from_pretrained(model_id, {
-    device: "webgpu",
-    dtype: "fp32", // TODO: add fp16 support
+    device: device,
+    dtype: dtype,
+    session_options: sessionOptions
   });
 } catch (err) {
   status.textContent = err.message;
@@ -43,6 +74,10 @@ sizeSlider.addEventListener("input", () => {
   sizeLabel.textContent = size;
 });
 sizeSlider.disabled = false;
+
+if (['webnn-gpu', 'webnn-cpu', 'webnn-npu'].includes(device)) {
+  sizeSlider.disabled = true;
+}
 
 let scale = 0.5;
 scaleSlider.addEventListener("input", () => {
