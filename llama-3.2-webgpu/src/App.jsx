@@ -10,7 +10,7 @@ const STICKY_SCROLL_THRESHOLD = 120;
 const EXAMPLES = [
   "Give me some tips to improve my time management skills.",
   "What is the difference between AI and ML?",
-  "Write python code to compute the nth fibonacci number.",
+  "Write Python code to perform merge sort.",
 ];
 
 function App() {
@@ -209,7 +209,7 @@ function App() {
               <br />
               You are about to load{" "}
               <a
-                href="https://huggingface.co/onnx-community/Llama-3.2-1B-Instruct-q4f16"
+                href="https://huggingface.co/onnx-community/Llama-3.2-1B-Instruct-onnx-web-gqa"
                 target="_blank"
                 rel="noreferrer"
                 className="font-medium underline"
