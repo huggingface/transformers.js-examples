@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "update": "node .scripts/update.js",
+    "audit": "node .scripts/update.js --audit_only",
     "build": "node .scripts/build.js",
     "format": "prettier --write ."
   },
