@@ -1,4 +1,4 @@
-import { AutoModel, AutoProcessor, RawImage } from "@huggingface/transformers";
+import { pipeline, RawImage } from "@huggingface/transformers";
 
 // Reference the elements that we will need
 const status = document.getElementById("status");
@@ -20,9 +20,9 @@ status.textContent = "Loading model...";
 
 // Load model and processor
 const model_id = "Xenova/modnet";
-let model;
+let pipe;
 try {
-  model = await AutoModel.from_pretrained(model_id, {
+  pipe = await pipeline("background-removal", model_id, {
     device: "webgpu",
     dtype: "fp32", // TODO: add fp16 support
   });
@@ -32,14 +32,12 @@ try {
   throw err;
 }
 
-const processor = await AutoProcessor.from_pretrained(model_id);
-
 // Set up controls
 let size = 256;
-processor.feature_extractor.size = { shortest_edge: size };
+pipe.processor.feature_extractor.size = { shortest_edge: size };
 sizeSlider.addEventListener("input", () => {
   size = Number(sizeSlider.value);
-  processor.feature_extractor.size = { shortest_edge: size };
+  pipe.processor.feature_extractor.size = { shortest_edge: size };
   sizeLabel.textContent = size;
 });
 sizeSlider.disabled = false;
@@ -71,19 +69,12 @@ function updateCanvas() {
       const currentFrame = context.getImageData(0, 0, width, height);
       const image = new RawImage(currentFrame.data, width, height, 4);
 
-      // Pre-process image
-      const inputs = await processor(image);
-
       // Predict alpha matte
-      const { output } = await model({ input: inputs.pixel_values });
+      const [output] = await pipe(image);
 
-      const mask = await RawImage.fromTensor(
-        output[0].mul(255).to("uint8"),
-      ).resize(width, height);
-      image.putAlpha(mask);
-
+      // Draw the alpha matte on the canvas
       outputContext.putImageData(
-        new ImageData(image.data, image.width, image.height),
+        new ImageData(output.data, output.width, output.height),
         0,
         0,
       );
