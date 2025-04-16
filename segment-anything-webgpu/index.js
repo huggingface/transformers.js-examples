@@ -3,7 +3,7 @@ import {
   AutoProcessor,
   RawImage,
   Tensor,
-} from "https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.1.1";
+} from "https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.5.0";
 
 // Reference the elements we will use
 const statusLabel = document.getElementById("status");
