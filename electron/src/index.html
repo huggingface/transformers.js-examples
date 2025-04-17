@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Transformers.js | Sample Electron application</title>
+    <link rel="stylesheet" href="index.css" />
+  </head>
+
+  <body>
+    <div class="container">
+        <h1>Transformers.js</h1>
+        <h2>Run 🤗 Transformers.js in Electron!</h2>
+        <input id="text" placeholder="Enter text here">
+        <pre id="output"></pre>
+    </div>
+
+    <script>
+      const inputElement = document.getElementById('text');
+      const outputElement = document.getElementById('output');
+
+      // 1. Send input data to the worker thread when it changes.
+      inputElement.addEventListener('input', async (event) => {
+          // 2. Await the result from the worker thread.
+          const result = await window.electronAPI.classify(event.target.value);
+
+          // 3. Update the UI.
+          outputElement.innerText = JSON.stringify(result, null, 2);
+      });
+    </script>
+</body>
+</html>
