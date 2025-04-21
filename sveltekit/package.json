@@ -32,6 +32,6 @@
     "vite": "^5.0.3"
   },
   "dependencies": {
-    "@huggingface/transformers": "^3.0.0"
+    "@huggingface/transformers": "3.5.0"
   }
 }
