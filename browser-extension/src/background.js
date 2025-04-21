@@ -1,8 +1,12 @@
 // background.js - Handles requests from the UI, runs the model, then sends back a response
 
-import { pipeline } from "@huggingface/transformers";
+import { env, pipeline } from "@huggingface/transformers";
 
 import { CONTEXT_MENU_ITEM_ID } from "./constants.js";
+
+// If you'd like to use a local model instead of loading the model
+// from the Hugging Face Hub, you can remove this line.
+env.allowLocalModels = false;
 
 /**
  * Wrap the pipeline construction in a Singleton class to ensure:

@@ -10,7 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@huggingface/transformers": "^3.2.0",
+    "@huggingface/transformers": "3.5.0",
     "@react-three/fiber": "^8.17.10",
     "@tailwindcss/vite": "^4.0.0-beta.7",
     "@types/three": "^0.171.0",
