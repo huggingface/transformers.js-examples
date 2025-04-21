@@ -12,7 +12,7 @@
     "vite": "^6.0.5"
   },
   "dependencies": {
-    "@huggingface/transformers": "^3.2.2",
+    "@huggingface/transformers": "3.5.0",
     "deepscatter": "github:nomic-ai/deepscatter"
   }
 }
