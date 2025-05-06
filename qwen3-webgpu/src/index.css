@@ -1,0 +1,38 @@
+@import "tailwindcss";
+
+/* Custom scrollbar styles */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 0.5rem; /* Equivalent to w-2 in Tailwind */
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  border-radius: 9999px; /* Equivalent to rounded-full in Tailwind */
+  background-color: #f3f4f6; /* Equivalent to bg-gray-100 in Tailwind */
+}
+
+.scrollbar-thin::-webkit-scrollbar-track.dark {
+  background-color: #374151; /* Equivalent to dark:bg-gray-700 in Tailwind */
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  border-radius: 9999px; /* Equivalent to rounded-full in Tailwind */
+  background-color: #d1d5db; /* Equivalent to bg-gray-300 in Tailwind */
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background-color: #6b7280; /* Equivalent to bg-gray-500 in Tailwind */
+}
+
+/* Animation delay classes */
+.animation-delay-200 {
+  animation-delay: 200ms;
+}
+
+.animation-delay-400 {
+  animation-delay: 400ms;
+}
+
+/* Overflow wrap class */
+.overflow-wrap-anywhere {
+  overflow-wrap: anywhere;
+}
