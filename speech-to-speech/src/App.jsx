@@ -23,6 +23,7 @@ export default function App() {
   const [elapsedTime, setElapsedTime] = useState("00:00");
   const worker = useRef(null);
 
+  const micStreamRef = useRef(null);
   const node = useRef(null);
 
   useEffect(() => {
@@ -108,15 +109,7 @@ export default function App() {
     let ignore = false;
 
     let outputAudioContext;
-    const audioStreamPromise = navigator.mediaDevices.getUserMedia({
-      audio: {
-        channelCount: 1,
-        echoCancellation: true,
-        autoGainControl: true,
-        noiseSuppression: true,
-        sampleRate: INPUT_SAMPLE_RATE,
-      },
-    });
+    const audioStreamPromise = Promise.resolve(micStreamRef.current);
 
     audioStreamPromise
       .then(async (stream) => {
@@ -218,10 +211,7 @@ export default function App() {
 
     return () => {
       ignore = true;
-
-      audioStreamPromise.then((stream) =>
-        stream.getTracks().forEach((track) => track.stop()),
-      );
+      audioStreamPromise.then((s) => s.getTracks().forEach((t) => t.stop()));
       source?.disconnect();
       worklet?.disconnect();
       inputAudioContext?.close();
@@ -241,6 +231,28 @@ export default function App() {
     }, 1000);
     return () => clearInterval(interval);
   }, [callStarted]);
+
+  const handleStartCall = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: {
+          channelCount: 1,
+          echoCancellation: true,
+          autoGainControl: true,
+          noiseSuppression: true,
+          sampleRate: INPUT_SAMPLE_RATE,
+        },
+      });
+      micStreamRef.current = stream;
+
+      setCallStartTime(Date.now());
+      setCallStarted(true);
+      worker.current?.postMessage({ type: "start_call" });
+    } catch (err) {
+      setError(err.message);
+      console.error(err);
+    }
+  };
 
   return (
     <div className="h-screen min-h-[240px] flex items-center justify-center bg-gray-50 p-4 relative">
@@ -338,11 +350,7 @@ export default function App() {
                   ? "bg-blue-100 text-blue-700 hover:bg-blue-200"
                   : "bg-blue-100 text-blue-700 opacity-50 cursor-not-allowed"
               }`}
-              onClick={() => {
-                setCallStartTime(Date.now());
-                setCallStarted(true);
-                worker.current?.postMessage({ type: "start_call" });
-              }}
+              onClick={handleStartCall}
               disabled={!ready}
             >
               <span>Start call</span>
