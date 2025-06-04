@@ -252,9 +252,11 @@ self.onmessage = async (event) => {
   if (type === "audio" && isPlaying) return;
 
   switch (type) {
-    case "start_call":
-      greet("Hello! How can I help you today?");
+    case "start_call": {
+      const name = tts.voices[voice ?? "af_heart"]?.name ?? "Heart";
+      greet(`Hey there, my name is ${name}! How can I help you today?`);
       return;
+    }
     case "end_call":
       messages = [SYSTEM_MESSAGE];
       past_key_values_cache = null;
