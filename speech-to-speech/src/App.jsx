@@ -62,7 +62,6 @@ export default function App() {
     });
 
     const onMessage = ({ data }) => {
-      console.log("Worker message:", data);
       if (data.error) {
         return onError(data.error);
       }
