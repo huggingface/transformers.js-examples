@@ -294,12 +294,24 @@ export default function App() {
             {isListening && "Listening..."}
             {isSpeaking && "Speaking..."}
           </div>
+          {/* Pulsing loader while initializing */}
           <div
-            className={`absolute w-32 h-32 rounded-full shadow-inner transition-transform duration-300 ease-out bg-green-300`}
+            className={`absolute w-32 h-32 rounded-full bg-green-200 ${
+              !ready ? "animate-ping opacity-75" : ""
+            }`}
+            style={{ animationDuration: "1.5s" }}
+          />
+          {/* Main rings */}
+          <div
+            className={`absolute w-32 h-32 rounded-full shadow-inner transition-transform duration-300 ease-out bg-green-300 ${
+              !ready ? "opacity-0" : ""
+            }`}
             style={{ transform: `scale(${speakingScale})` }}
           />
           <div
-            className={`absolute w-32 h-32 rounded-full shadow-inner transition-transform duration-300 ease-out bg-green-200`}
+            className={`absolute w-32 h-32 rounded-full shadow-inner transition-transform duration-300 ease-out bg-green-200 ${
+              !ready ? "opacity-0" : ""
+            }`}
             style={{ transform: `scale(${listeningScale})` }}
           />
         </div>
