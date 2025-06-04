@@ -301,31 +301,42 @@ export default function App() {
                 style={{ animation: "ripple 1.5s ease-out forwards" }}
               />
             ))}
-          <div className="absolute z-10 text-lg text-gray-700">
-            {!ready ? "Loading..." : ""}
-            {isListening && "Listening..."}
-            {isSpeaking && "Speaking..."}
-          </div>
           {/* Pulsing loader while initializing */}
           <div
-            className={`absolute w-32 h-32 rounded-full bg-green-200 ${
-              !ready ? "animate-ping opacity-75" : ""
-            }`}
+            className={`absolute w-32 h-32 rounded-full ${
+              error ? "bg-red-200" : "bg-green-200"
+            } ${!ready ? "animate-ping opacity-75" : ""}`}
             style={{ animationDuration: "1.5s" }}
           />
           {/* Main rings */}
           <div
-            className={`absolute w-32 h-32 rounded-full shadow-inner transition-transform duration-300 ease-out bg-green-300 ${
-              !ready ? "opacity-0" : ""
-            }`}
+            className={`absolute w-32 h-32 rounded-full shadow-inner transition-transform duration-300 ease-out ${
+              error ? "bg-red-300" : "bg-green-300"
+            } ${!ready ? "opacity-0" : ""}`}
             style={{ transform: `scale(${speakingScale})` }}
           />
           <div
-            className={`absolute w-32 h-32 rounded-full shadow-inner transition-transform duration-300 ease-out bg-green-200 ${
-              !ready ? "opacity-0" : ""
-            }`}
+            className={`absolute w-32 h-32 rounded-full shadow-inner transition-transform duration-300 ease-out ${
+              error ? "bg-red-200" : "bg-green-200"
+            } ${!ready ? "opacity-0" : ""}`}
             style={{ transform: `scale(${listeningScale})` }}
           />
+          {/* Center text: show error if present, else existing statuses */}
+          <div
+            className={`absolute z-10 text-lg text-center ${
+              error ? "text-red-700" : "text-gray-700"
+            }`}
+          >
+            {error ? (
+              error
+            ) : (
+              <>
+                {!ready && "Loading..."}
+                {isListening && "Listening..."}
+                {isSpeaking && "Speaking..."}
+              </>
+            )}
+          </div>
         </div>
 
         <div className="space-y-4 w-[140px]">
