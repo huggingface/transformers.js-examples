@@ -14,6 +14,6 @@ export default defineConfig({
   resolve: {
     // Only bundle a single instance of Transformers.js
     // (shared by `@huggingface/transformers` and `kokoro-js`)
-    dedupe: ['@huggingface/transformers'],
+    dedupe: ["@huggingface/transformers"],
   },
 });

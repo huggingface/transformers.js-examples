@@ -342,7 +342,7 @@ function greet(text) {
   isPlaying = true;
   const splitter = new TextSplitterStream();
   const stream = tts.stream(splitter, { voice });
-  ;(async () => {
+  (async () => {
     for await (const { text: chunkText, audio } of stream) {
       self.postMessage({ type: "output", text: chunkText, result: audio });
     }
