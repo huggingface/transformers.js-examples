@@ -248,10 +248,13 @@ let prevBuffers = [];
 self.onmessage = async (event) => {
   const { type, buffer } = event.data;
 
-  // refuse new audio while already playing back
+  // refuse new audio while playing back
   if (type === "audio" && isPlaying) return;
 
   switch (type) {
+    case "start_call":
+      greet("Hello! How can I help you today?");
+      return;
     case "end_call":
       messages = [SYSTEM_MESSAGE];
       past_key_values_cache = null;
@@ -334,3 +337,17 @@ self.onmessage = async (event) => {
 
   dispatchForTranscriptionAndResetAudioBuffer();
 };
+
+function greet(text) {
+  isPlaying = true;
+  const splitter = new TextSplitterStream();
+  const stream = tts.stream(splitter, { voice });
+  ;(async () => {
+    for await (const { text: chunkText, audio } of stream) {
+      self.postMessage({ type: "output", text: chunkText, result: audio });
+    }
+  })();
+  splitter.push(text);
+  splitter.close();
+  messages.push({ role: "assistant", content: text });
+}

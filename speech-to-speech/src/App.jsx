@@ -329,6 +329,7 @@ export default function App() {
               onClick={() => {
                 setCallStartTime(Date.now());
                 setCallStarted(true);
+                worker.current?.postMessage({ type: "start_call" });
               }}
               disabled={!ready}
             >
