@@ -1,4 +1,4 @@
-# whisper-word-timestamps 🚀
+# whisper-word-timestamps
 
 Run Whisper (via **Transformers.js**) locally with **word-level timestamps**.
 
