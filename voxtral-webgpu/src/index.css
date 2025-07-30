@@ -1,0 +1,62 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+@layer utilities {
+  .animate-progress {
+    animation: progress-animation 2s ease-out infinite;
+  }
+}
+
+@keyframes progress-animation {
+  0% {
+    transform: translateX(-100%) scaleX(0.5);
+  }
+  50% {
+    transform: translateX(0) scaleX(1);
+  }
+  100% {
+    transform: translateX(100%) scaleX(0.5);
+  }
+}
+
+/* Custom Styled Audio Player */
+.styled-audio {
+  filter: invert(1) sepia(1) saturate(0.5) hue-rotate(240deg);
+}
+
+.animate-spin-slow {
+  animation: spin 1.2s linear infinite;
+}
+
+/* Custom scrollbar styles for dark mode */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #232136;
+  border-radius: 6px;
+  border: 2px solid #181825;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #3b375a;
+}
+
+::-webkit-scrollbar-corner {
+  background: #181825;
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #232136 #181825;
+}
