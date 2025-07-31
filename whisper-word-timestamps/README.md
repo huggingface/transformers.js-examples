@@ -1,6 +1,6 @@
-# Code Completion
+# whisper-word-timestamps
 
-## Getting Started
+Run Whisper (via **Transformers.js**) locally with **word-level timestamps**.
 
 Follow the steps below to set up and run the application.
 
@@ -14,10 +14,10 @@ git clone https://github.com/huggingface/transformers.js-examples.git
 
 ### 2. Navigate to the Project Directory
 
-Change your working directory to the `code-completion` folder:
+Change your working directory to the `whisper-word-timestamps` folder:
 
 ```sh
-cd transformers.js-examples/code-completion
+cd transformers.js-examples/whisper-word-timestamps
 ```
 
 ### 3. Install Dependencies
@@ -37,3 +37,4 @@ npm run dev
 ```
 
 The application should now be running locally. Open your browser and go to `http://localhost:5173` to see it in action.
+
