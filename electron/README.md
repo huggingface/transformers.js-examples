@@ -9,6 +9,7 @@ An example project to show how to run 🤗 Transformers in an [Electron](https:/
     git clone https://github.com/huggingface/transformers.js-examples.git
     cd transformers.js-examples/electron/
     ```
+
 1. Install the necessary dependencies:
     ```bash
     npm install 
@@ -23,7 +24,6 @@ An example project to show how to run 🤗 Transformers in an [Electron](https:/
 
 
 ## Editing the template
-
 
 All source code can be found in `./src/`:
 - `index.js` - Serves as the entry point for the application's main process. When an Electron app is launched, this is the first file that gets executed, and it is responsible for setting up the main process of the application. You will need to restart the application after editing this file for your changes to take effect.
