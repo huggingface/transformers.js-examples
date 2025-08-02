@@ -11,7 +11,7 @@
     "format": "prettier --write . --print-width 120"
   },
   "dependencies": {
-    "@huggingface/transformers": "^3.7.0",
+    "@huggingface/transformers": "3.7.1",
     "@tailwindcss/vite": "^4.1.11",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",

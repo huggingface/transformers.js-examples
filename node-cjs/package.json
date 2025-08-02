@@ -6,6 +6,6 @@
   "license": "Apache-2.0",
   "description": "",
   "dependencies": {
-    "@huggingface/transformers": "3.5.0"
+    "@huggingface/transformers": "3.7.1"
   }
 }
