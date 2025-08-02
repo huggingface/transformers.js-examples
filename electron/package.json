@@ -14,7 +14,7 @@
   "keywords": [],
   "license": "MIT",
   "dependencies": {
-    "@huggingface/transformers": "^3.7.0",
+    "@huggingface/transformers": "3.7.1",
     "electron-squirrel-startup": "^1.0.1"
   },
   "devDependencies": {

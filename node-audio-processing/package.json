@@ -11,7 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@huggingface/transformers": "3.5.0",
+    "@huggingface/transformers": "3.7.1",
     "wavefile": "11.0.0"
   }
 }

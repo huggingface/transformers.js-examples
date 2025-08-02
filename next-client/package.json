@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@huggingface/transformers": "3.5.0",
+    "@huggingface/transformers": "3.7.1",
     "next": "^15.2.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"

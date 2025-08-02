@@ -13,7 +13,8 @@
     "motion": "^11.12.0",
     "outetts": "github:xenova/OuteTTS",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "@huggingface/transformers": "3.7.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.15.0",
