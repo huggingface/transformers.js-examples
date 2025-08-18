@@ -34,6 +34,12 @@ export const MODELS: ModelConfig[] = [
     supportsWorker: true,
   },
   {
+    id: "onnx-community/DeepSeek-R1-Distill-Qwen-1.5B-ONNX",
+    name: "Deepseek R1 Distill 1.5B",
+    device: "webgpu",
+    dtype: "q4f16",
+  },
+  {
     id: "HuggingFaceTB/SmolVLM-256M-Instruct",
     name: "SmolVLM 256M (Vision)",
     device: "webgpu",

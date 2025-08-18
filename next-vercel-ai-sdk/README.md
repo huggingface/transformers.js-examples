@@ -3,6 +3,12 @@
 A modern Transformers.js chat application powered by [@built-in-ai/transformers-js](https://github.com/jakobhoeg/built-in-ai) and [Vercel AI SDK](https://ai-sdk.dev/). 
 This app demonstrates how to use Transformers.js models with Vercel AI SDK to quickly build a fully functional chat application.
 
+Components to check out for the implementation:
+- [page.tsx](./src/app/page.tsx)
+- [chat-transport.tsx](./src/app/chat-transport.ts)
+- [store.ts](./src/store/store.ts)
+- [models.ts](./src/app/models.ts)
+
 ## Features
 
 - Run AI models directly in the browser

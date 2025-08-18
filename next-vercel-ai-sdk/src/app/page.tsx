@@ -109,8 +109,8 @@ const ChatBotDemo = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 relative size-full h-[calc(100dvh)]">
-      <div className="flex flex-col h-full">
+    <div className="max-w-4xl mx-auto p-6 relative h-[calc(100dvh)]">
+      <div className="flex flex-col h-full overflow-hidden">
         {messages.length === 0 && (
           <div className="flex h-full flex-col items-center justify-center text-center">
             <Image alt="logo" width={350} height={120} src="huggingface.svg" />
@@ -123,7 +123,7 @@ const ChatBotDemo = () => {
         )}
 
         {messages.length > 0 && (
-          <Conversation className="flex-1">
+          <Conversation className="flex-1 min-h-0 overflow-hidden">
             <ConversationContent>
               {messages.map((message, messageIndex) => (
                 <div key={message.id}>
@@ -224,7 +224,7 @@ const ChatBotDemo = () => {
           </Conversation>
         )}
 
-        <div className="mt-auto">
+        <div className="shrink-0">
           {messages.length === 0 && (
             <Suggestions>
               {suggestions.map((suggestion) => (
