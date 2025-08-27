@@ -94,7 +94,11 @@ async function saveAudioToDB(key: string, file: File): Promise<void> {
   const db = await getDB();
   const arrayBuffer = await file.arrayBuffer();
   const tx = db.transaction(AUDIO_STORE, "readwrite");
-  tx.objectStore(AUDIO_STORE).put({ key, buffer: arrayBuffer, type: file.type });
+  tx.objectStore(AUDIO_STORE).put({
+    key,
+    buffer: arrayBuffer,
+    type: file.type,
+  });
   return transactionPromise(tx);
 }
 
@@ -105,7 +109,9 @@ async function getAudioUrlFromDB(key: string): Promise<string | null> {
     const result = await promiseify(tx.objectStore(AUDIO_STORE).get(key));
 
     if (result?.buffer) {
-      const blob = new Blob([result.buffer], { type: result.type || "audio/wav" });
+      const blob = new Blob([result.buffer], {
+        type: result.type || "audio/wav",
+      });
       return URL.createObjectURL(blob);
     }
     return null;
@@ -126,10 +132,14 @@ function inferAudioKey(item: Transcription): string | undefined {
   return item.audioKey ?? (item.id ? `voxtral_audio_${item.id}` : undefined);
 }
 
-async function fileToAudioBuffer(file: File, targetSampleRate: number): Promise<AudioBuffer | null> {
+async function fileToAudioBuffer(
+  file: File,
+  targetSampleRate: number,
+): Promise<AudioBuffer | null> {
   try {
     const arrayBuffer = await file.arrayBuffer();
-    const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+    const audioCtx = new (window.AudioContext ||
+      (window as any).webkitAudioContext)();
     const decoded = await audioCtx.decodeAudioData(arrayBuffer);
 
     if (decoded.sampleRate === targetSampleRate) {
@@ -158,22 +168,38 @@ async function fileToAudioBuffer(file: File, targetSampleRate: number): Promise<
 export default function App() {
   const [screen, setScreen] = useState<Screen>("intro");
   const [history, setHistory] = useState<Transcription[]>([]);
-  const [viewedTranscription, setViewedTranscription] = useState<Transcription | null>(null);
-  const [pendingTranscriptionId, setPendingTranscriptionId] = useState<string | null>(null);
+  const [viewedTranscription, setViewedTranscription] =
+    useState<Transcription | null>(null);
+  const [pendingTranscriptionId, setPendingTranscriptionId] = useState<
+    string | null
+  >(null);
   const [audioSaveError, setAudioSaveError] = useState<string | null>(null);
   const [editingFilename, setEditingFilename] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState("en");
   const [search, setSearch] = useState("");
 
-  const [audioUrlCache, setAudioUrlCache] = useState<Map<string, string>>(new Map());
-  const { status, error, transcription, setTranscription, loadModel, transcribe, stopTranscription } = useVoxtral();
+  const [audioUrlCache, setAudioUrlCache] = useState<Map<string, string>>(
+    new Map(),
+  );
+  const {
+    status,
+    error,
+    transcription,
+    setTranscription,
+    loadModel,
+    transcribe,
+    stopTranscription,
+  } = useVoxtral();
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const filenameInputRef = useRef<HTMLInputElement | null>(null);
   const introRef = useRef<HTMLDivElement>(null);
   const urlCacheRef = useRef(audioUrlCache);
 
-  const sortedHistory = useMemo(() => [...history].sort((a, b) => Number(b.id) - Number(a.id)), [history]);
+  const sortedHistory = useMemo(
+    () => [...history].sort((a, b) => Number(b.id) - Number(a.id)),
+    [history],
+  );
   const currentTranscription = useMemo(() => {
     if (!viewedTranscription) return "";
     if (pendingTranscriptionId === viewedTranscription.id) {
@@ -192,7 +218,9 @@ export default function App() {
     if (!search.trim()) return sortedHistory;
     const s = search.trim().toLowerCase();
     return sortedHistory.filter(
-      (item) => item.filename.toLowerCase().includes(s) || (item.text && item.text.toLowerCase().includes(s)),
+      (item) =>
+        item.filename.toLowerCase().includes(s) ||
+        (item.text && item.text.toLowerCase().includes(s)),
     );
   }, [sortedHistory, search]);
 
@@ -235,7 +263,9 @@ export default function App() {
 
       const finalEntry = { ...entry, text: result ?? "Transcription failed." };
       setHistory((currentHistory) => {
-        const finalHistory = currentHistory.map((h) => (h.id === id ? finalEntry : h));
+        const finalHistory = currentHistory.map((h) =>
+          h.id === id ? finalEntry : h,
+        );
         saveHistoryDB(finalHistory);
         return finalHistory;
       });
@@ -275,22 +305,34 @@ export default function App() {
     [history, viewedTranscription],
   );
 
-  const updateFilename = useCallback(async (id: string, newFilename: string) => {
-    setHistory((prev) => {
-      const updated = prev.map((h) => (h.id === id ? { ...h, filename: newFilename } : h));
-      saveHistoryDB(updated);
-      return updated;
-    });
-  }, []);
+  const updateFilename = useCallback(
+    async (id: string, newFilename: string) => {
+      setHistory((prev) => {
+        const updated = prev.map((h) =>
+          h.id === id ? { ...h, filename: newFilename } : h,
+        );
+        saveHistoryDB(updated);
+        return updated;
+      });
+    },
+    [],
+  );
 
-  const updateTranscriptionText = useCallback(async (id: string, newText: string) => {
-    setViewedTranscription((prev) => (prev && prev.id === id ? { ...prev, text: newText } : prev));
-    setHistory((prev) => {
-      const updated = prev.map((h) => (h.id === id ? { ...h, text: newText } : h));
-      saveHistoryDB(updated);
-      return updated;
-    });
-  }, []);
+  const updateTranscriptionText = useCallback(
+    async (id: string, newText: string) => {
+      setViewedTranscription((prev) =>
+        prev && prev.id === id ? { ...prev, text: newText } : prev,
+      );
+      setHistory((prev) => {
+        const updated = prev.map((h) =>
+          h.id === id ? { ...h, text: newText } : h,
+        );
+        saveHistoryDB(updated);
+        return updated;
+      });
+    },
+    [],
+  );
 
   useEffect(() => {
     const input = document.createElement("input");
@@ -384,7 +426,9 @@ export default function App() {
       <div
         ref={introRef}
         className="relative flex flex-col items-center justify-center min-h-screen bg-[#0A0A0A] text-white overflow-hidden"
-        style={{ "--mouse-x": "50%", "--mouse-y": "50%" } as React.CSSProperties}
+        style={
+          { "--mouse-x": "50%", "--mouse-y": "50%" } as React.CSSProperties
+        }
       >
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:3rem_3rem]"></div>
         <div className="absolute inset-0 bg-[radial-gradient(circle_400px_at_var(--mouse-x)_var(--mouse-y),rgba(124,58,237,0.2),transparent_80%)]"></div>
@@ -392,12 +436,18 @@ export default function App() {
         <main className="text-center z-10 p-4">
           <div className="inline-block mb-6 px-3 py-1 text-md bg-gray-800/50 border border-gray-700 rounded-full">
             Powered by{" "}
-            <a href="https://github.com/huggingface/transformers.js" target="_blank" rel="noopener noreferrer">
+            <a
+              href="https://github.com/huggingface/transformers.js"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <HfIcon className="w-5 inline translate-y-[-1px]" />
               Transformers.js
             </a>
           </div>
-          <h1 className="text-7xl font-extrabold tracking-tight mb-4">Voxtral WebGPU</h1>
+          <h1 className="text-7xl font-extrabold tracking-tight mb-4">
+            Voxtral WebGPU
+          </h1>
           <p className="max-w-2xl mx-auto text-xl text-gray-400 mb-8">
             State-of-the-art audio transcription directly in your browser.
           </p>
@@ -415,8 +465,10 @@ export default function App() {
               , a 4.68B parameter model, optimized for inference on the web.
             </p>
             <p>
-              Everything runs entirely in your browser with <strong>Transformers.js</strong> and{" "}
-              <strong>ONNX Runtime Web</strong>, meaning no data is sent to a server.
+              Everything runs entirely in your browser with{" "}
+              <strong>Transformers.js</strong> and{" "}
+              <strong>ONNX Runtime Web</strong>, meaning no data is sent to a
+              server.
             </p>
             <p>Get started by clicking the button below.</p>
           </div>
@@ -441,7 +493,9 @@ export default function App() {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-[#0A0A0A] text-white p-4">
         <div className="flex flex-col items-center p-8 bg-gray-900/50 border border-gray-700 rounded-xl shadow-lg w-full max-w-2xl">
-          <h2 className="text-2xl font-semibold mb-2 text-purple-400">Loading Voxtral Model...</h2>
+          <h2 className="text-2xl font-semibold mb-2 text-purple-400">
+            Loading Voxtral Model...
+          </h2>
           <p className="text-gray-400 text-center mb-8">
             This may take some time to download on first load.
             <br />
@@ -468,21 +522,27 @@ export default function App() {
             </div>
           </div>
           {error && (
-            <div className="mt-6 text-red-500 bg-red-900/20 border border-red-500/30 p-3 rounded-lg">{error}</div>
+            <div className="mt-6 text-red-500 bg-red-900/20 border border-red-500/30 p-3 rounded-lg">
+              {error}
+            </div>
           )}
         </div>
       </div>
     );
   }
 
-  const isProcessing = pendingTranscriptionId && pendingTranscriptionId === viewedTranscription?.id;
+  const isProcessing =
+    pendingTranscriptionId &&
+    pendingTranscriptionId === viewedTranscription?.id;
 
   return (
     <div className="flex h-screen bg-[#0A0A0A] text-white font-sans">
       <aside className="w-80 bg-black/30 border-r border-gray-800 flex flex-col">
         <div className="p-4 border-b border-gray-800 flex items-center justify-between">
           <div className="flex flex-col flex-1">
-            <h2 className="text-lg font-bold text-gray-200">Transcript History</h2>
+            <h2 className="text-lg font-bold text-gray-200">
+              Transcript History
+            </h2>
             <select
               className="mt-2 bg-gray-800 text-gray-200 rounded px-2 py-1 text-sm border border-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500 w-[150px]"
               value={selectedLanguage}
@@ -509,18 +569,32 @@ export default function App() {
             onClick={() => fileInputRef.current?.click()}
             disabled={status === "transcribing"}
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 4v16m8-8H4"
+              />
             </svg>
           </button>
         </div>
         <div className="flex-1 overflow-y-auto">
           {filteredHistory.length === 0 ? (
-            <div className="p-6 text-center text-gray-500 text-sm">No transcriptions yet.</div>
+            <div className="p-6 text-center text-gray-500 text-sm">
+              No transcriptions yet.
+            </div>
           ) : (
             <ul>
               {filteredHistory.map((item) => {
-                const language = LANGUAGES.find((l) => l.code === item.language);
+                const language = LANGUAGES.find(
+                  (l) => l.code === item.language,
+                );
                 return (
                   <li
                     key={item.id}
@@ -532,17 +606,26 @@ export default function App() {
                     )}
                     <div className="flex-1 min-w-0 pl-2 flex items-center gap-2">
                       <div className="flex-1 min-w-0">
-                        <div className="font-semibold text-gray-300 truncate">{item.filename}</div>
-                        <div className="text-xs text-gray-500 mb-1">{item.date}</div>
+                        <div className="font-semibold text-gray-300 truncate">
+                          {item.filename}
+                        </div>
+                        <div className="text-xs text-gray-500 mb-1">
+                          {item.date}
+                        </div>
                         <div className="text-sm text-gray-400 line-clamp-2">
                           {item.text !== null ? (
                             item.text
                           ) : (
-                            <span className="text-gray-500 italic">Transcription in progress...</span>
+                            <span className="text-gray-500 italic">
+                              Transcription in progress...
+                            </span>
                           )}
                         </div>
                       </div>
-                      <span className="text-lg flex-shrink-0 ml-2" title={language?.label || item.language}>
+                      <span
+                        className="text-lg flex-shrink-0 ml-2"
+                        title={language?.label || item.language}
+                      >
                         {language?.icon || "🌐"}
                       </span>
                     </div>
@@ -551,7 +634,11 @@ export default function App() {
                       title="Delete transcription"
                       onClick={(e) => deleteHistoryItem(e, item)}
                     >
-                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                      <svg
+                        className="w-4 h-4"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
                         <path
                           fillRule="evenodd"
                           d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
@@ -577,7 +664,12 @@ export default function App() {
             )}
             {!viewedTranscription ? (
               <div className="flex-1 flex flex-col items-center justify-center text-center text-gray-600">
-                <svg className="w-16 h-16 mb-4 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg
+                  className="w-16 h-16 mb-4 text-gray-700"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -585,8 +677,12 @@ export default function App() {
                     d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                   />
                 </svg>
-                <h2 className="text-2xl font-bold text-gray-500">Select a transcription</h2>
-                <p className="text-gray-600">Choose an item from the history or add a new file to begin.</p>
+                <h2 className="text-2xl font-bold text-gray-500">
+                  Select a transcription
+                </h2>
+                <p className="text-gray-600">
+                  Choose an item from the history or add a new file to begin.
+                </p>
               </div>
             ) : (
               <div className="flex flex-col h-full">
@@ -605,16 +701,27 @@ export default function App() {
                         padding: "0.25rem 0.5rem",
                       }}
                       value={viewedTranscription.filename}
-                      onChange={(e) => setViewedTranscription({ ...viewedTranscription, filename: e.target.value })}
+                      onChange={(e) =>
+                        setViewedTranscription({
+                          ...viewedTranscription,
+                          filename: e.target.value,
+                        })
+                      }
                       onBlur={() => {
                         setEditingFilename(false);
-                        updateFilename(viewedTranscription.id, viewedTranscription.filename);
+                        updateFilename(
+                          viewedTranscription.id,
+                          viewedTranscription.filename,
+                        );
                       }}
                       onKeyDown={(e) => {
                         if (e.key === "Enter" || e.key === "Escape") {
                           e.preventDefault();
                           setEditingFilename(false);
-                          updateFilename(viewedTranscription.id, viewedTranscription.filename);
+                          updateFilename(
+                            viewedTranscription.id,
+                            viewedTranscription.filename,
+                          );
                         }
                       }}
                     />
@@ -639,11 +746,17 @@ export default function App() {
                       {viewedTranscription.filename}
                     </h1>
                   )}
-                  <p className="text-sm text-gray-500 pl-2">{viewedTranscription.date}</p>
+                  <p className="text-sm text-gray-500 pl-2">
+                    {viewedTranscription.date}
+                  </p>
                 </div>
 
                 <div className="mb-6">
-                  <audio src={audioSrc || undefined} controls className="w-full styled-audio" />
+                  <audio
+                    src={audioSrc || undefined}
+                    controls
+                    className="w-full styled-audio"
+                  />
                 </div>
 
                 <div className="flex-1 flex flex-col min-h-0 relative">
@@ -651,7 +764,12 @@ export default function App() {
                     <textarea
                       className="w-full h-full bg-transparent rounded-md p-4 text-gray-300 font-mono text-base resize-none focus:outline-none focus:ring-2 focus:ring-purple-500/50 placeholder:text-gray-500"
                       value={currentTranscription || ""}
-                      onChange={(e) => updateTranscriptionText(viewedTranscription.id, e.target.value)}
+                      onChange={(e) =>
+                        updateTranscriptionText(
+                          viewedTranscription.id,
+                          e.target.value,
+                        )
+                      }
                       readOnly={!!isProcessing}
                     />
                   </div>
@@ -660,7 +778,11 @@ export default function App() {
                       <div className="flex flex-col items-center text-gray-400 relative">
                         <span className="relative flex h-10 w-10">
                           <span className="relative inline-flex rounded-full h-10 w-10 items-center justify-center animate-spin-slow">
-                            <svg className="h-7 w-7 text-purple-400" viewBox="0 0 24 24" fill="none">
+                            <svg
+                              className="h-7 w-7 text-purple-400"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                            >
                               <circle
                                 className="opacity-30"
                                 cx="12"
@@ -680,7 +802,9 @@ export default function App() {
                           </span>
                         </span>
                         <span className="mt-2 pointer-events-none">
-                          {transcription.length === 0 ? "Processing audio..." : "Transcribing..."}
+                          {transcription.length === 0
+                            ? "Processing audio..."
+                            : "Transcribing..."}
                         </span>
                       </div>
                     </div>
@@ -693,8 +817,21 @@ export default function App() {
                       title="Stop transcription"
                       onClick={stopTranscription}
                     >
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                        <rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor" />
+                      <svg
+                        className="w-5 h-5"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        viewBox="0 0 24 24"
+                      >
+                        <rect
+                          x="6"
+                          y="6"
+                          width="12"
+                          height="12"
+                          rx="2"
+                          fill="currentColor"
+                        />
                       </svg>
                       Stop
                     </button>
@@ -710,7 +847,9 @@ export default function App() {
                     onClick={() => {
                       const baseName = viewedTranscription.filename;
                       const filename = `${baseName}.txt`;
-                      const blob = new Blob([viewedTranscription.text ?? ""], { type: "text/plain" });
+                      const blob = new Blob([viewedTranscription.text ?? ""], {
+                        type: "text/plain",
+                      });
                       const url = URL.createObjectURL(blob);
                       const a = document.createElement("a");
                       a.href = url;
@@ -723,7 +862,13 @@ export default function App() {
                       }, 100);
                     }}
                   >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <svg
+                      className="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      viewBox="0 0 24 24"
+                    >
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
