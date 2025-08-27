@@ -25,7 +25,7 @@ Components to check out for the implementation:
 - [Zustand](https://github.com/pmndrs/zustand) for lightweight state management
 - **AI Integration**:
   - [Vercel AI SDK](https://ai-sdk.dev/) for chat interface and streaming
-  - [@built-in-ai/transformers-js](https://github.com/jakobhoeg/built-in-ai) model provider that works as a wrapper for Transformers.js to integreate with Vercel AI SDK.
+  - [@built-in-ai/transformers-js](https://github.com/jakobhoeg/built-in-ai) model provider that works as a model provider for Transformers.js to integreate with Vercel AI SDK.
 
 ## Getting Started
 
