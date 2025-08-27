@@ -16,8 +16,8 @@ import { useModelStore } from "../store/store";
 
 // Simple version of the chat transport without progress tracking
 export class TransformersChatTransport
-  implements ChatTransport<TransformersUIMessage> {
-
+  implements ChatTransport<TransformersUIMessage>
+{
   private async getModel(): Promise<TransformersJSLanguageModel> {
     return useModelStore.getState().getModelInstance();
   }

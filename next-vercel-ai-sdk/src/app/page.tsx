@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
 import {
   Conversation,
   ConversationContent,
   ConversationScrollButton,
-} from '@/components/ai-elements/conversation';
-import { Message, MessageContent } from '@/components/ai-elements/message';
+} from "@/components/ai-elements/conversation";
+import { Message, MessageContent } from "@/components/ai-elements/message";
 import {
   PromptInput,
   PromptInputButton,
@@ -18,35 +18,35 @@ import {
   PromptInputTextarea,
   PromptInputToolbar,
   PromptInputTools,
-} from '@/components/ai-elements/prompt-input';
-import { useRef, useState } from 'react';
-import { useChat } from '@ai-sdk/react';
-import { Response } from '@/components/ai-elements/response';
+} from "@/components/ai-elements/prompt-input";
+import { useRef, useState } from "react";
+import { useChat } from "@ai-sdk/react";
+import { Response } from "@/components/ai-elements/response";
 import {
   Reasoning,
   ReasoningContent,
   ReasoningTrigger,
-} from '@/components/ai-elements/reasoning';
-import { Loader } from '@/components/ai-elements/loader';
-import { MODELS } from './models';
-import { TransformersUIMessage } from '@built-in-ai/transformers-js';
-import { TransformersChatTransport } from './chat-transport';
-import { useModelStore } from '../store/store';
-import { Progress } from '@/components/ui/progress';
-import { Button } from '@/components/ui/button';
-import { Copy, PlusIcon, RefreshCcw, X } from 'lucide-react';
-import { Suggestion, Suggestions } from '@/components/ai-elements/suggestion';
+} from "@/components/ai-elements/reasoning";
+import { Loader } from "@/components/ai-elements/loader";
+import { MODELS } from "./models";
+import { TransformersUIMessage } from "@built-in-ai/transformers-js";
+import { TransformersChatTransport } from "./chat-transport";
+import { useModelStore } from "../store/store";
+import { Progress } from "@/components/ui/progress";
+import { Button } from "@/components/ui/button";
+import { Copy, PlusIcon, RefreshCcw, X } from "lucide-react";
+import { Suggestion, Suggestions } from "@/components/ai-elements/suggestion";
 import Image from "next/image";
-import { Action } from '@/components/ai-elements/actions';
+import { Action } from "@/components/ai-elements/actions";
 
 const suggestions = [
-  'Can you explain how to play tennis?',
-  'What is a neural network?',
-  'How do I make a really good lasagna?',
+  "Can you explain how to play tennis?",
+  "What is a neural network?",
+  "How do I make a really good lasagna?",
 ];
 
 const ChatBotDemo = () => {
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState("");
   const { selectedModel, setSelectedModel } = useModelStore();
   const imageInputRef = useRef<HTMLInputElement>(null);
   const [files, setFiles] = useState<FileList | undefined>(undefined);
@@ -55,7 +55,7 @@ const ChatBotDemo = () => {
     useChat<TransformersUIMessage>({
       transport: new TransformersChatTransport(),
       experimental_throttle: 75,
-    })
+    });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -114,10 +114,35 @@ const ChatBotDemo = () => {
         {messages.length === 0 && (
           <div className="flex h-full flex-col items-center justify-center text-center">
             <Image alt="logo" width={350} height={120} src="huggingface.svg" />
-            <p className='text-sm max-w-xl'>In-browser, local chat application powered by {""}
-              <a className='text-blue-400 underline' href="https://github.com/huggingface/transformers.js" target="_blank" rel="noopener noreferrer">Transformers.js</a>, {""}
-              <a className='text-blue-400 underline' href="https://github.com/jakobhoeg/built-in-ai" target="_blank" rel="noopener noreferrer">@built-in-ai/transformers-js</a> and {""}
-              <a className='text-blue-400 underline' href="https://ai-sdk.dev/" target="_blank" rel="noopener noreferrer">Vercel AI SDK</a>.
+            <p className="text-sm max-w-xl">
+              In-browser, local chat application powered by {""}
+              <a
+                className="text-blue-400 underline"
+                href="https://github.com/huggingface/transformers.js"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Transformers.js
+              </a>
+              , {""}
+              <a
+                className="text-blue-400 underline"
+                href="https://github.com/jakobhoeg/built-in-ai"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                @built-in-ai/transformers-js
+              </a>{" "}
+              and {""}
+              <a
+                className="text-blue-400 underline"
+                href="https://ai-sdk.dev/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Vercel AI SDK
+              </a>
+              .
             </p>
           </div>
         )}
@@ -133,9 +158,9 @@ const ChatBotDemo = () => {
                         switch (part.type) {
                           case "data-modelDownloadProgress":
                             // Only show if message is not empty (hiding completed/cleared progress)
-                            if (!part.data.message) return null
+                            if (!part.data.message) return null;
                             // Don't show the entire div when actively streaming
-                            if (status === "ready") return null
+                            if (status === "ready") return null;
                             return (
                               <div key={i}>
                                 <div className="flex items-center justify-between mb-2">
@@ -144,11 +169,12 @@ const ChatBotDemo = () => {
                                     {part.data.message}
                                   </span>
                                 </div>
-                                {part.data.status === "downloading" && part.data.progress !== undefined && (
-                                  <Progress value={part.data.progress} />
-                                )}
+                                {part.data.status === "downloading" &&
+                                  part.data.progress !== undefined && (
+                                    <Progress value={part.data.progress} />
+                                  )}
                               </div>
-                            )
+                            );
                           case "file":
                             if (part.mediaType?.startsWith("image/"))
                               return (
@@ -161,26 +187,34 @@ const ChatBotDemo = () => {
                                     className="object-contain max-w-sm rounded-lg border"
                                   />
                                 </div>
-                              )
-                            return null
+                              );
+                            return null;
                           case "text":
-                            return <Response key={`${message.id}-${i}`}>{part.text}</Response>
+                            return (
+                              <Response key={`${message.id}-${i}`}>
+                                {part.text}
+                              </Response>
+                            );
                           case "reasoning":
                             return (
                               <Reasoning
                                 key={`${message.id}-${i}`}
                                 className="w-full"
-                                isStreaming={status === "streaming" && messageIndex === messages.length - 1}
+                                isStreaming={
+                                  status === "streaming" &&
+                                  messageIndex === messages.length - 1
+                                }
                               >
                                 <ReasoningTrigger />
                                 <ReasoningContent>{part.text}</ReasoningContent>
                               </Reasoning>
-                            )
+                            );
                           default:
-                            return null
+                            return null;
                         }
                       })}
-                      {(message.role === "assistant" || message.role === "system") &&
+                      {(message.role === "assistant" ||
+                        message.role === "system") &&
                         messageIndex === messages.length - 1 &&
                         status === "ready" && (
                           <div className="flex gap-1 mt-2">
@@ -191,7 +225,7 @@ const ChatBotDemo = () => {
                               onClick={() => copyMessageToClipboard(message)}
                               className="text-muted-foreground hover:text-foreground size-4"
                             >
-                              <Copy className='size-3.5' />
+                              <Copy className="size-3.5" />
                             </Action>
                             <Button
                               type="button"
@@ -200,7 +234,7 @@ const ChatBotDemo = () => {
                               onClick={() => regenerate()}
                               className="text-muted-foreground hover:text-foreground size-4"
                             >
-                              <RefreshCcw className='size-3.5' />
+                              <RefreshCcw className="size-3.5" />
                             </Button>
                           </div>
                         )}
@@ -228,7 +262,11 @@ const ChatBotDemo = () => {
           {messages.length === 0 && (
             <Suggestions>
               {suggestions.map((suggestion) => (
-                <Suggestion key={suggestion} onClick={handleSuggestionClick} suggestion={suggestion} />
+                <Suggestion
+                  key={suggestion}
+                  onClick={handleSuggestionClick}
+                  suggestion={suggestion}
+                />
               ))}
             </Suggestions>
           )}
@@ -240,7 +278,9 @@ const ChatBotDemo = () => {
             <PromptInputToolbar>
               <PromptInputTools>
                 <>
-                  <PromptInputButton onClick={() => imageInputRef.current?.click()}>
+                  <PromptInputButton
+                    onClick={() => imageInputRef.current?.click()}
+                  >
                     <PlusIcon size={16} />
                   </PromptInputButton>
                   <input
@@ -263,7 +303,10 @@ const ChatBotDemo = () => {
                   </PromptInputModelSelectTrigger>
                   <PromptInputModelSelectContent>
                     {MODELS.map((model) => (
-                      <PromptInputModelSelectItem key={model.id} value={model.id}>
+                      <PromptInputModelSelectItem
+                        key={model.id}
+                        value={model.id}
+                      >
                         {model.name}
                       </PromptInputModelSelectItem>
                     ))}
@@ -271,16 +314,14 @@ const ChatBotDemo = () => {
                 </PromptInputModelSelect>
               </PromptInputTools>
               <PromptInputSubmit
-                disabled={
-                  status === "ready" &&
-                  !input.trim()
-                }
+                disabled={status === "ready" && !input.trim()}
                 status={status}
                 onClick={
                   status === "submitted" || status === "streaming"
                     ? stop
                     : undefined
-                } />
+                }
+              />
             </PromptInputToolbar>
             {files && files.length > 0 && (
               <div className="w-full flex px-2 p-2 gap-2">
@@ -315,7 +356,7 @@ const ChatBotDemo = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ChatBotDemo
+export default ChatBotDemo;

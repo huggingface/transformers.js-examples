@@ -1,9 +1,10 @@
 # Transformers.js and Vercel AI SDK example
 
-A modern Transformers.js chat application powered by [@built-in-ai/transformers-js](https://github.com/jakobhoeg/built-in-ai) and [Vercel AI SDK](https://ai-sdk.dev/). 
+A modern Transformers.js chat application powered by [@built-in-ai/transformers-js](https://github.com/jakobhoeg/built-in-ai) and [Vercel AI SDK](https://ai-sdk.dev/).
 This app demonstrates how to use Transformers.js models with Vercel AI SDK to quickly build a fully functional chat application.
 
 Components to check out for the implementation:
+
 - [page.tsx](./src/app/page.tsx)
 - [chat-transport.tsx](./src/app/chat-transport.ts)
 - [store.ts](./src/store/store.ts)
@@ -22,18 +23,20 @@ Components to check out for the implementation:
 - [Next.js 15](https://nextjs.org)
 - [Shadcn/ui](https://ui.shadcn.com) for modern, accessible components
 - [Zustand](https://github.com/pmndrs/zustand) for lightweight state management
-- **AI Integration**: 
+- **AI Integration**:
   - [Vercel AI SDK](https://ai-sdk.dev/) for chat interface and streaming
-  - [@built-in-ai/transformers-js](https://github.com/jakobhoeg/built-in-ai) model provider that works as a wrapper for Transformers.js to integreate with Vercel AI SDK. 
+  - [@built-in-ai/transformers-js](https://github.com/jakobhoeg/built-in-ai) model provider that works as a wrapper for Transformers.js to integreate with Vercel AI SDK.
 
 ## Getting Started
 
 1. **Install dependencies**:
+
    ```bash
    npm install
    ```
 
 2. **Run the development server**:
+
    ```bash
    npm run dev
    ```
