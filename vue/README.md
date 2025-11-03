@@ -1,6 +1,57 @@
+---
+title: Vue Text Summarization
+emoji: 📝
+colorFrom: green
+colorTo: blue
+sdk: static
+pinned: false
+license: apache-2.0
+models:
+  - Xenova/distilbart-cnn-6-6
+short_description: Text summarization using Transformers.js in Vue.js
+---
+
 # Vue Text Summarization Application
 
 This folder contains the source code for a web application that summarizes text using Transformers.js! The app uses the DistilBART-CNN model to generate concise summaries of input text.
+
+## Getting Started
+
+Follow the steps below to set up and run the application.
+
+### 1. Clone the Repository
+
+Clone the examples repository from GitHub:
+
+```sh
+git clone https://github.com/huggingface/transformers.js-examples.git
+```
+
+### 2. Navigate to the Project Directory
+
+Change your working directory to the `vue` folder:
+
+```sh
+cd transformers.js-examples/vue
+```
+
+### 3. Install Dependencies
+
+Install the necessary dependencies using npm:
+
+```sh
+npm install
+```
+
+### 4. Run the Development Server
+
+Start the development server:
+
+```sh
+npm run dev
+```
+
+The application should now be running locally. Open your browser and go to `http://localhost:5173` to see it in action.
 
 ## How it works
 
@@ -15,40 +66,7 @@ The user enters text in the input textarea and clicks "Summarize". The applicati
 
 ## Recommended IDE Setup
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
-
-## Recommended Browser Setup
-
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
-
-## Project Setup
-
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
+[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar).
 
 ## Model Information
 
