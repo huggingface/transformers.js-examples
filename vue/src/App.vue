@@ -102,6 +102,13 @@ const summarize = () => {
         <ProgressBar :text="data.file" :percentage="data.progress" />
       </div>
     </div>
+
+    <div class="disclaimer">
+      <small
+        >⚠️ Disclaimer: AI-generated summaries may be inaccurate or incomplete. Always verify
+        important information.</small
+      >
+    </div>
   </div>
 </template>
 
@@ -169,5 +176,14 @@ button:disabled {
   display: block;
   margin-bottom: 10px;
   font-weight: bold;
+}
+
+.disclaimer {
+  margin-top: 30px;
+  text-align: center;
+  color: #666;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
 }
 </style>
