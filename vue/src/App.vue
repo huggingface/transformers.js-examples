@@ -77,6 +77,12 @@ const summarize = () => {
   <div class="app">
     <h1>Transformers.js</h1>
     <h2>ML-powered text summarization in Vue!</h2>
+    <h3>
+      Using
+      <a href="https://huggingface.co/Xenova/distilbart-cnn-6-6" target="_blank" class="model-link"
+        >Xenova/distilbart-cnn-6-6</a
+      >
+    </h3>
 
     <div class="container">
       <div class="textbox-container">
@@ -185,5 +191,15 @@ button:disabled {
   max-width: 600px;
   margin-left: auto;
   margin-right: auto;
+}
+
+.model-link {
+  color: #2196f3;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.model-link:hover {
+  text-decoration: underline;
 }
 </style>
