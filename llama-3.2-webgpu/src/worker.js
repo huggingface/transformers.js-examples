@@ -9,7 +9,7 @@ import {
  * This class uses the Singleton pattern to enable lazy-loading of the pipeline
  */
 class TextGenerationPipeline {
-  static model_id = "onnx-community/Llama-3.2-1B-Instruct-q4f16";
+  static model_id = "onnx-community/Llama-3.2-1B-Instruct-ONNX";
 
   static async getInstance(progress_callback = null) {
     this.tokenizer ??= AutoTokenizer.from_pretrained(this.model_id, {
@@ -69,8 +69,7 @@ async function generate(messages) {
 
   const { past_key_values, sequences } = await model.generate({
     ...inputs,
-    // TODO: Add when model is fixed
-    // past_key_values: past_key_values_cache,
+    past_key_values: past_key_values_cache,
 
     // Sampling
     do_sample: false,
@@ -80,7 +79,7 @@ async function generate(messages) {
     stopping_criteria,
     return_dict_in_generate: true,
   });
-  // past_key_values_cache = past_key_values;
+  past_key_values_cache = past_key_values;
 
   const decoded = tokenizer.batch_decode(sequences, {
     skip_special_tokens: true,

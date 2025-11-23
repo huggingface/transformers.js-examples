@@ -209,7 +209,7 @@ function App() {
               <br />
               You are about to load{" "}
               <a
-                href="https://huggingface.co/onnx-community/Llama-3.2-1B-Instruct-q4f16"
+                href="https://huggingface.co/onnx-community/Llama-3.2-1B-Instruct-ONNX"
                 target="_blank"
                 rel="noreferrer"
                 className="font-medium underline"
@@ -217,7 +217,7 @@ function App() {
                 Llama-3.2-1B-Instruct
               </a>
               , a 1.24 billion parameter LLM that is optimized for inference on
-              the web. Once downloaded, the model (1.15&nbsp;GB) will be cached
+              the web. Once downloaded, the model (1.01&nbsp;GB) will be cached
               and reused when you revisit the page.
               <br />
               <br />
