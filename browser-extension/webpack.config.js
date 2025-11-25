@@ -15,14 +15,6 @@ const config = {
     popup: "./src/popup.js",
     content: "./src/content.js",
   },
-  resolve: {
-    alias: {
-      "@huggingface/transformers": path.resolve(
-        __dirname,
-        "node_modules/@huggingface/transformers",
-      ),
-    },
-  },
   output: {
     path: path.resolve(__dirname, "build"),
     filename: "[name].js",
