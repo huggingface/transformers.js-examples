@@ -17,5 +17,6 @@ A collection of [🤗 Transformers.js](https://huggingface.co/docs/transformers.
 | [Node.js (CJS)](./node-cjs/)                            | Sentiment analysis in Node.js w/ CommonJS                   | n/a                                                                             |
 | [Next.js](./next-server/)                               | Sentiment analysis in Next.js                               | [Demo](https://huggingface.co/spaces/webml-community/next-server-template)      |
 | [SvelteKit](./sveltekit/)                               | Sentiment analysis in SvelteKit                             | [Demo](https://huggingface.co/spaces/webml-community/sveltekit-server-template) |
+| [Chrome Extension with Plasmo](https://github.com/tantara/transformers.js-chrome) | Chrome extension with Plasmo      | [Demo](https://chromewebstore.google.com/detail/private-ai-assistant-runn/jojlpeliekadmokfnikappfadbjiaghp) |
 
 Check out the Transformers.js [template](https://huggingface.co/new-space?template=static-templates%2Ftransformers.js) on Hugging Face to get started in one click!
