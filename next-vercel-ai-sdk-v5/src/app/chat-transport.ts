@@ -14,9 +14,7 @@ import {
 } from "@built-in-ai/transformers-js";
 import { useModelStore } from "../store/store";
 
-export class TransformersChatTransport
-  implements ChatTransport<TransformersUIMessage>
-{
+export class TransformersChatTransport implements ChatTransport<TransformersUIMessage> {
   private async getModel(): Promise<TransformersJSLanguageModel> {
     return useModelStore.getState().getModelInstance();
   }
