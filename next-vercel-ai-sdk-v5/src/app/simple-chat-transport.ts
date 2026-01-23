@@ -11,7 +11,7 @@ import {
 import {
   TransformersJSLanguageModel,
   TransformersUIMessage,
-} from "@built-in-ai/transformers-js";
+} from "@browser-ai/transformers-js";
 import { useModelStore } from "../store/store";
 
 // Simple version of the chat transport without progress tracking

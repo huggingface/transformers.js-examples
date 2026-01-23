@@ -2,7 +2,7 @@ import { create } from "zustand";
 import {
   TransformersJSLanguageModel,
   transformersJS,
-} from "@built-in-ai/transformers-js";
+} from "@browser-ai/transformers-js";
 import { MODELS } from "../app/models";
 
 interface ModelStore {

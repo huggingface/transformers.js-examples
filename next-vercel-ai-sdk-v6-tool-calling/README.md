@@ -1,6 +1,6 @@
 # Transformers.js and Vercel AI SDK example
 
-A modern Transformers.js chat application powered by [@built-in-ai/transformers-js](https://github.com/jakobhoeg/built-in-ai) and [Vercel AI SDK v6](https://ai-sdk.dev/).
+A modern Transformers.js chat application powered by [@browser-ai/transformers-js](https://github.com/jakobhoeg/browser-ai) and [Vercel AI SDK v6](https://ai-sdk.dev/).
 This app demonstrates how to use Transformers.js models with Vercel AI SDK to quickly build a fully functional AI chat application with tool-calling support.
 
 Components to check out for the implementation:
@@ -25,7 +25,7 @@ Components to check out for the implementation:
 - [Zustand](https://github.com/pmndrs/zustand) for lightweight state management
 - **AI Integration**:
   - [Vercel AI SDK](https://ai-sdk.dev/) for chat interface and streaming
-  - [@built-in-ai/transformers-js](https://github.com/jakobhoeg/built-in-ai) model provider that works as a model provider for Transformers.js to integreate with Vercel AI SDK.
+  - [@browser-ai/transformers-js](https://github.com/jakobhoeg/browser-ai) model provider that works as a model provider for Transformers.js to integreate with Vercel AI SDK.
 
 ## Getting Started
 

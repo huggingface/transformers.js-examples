@@ -1,4 +1,4 @@
-import { WorkerLoadOptions } from "@built-in-ai/transformers-js";
+import { WorkerLoadOptions } from "@browser-ai/transformers-js";
 
 export interface ModelConfig extends Omit<WorkerLoadOptions, "modelId"> {
   id: string;

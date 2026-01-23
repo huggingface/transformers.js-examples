@@ -29,7 +29,7 @@ import {
 } from "@/components/ai-elements/reasoning";
 import { Loader } from "@/components/ai-elements/loader";
 import { MODELS } from "./models";
-import { TransformersUIMessage } from "@built-in-ai/transformers-js";
+import { TransformersUIMessage } from "@browser-ai/transformers-js";
 import { TransformersChatTransport } from "./chat-transport";
 import { useModelStore } from "../store/store";
 import { Progress } from "@/components/ui/progress";
@@ -127,11 +127,11 @@ const ChatBotDemo = () => {
               , {""}
               <a
                 className="text-blue-400 underline"
-                href="https://github.com/jakobhoeg/built-in-ai"
+                href="https://github.com/jakobhoeg/browser-ai"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                @built-in-ai/transformers-js
+                @browser-ai/transformers-js
               </a>{" "}
               and {""}
               <a
