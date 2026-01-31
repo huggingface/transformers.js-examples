@@ -33,7 +33,7 @@ export class TransformersChatTransport implements ChatTransport<TransformersUIMe
     const { chatId, messages, abortSignal, trigger, messageId, ...rest } =
       options;
 
-    const prompt = convertToModelMessages(messages);
+    const prompt = await convertToModelMessages(messages);
     const model = await this.getModel();
 
     const result = streamText({
