@@ -11,6 +11,7 @@
   "dependencies": {
     "@ai-sdk/react": "^3.0.41",
     "@browser-ai/transformers-js": "^2.0.0",
+    "@huggingface/transformers": "^3.8.1",
     "@icons-pack/react-simple-icons": "^13.7.0",
     "@radix-ui/react-avatar": "^1.1.10",
     "@radix-ui/react-collapsible": "^1.1.12",
