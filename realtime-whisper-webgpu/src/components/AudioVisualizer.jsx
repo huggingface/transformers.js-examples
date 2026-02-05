@@ -4,8 +4,9 @@ export function AudioVisualizer({ stream, ...props }) {
   const canvasRef = useRef(null);
 
   const visualize = useCallback((stream) => {
-    const audioContext = new (window.AudioContext ||
-      window.webkitAudioContext)();
+    const audioContext = new (
+      window.AudioContext || window.webkitAudioContext
+    )();
     const source = audioContext.createMediaStreamSource(stream);
     const analyser = audioContext.createAnalyser();
     analyser.fftSize = 2048;

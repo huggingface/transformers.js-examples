@@ -114,8 +114,9 @@ export default function App() {
       .then(async (stream) => {
         if (ignore) return;
 
-        inputAudioContext = new (window.AudioContext ||
-          window.webkitAudioContext)({
+        inputAudioContext = new (
+          window.AudioContext || window.webkitAudioContext
+        )({
           sampleRate: INPUT_SAMPLE_RATE,
         });
 
