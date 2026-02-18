@@ -1,0 +1,31 @@
+export const STORY_DATA = {
+  characters: [
+    "a brave squirrel",
+    "a shy dragon",
+    "a clever fox",
+    "a sleepy astronaut",
+    "a grumpy gnome",
+    "a cheerful princess",
+    "a tiny robot",
+    "a magical cat",
+  ],
+  settings: [
+    "on the moon",
+    "in an enchanted forest",
+    "under the sea",
+    "in a castle made of clouds",
+    "inside a giant's boot",
+    "at a wizard's school",
+    "on a floating island",
+  ],
+  items: [
+    "discovers a map to hidden treasure",
+    "finds a pair of flying shoes",
+    "stumbles upon an invisible cloak",
+    "befriends a friendly ghost",
+    "uncovers a secret door",
+    "meets a wise old man",
+  ],
+  themes: ["Fairy Tale", "Silly", "Adventurous", "Magical", "Bedtime", "Funny"],
+  length: ["Short", "Medium", "Long"],
+};
