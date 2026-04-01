@@ -55,6 +55,7 @@ import {
   ConfirmationAction,
 } from "@/components/ai-elements/confirmation";
 import { lastAssistantMessageIsCompleteWithApprovalResponses } from "ai";
+import { Badge } from "@/components/ui/badge";
 
 const suggestions = [
   "Where am I located?",
@@ -465,6 +466,7 @@ const ChatBotDemo = () => {
                         value={model.id}
                       >
                         {model.name}
+                        {model.supportsTools && <Badge>Tool calling</Badge>}
                       </PromptInputModelSelectItem>
                     ))}
                   </PromptInputModelSelectContent>
