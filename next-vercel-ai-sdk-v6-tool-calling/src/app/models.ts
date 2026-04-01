@@ -17,7 +17,7 @@ export const MODELS: ModelConfig[] = [
     dtype: "q4f16",
     enableThinking: true,
     supportsWorker: true,
-    supportsTools: true
+    supportsTools: true,
   },
   {
     id: "onnx-community/Qwen3.5-0.8B-ONNX",
@@ -44,13 +44,13 @@ export const MODELS: ModelConfig[] = [
     enableThinking: true,
     prependThinkTag: true,
   },
-    {
+  {
     id: "onnx-community/LFM2.5-350M-ONNX",
     name: "LFM2.5 350M",
     device: "webgpu",
     dtype: "q4",
     supportsWorker: true,
-    supportsTools: true
+    supportsTools: true,
   },
   {
     id: "onnx-community/granite-4.0-350m-ONNX-web",
@@ -58,7 +58,7 @@ export const MODELS: ModelConfig[] = [
     device: "webgpu",
     dtype: "fp16",
     supportsWorker: false,
-    supportsTools: true    
+    supportsTools: true,
   },
   {
     id: "onnx-community/granite-4.0-micro-ONNX-web",
@@ -66,7 +66,7 @@ export const MODELS: ModelConfig[] = [
     device: "webgpu",
     dtype: "q4f16",
     supportsWorker: false,
-    supportsTools: true
+    supportsTools: true,
   },
   {
     id: "onnx-community/LFM2-1.2B-Tool-ONNX",
@@ -74,6 +74,6 @@ export const MODELS: ModelConfig[] = [
     device: "webgpu",
     dtype: "fp16",
     supportsWorker: false,
-    supportsTools: true
+    supportsTools: true,
   },
 ];

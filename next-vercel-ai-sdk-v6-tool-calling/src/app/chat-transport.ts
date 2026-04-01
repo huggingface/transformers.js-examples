@@ -56,42 +56,40 @@ export class TransformersChatTransport implements ChatTransport<TransformersUIMe
 
         // Only track progress if model needs downloading
         if (availability !== "available") {
-          await model.createSessionWithProgress(
-            (progress) => {
-              const percent = Math.round(progress * 100);
+          await model.createSessionWithProgress((progress) => {
+            const percent = Math.round(progress * 100);
 
-              if (progress >= 1) {
-                if (downloadProgressId) {
-                  writer.write({
-                    type: "data-modelDownloadProgress",
-                    id: downloadProgressId,
-                    data: {
-                      status: "complete",
-                      progress: 100,
-                      message:
-                        "Model finished downloading! Getting ready for inference...",
-                    },
-                  });
-                }
-                return;
+            if (progress >= 1) {
+              if (downloadProgressId) {
+                writer.write({
+                  type: "data-modelDownloadProgress",
+                  id: downloadProgressId,
+                  data: {
+                    status: "complete",
+                    progress: 100,
+                    message:
+                      "Model finished downloading! Getting ready for inference...",
+                  },
+                });
               }
+              return;
+            }
 
-              if (!downloadProgressId) {
-                downloadProgressId = `download-${Date.now()}`;
-              }
+            if (!downloadProgressId) {
+              downloadProgressId = `download-${Date.now()}`;
+            }
 
-              writer.write({
-                type: "data-modelDownloadProgress",
-                id: downloadProgressId,
-                data: {
-                  status: "downloading",
-                  progress: percent,
-                  message: `Downloading browser AI model... ${percent}%`,
-                },
-                transient: !downloadProgressId,
-              });
-            },
-          );
+            writer.write({
+              type: "data-modelDownloadProgress",
+              id: downloadProgressId,
+              data: {
+                status: "downloading",
+                progress: percent,
+                message: `Downloading browser AI model... ${percent}%`,
+              },
+              transient: !downloadProgressId,
+            });
+          });
         }
 
         const result = streamText({
