@@ -16,6 +16,7 @@ import {
 } from "@browser-ai/transformers-js";
 import { useModelStore } from "../store/store";
 import { createTools } from "./tools/tools";
+import { MODELS } from "./models";
 
 /**
  * Client-side chat transport AI SDK implementation that handles AI model communication
@@ -45,6 +46,8 @@ export class TransformersChatTransport implements ChatTransport<TransformersUIMe
     const { messages, abortSignal } = options;
     const prompt = await convertToModelMessages(messages);
     const model = await this.getModel();
+    const selectedModelId = useModelStore.getState().selectedModel;
+    const modelConfig = MODELS.find((m) => m.id === selectedModelId);
 
     return createUIMessageStream<TransformersUIMessage>({
       execute: async ({ writer }) => {
@@ -53,42 +56,40 @@ export class TransformersChatTransport implements ChatTransport<TransformersUIMe
 
         // Only track progress if model needs downloading
         if (availability !== "available") {
-          await model.createSessionWithProgress(
-            (progress: { progress: number }) => {
-              const percent = Math.round(progress.progress * 100);
+          await model.createSessionWithProgress((progress) => {
+            const percent = Math.round(progress * 100);
 
-              if (progress.progress >= 1) {
-                if (downloadProgressId) {
-                  writer.write({
-                    type: "data-modelDownloadProgress",
-                    id: downloadProgressId,
-                    data: {
-                      status: "complete",
-                      progress: 100,
-                      message:
-                        "Model finished downloading! Getting ready for inference...",
-                    },
-                  });
-                }
-                return;
+            if (progress >= 1) {
+              if (downloadProgressId) {
+                writer.write({
+                  type: "data-modelDownloadProgress",
+                  id: downloadProgressId,
+                  data: {
+                    status: "complete",
+                    progress: 100,
+                    message:
+                      "Model finished downloading! Getting ready for inference...",
+                  },
+                });
               }
+              return;
+            }
 
-              if (!downloadProgressId) {
-                downloadProgressId = `download-${Date.now()}`;
-              }
+            if (!downloadProgressId) {
+              downloadProgressId = `download-${Date.now()}`;
+            }
 
-              writer.write({
-                type: "data-modelDownloadProgress",
-                id: downloadProgressId,
-                data: {
-                  status: "downloading",
-                  progress: percent,
-                  message: `Downloading browser AI model... ${percent}%`,
-                },
-                transient: !downloadProgressId,
-              });
-            },
-          );
+            writer.write({
+              type: "data-modelDownloadProgress",
+              id: downloadProgressId,
+              data: {
+                status: "downloading",
+                progress: percent,
+                message: `Downloading browser AI model... ${percent}%`,
+              },
+              transient: !downloadProgressId,
+            });
+          });
         }
 
         const result = streamText({
@@ -96,12 +97,19 @@ export class TransformersChatTransport implements ChatTransport<TransformersUIMe
             model,
             middleware: extractReasoningMiddleware({
               tagName: "think",
+              startWithReasoning: modelConfig?.prependThinkTag ?? false,
             }),
           }),
-          tools: this.tools,
+          maxOutputTokens: 4092,
+          ...(modelConfig?.supportsTools ? { tools: this.tools } : {}),
           stopWhen: stepCountIs(5),
           messages: prompt,
           abortSignal,
+          providerOptions: {
+            "transformers-js": {
+              enableThinking: modelConfig?.enableThinking ?? false,
+            },
+          },
           onChunk: (event) => {
             if (event.chunk.type === "text-delta" && downloadProgressId) {
               writer.write({
