@@ -10,7 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@huggingface/transformers": "3.7.1",
+    "@huggingface/transformers": "^4.2.0",
     "@tailwindcss/vite": "^4.1.4",
     "kokoro-js": "^1.2.1",
     "lucide-react": "^0.503.0",
