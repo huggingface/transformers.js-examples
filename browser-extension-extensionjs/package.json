@@ -1,0 +1,18 @@
+{
+  "name": "browser-extension-extensionjs",
+  "version": "0.0.1",
+  "description": "Transformers.js | Cross-browser extension built with Extension.js",
+  "type": "module",
+  "scripts": {
+    "dev": "extension dev",
+    "build": "extension build --browser=chrome",
+    "build:edge": "extension build --browser=edge",
+    "build:firefox": "extension build --browser=firefox"
+  },
+  "dependencies": {
+    "@huggingface/transformers": "3.7.1"
+  },
+  "devDependencies": {
+    "extension": "^4.1.28"
+  }
+}

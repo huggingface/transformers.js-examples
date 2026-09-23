@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json.schemastore.org/chrome-manifest.json",
+  "chromium:manifest_version": 3,
+  "firefox:manifest_version": 2,
+  "version": "1.0.0",
+  "firefox:browser_specific_settings": {
+    "gecko": {
+      "id": "transformers-js@extension.js",
+      "data_collection_permissions": {
+        "required": ["none"]
+      }
+    }
+  },
+  "name": "Transformers.js Example",
+  "description": "Adds a sidebar panel that classifies the active page or your selected text with on-device AI models.",
+  "author": "Your Name",
+  "icons": {
+    "16": "images/icon-16.png",
+    "32": "images/icon-32.png",
+    "48": "images/icon-48.png",
+    "64": "images/icon-64.png",
+    "128": "images/icon-128.png"
+  },
+  "chromium:action": {
+    "default_icon": {
+      "16": "images/icon-16.png",
+      "32": "images/icon-32.png",
+      "48": "images/icon-48.png",
+      "64": "images/icon-64.png",
+      "128": "images/icon-128.png"
+    },
+    "default_title": "Open Transformers.js Side Panel"
+  },
+  "firefox:browser_action": {
+    "default_icon": {
+      "16": "images/icon-16.png",
+      "32": "images/icon-32.png",
+      "48": "images/icon-48.png",
+      "64": "images/icon-64.png",
+      "128": "images/icon-128.png"
+    },
+    "default_title": "Open Transformers.js Side Panel"
+  },
+  "chromium:side_panel": {
+    "default_path": "sidebar/index.html",
+    "default_title": "Transformers.js Side Panel"
+  },
+  "firefox:sidebar_action": {
+    "default_panel": "sidebar/index.html",
+    "default_title": "Transformers.js Side Panel",
+    "browser_style": false
+  },
+  "chromium:permissions": ["sidePanel", "storage", "tabs", "contextMenus"],
+  "firefox:permissions": ["storage", "tabs", "contextMenus"],
+  "host_permissions": ["<all_urls>"],
+  "minimum_chrome_version": "92",
+  "background": {
+    "chromium:service_worker": "background.js",
+    "firefox:scripts": ["background.js"]
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content/scripts.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["images/icon.png"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}

@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Transformers.js | Extension Side Panel</title>
+    <link rel="stylesheet" href="sakura.css" />
+  </head>
+  <body>
+    <div id="root">
+      <div class="sidebar_app">
+        <img
+          class="sidebar_logo"
+          src="../images/icon.png"
+          alt="The Transformers.js logo"
+        />
+        <h1 class="sidebar_title">Transformers.js</h1>
+        <h2 class="sidebar_subtitle">
+          Run 🤗 Transformers in a Browser Extension!
+        </h2>
+        <p class="sidebar_description">
+          Learn more in the
+          <a
+            href="https://extension.js.org"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Extension.js docs</a
+          >.
+        </p>
+
+        <div class="sidebar_input_section">
+          <input id="text" placeholder="Enter text here" />
+          <pre id="output"></pre>
+        </div>
+
+        <div class="actions">
+          <button
+            id="use-page"
+            type="button"
+            title="Classify the text of the active page"
+          >
+            Use page text
+          </button>
+          <button
+            id="use-selection"
+            type="button"
+            title="Classify the selection on the active page"
+          >
+            Use selection
+          </button>
+        </div>
+
+        <details class="sidebar_config_section">
+          <summary class="sidebar_config_summary">Model settings</summary>
+
+          <div class="sidebar_input_section">
+            <label class="sidebar_label" for="task">Task</label>
+            <select id="task"></select>
+          </div>
+
+          <div class="sidebar_input_section">
+            <label class="sidebar_label" for="model">Model</label>
+            <select id="model"></select>
+          </div>
+
+          <div class="sidebar_input_section">
+            <label class="sidebar_label" for="customModel"
+              >Custom model (optional)</label
+            >
+            <input id="customModel" placeholder="org/model-id" />
+          </div>
+
+          <div class="sidebar_input_section">
+            <label class="sidebar_label" for="device">Device</label>
+            <select id="device">
+              <option value="webgpu">webgpu</option>
+              <option value="webgl">webgl</option>
+              <option value="cpu">cpu</option>
+            </select>
+          </div>
+
+          <div class="sidebar_input_section">
+            <label class="sidebar_label" for="dtype">Precision</label>
+            <select id="dtype">
+              <option value="q4">q4</option>
+              <option value="q8">q8</option>
+              <option value="fp32">fp32</option>
+            </select>
+          </div>
+        </details>
+      </div>
+    </div>
+    <script type="module" src="scripts.js"></script>
+  </body>
+</html>
