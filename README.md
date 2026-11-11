@@ -10,6 +10,7 @@ A collection of [🤗 Transformers.js](https://huggingface.co/docs/transformers.
 | [Segment Anything WebGPU](./segment-anything-webgpu/)   | WebGPU image segmentation                                   | [Demo](https://huggingface.co/spaces/webml-community/segment-anything-webgpu)   |
 | [Remove Background WebGPU](./remove-background-webgpu/) | WebGPU image background removal                             | [Demo](https://huggingface.co/spaces/webml-community/remove-background-webgpu)  |
 | [PGlite Semantic Search](./pglite-semantic-search/)     | Semantic search                                             | [Demo](https://huggingface.co/spaces/thorwebdev/pglite-semantic-search)         |
+| [Grounded RAG](./grounded-rag/)                         | Cited, verified RAG over the Transformers.js docs           | [Demo](https://huggingface.co/spaces/A7reus/grounded-rag)                       |
 | [Sapiens](./sapiens-node/)                              | Image segmentation, depth, and normal estimation in Node.js | n/a                                                                             |
 | [Bun](./bun/)                                           | Compute text embeddings in [Bun](https://bun.sh/)           | n/a                                                                             |
 | [Deno](./deno-embed/)                                   | Compute text embeddings in [Deno](https://deno.com/)        | n/a                                                                             |
