@@ -1,0 +1,700 @@
+{
+  "summary": {
+    "questions": 12,
+    "answerable": 8,
+    "unanswerable": 4,
+    "hitAt4": 1,
+    "citationRate": 0.875,
+    "groundedRate": 0.875,
+    "keywordAccuracy": 0.875,
+    "refusalAccuracy": 1,
+    "ungroundedCitationRate": 0.5,
+    "ungroundedGroundedRate": 0,
+    "ungroundedKeywordAccuracy": 0.375,
+    "elapsedMs": 110375,
+    "config": {
+      "topK": 4,
+      "threshold": 0.3,
+      "maxNewTokens": 160,
+      "embedModel": "Xenova/all-MiniLM-L6-v2",
+      "generationModel": "onnx-community/Qwen2.5-0.5B-Instruct-ONNX",
+      "nliModel": "Xenova/nli-deberta-v3-xsmall"
+    },
+    "generatedAt": "2026-11-11T04:21:18.083Z"
+  },
+  "results": [
+    {
+      "id": "webgpu",
+      "question": "How do I run a model on WebGPU?",
+      "answerable": true,
+      "expectedDoc": "guides/webgpu",
+      "hitAt4": true,
+      "topScore": 0.7130033710900221,
+      "sources": [
+        {
+          "docId": "guides/webgpu",
+          "heading": "Reporting bugs and providing feedback",
+          "score": 0.7130033710900221
+        },
+        {
+          "docId": "guides/webgpu",
+          "heading": "Running models on WebGPU",
+          "score": 0.6599409092822234
+        },
+        {
+          "docId": "guides/webgpu",
+          "heading": "Running models on WebGPU",
+          "score": 0.6488931214011403
+        },
+        {
+          "docId": "guides/webgpu",
+          "heading": "Usage",
+          "score": 0.6050561384493985
+        }
+      ],
+      "grounded": {
+        "rawAnswer": "To run a model on WebGPU, you need to set the `device` property to `'webgpu'`.",
+        "status": "grounded",
+        "answer": "To run a model on WebGPU, you need to set the `device` property to `'webgpu'`. [4]",
+        "supportedCount": 1,
+        "totalCount": 1,
+        "removedCount": 0,
+        "citations": [
+          4
+        ],
+        "inferredCount": 1,
+        "correctedCount": 0,
+        "refused": false,
+        "keywordHit": true,
+        "ms": 6495
+      },
+      "ungrounded": {
+        "rawAnswer": "To run a model on WebGPU, you need to follow these steps:\n\n1. Install WebGPU and WebAssembly modules.\n2. Create a WebGL context.\n3. Load your model file into the context.\n4. Run the model using the WebGL API.\n\nHere's a step-by-step guide:\n\n1. Install WebGPU and WebAssembly modules:\n   - Visit the WebGPU website (<https://developer.mozilla.org/en-US/docs/Web/API/WebGPU_API>) to download the latest version of WebGPU.\n   - Follow the installation instructions provided by the website.\n\n2. Create a WebGL context:\n   - Use the `WebGLContextCreate` function to create a new WebGL context.\n   - Pass the `WebGLContextCreate` function as an argument to the `WebGLContextCreate` function",
+        "status": "refused_after_filter",
+        "answer": "I don't have enough information in the provided documentation to answer that.",
+        "supportedCount": 0,
+        "totalCount": 12,
+        "removedCount": 12,
+        "citations": [],
+        "inferredCount": 0,
+        "correctedCount": 0,
+        "refused": true,
+        "keywordHit": false,
+        "ms": 11228
+      }
+    },
+    {
+      "id": "dtype-4bit",
+      "question": "Which dtypes are available for 4-bit quantization?",
+      "answerable": true,
+      "expectedDoc": "guides/dtypes",
+      "hitAt4": true,
+      "topScore": 0.6901156226785008,
+      "sources": [
+        {
+          "docId": "guides/dtypes",
+          "heading": "Using quantized models (dtypes)",
+          "score": 0.6901156226785008
+        },
+        {
+          "docId": "guides/dtypes",
+          "heading": "Detecting available dtypes",
+          "score": 0.5685233328914587
+        },
+        {
+          "docId": "guides/dtypes",
+          "heading": "Detecting available dtypes",
+          "score": 0.5484304910960556
+        },
+        {
+          "docId": "guides/dtypes",
+          "heading": "Per-module dtypes",
+          "score": 0.5300092289689219
+        }
+      ],
+      "grounded": {
+        "rawAnswer": "The available dtypes for 4-bit quantization are [ \"q4\", \"q8\", \"fp16\", \"fp32\" ].",
+        "status": "refused_after_filter",
+        "answer": "I don't have enough information in the provided documentation to answer that.",
+        "supportedCount": 0,
+        "totalCount": 1,
+        "removedCount": 1,
+        "citations": [],
+        "inferredCount": 0,
+        "correctedCount": 0,
+        "refused": true,
+        "keywordHit": false,
+        "ms": 8435
+      },
+      "ungrounded": {
+        "rawAnswer": "The dtypes that are available for 4-bit quantization are `uint8` and `uint16`.",
+        "status": "refused_after_filter",
+        "answer": "I don't have enough information in the provided documentation to answer that.",
+        "supportedCount": 0,
+        "totalCount": 1,
+        "removedCount": 1,
+        "citations": [],
+        "inferredCount": 0,
+        "correctedCount": 0,
+        "refused": true,
+        "keywordHit": false,
+        "ms": 2472
+      }
+    },
+    {
+      "id": "remote-loading",
+      "question": "How do I disable remote model loading?",
+      "answerable": true,
+      "expectedDoc": "tutorials/node",
+      "hitAt4": true,
+      "topScore": 0.46626479765959117,
+      "sources": [
+        {
+          "docId": "tutorials/node",
+          "heading": "Use local models",
+          "score": 0.46626479765959117
+        },
+        {
+          "docId": "custom_usage",
+          "heading": "Settings",
+          "score": 0.42674420860742923
+        },
+        {
+          "docId": "tutorials/vanilla-js",
+          "heading": "Step 3: Create an object detection pipeline",
+          "score": 0.29140388738447653
+        },
+        {
+          "docId": "guides/webgpu",
+          "heading": "Usage",
+          "score": 0.2627211444252731
+        }
+      ],
+      "grounded": {
+        "rawAnswer": "To disable remote model loading, you should set `env.allowRemoteModels` to `false`.",
+        "status": "grounded",
+        "answer": "To disable remote model loading, you should set `env.allowRemoteModels` to `false`. [1]",
+        "supportedCount": 1,
+        "totalCount": 1,
+        "removedCount": 0,
+        "citations": [
+          1
+        ],
+        "inferredCount": 1,
+        "correctedCount": 0,
+        "refused": false,
+        "keywordHit": true,
+        "ms": 6830
+      },
+      "ungrounded": {
+        "rawAnswer": "To disable remote model loading, you can follow these steps:\n\n1. Open your game's settings.\n2. Go to the \"General\" tab.\n3. Scroll down and find the section labeled \"Remote Model Loading\".\n4. Check the box next to \"Disable Remote Model Loading\".\n5. Save your changes.\n\nThis will prevent remote model loading from being enabled in your game.",
+        "status": "partially_grounded",
+        "answer": "To disable remote model loading, you can follow these steps: [1]",
+        "supportedCount": 1,
+        "totalCount": 7,
+        "removedCount": 6,
+        "citations": [
+          1
+        ],
+        "inferredCount": 1,
+        "correctedCount": 0,
+        "refused": false,
+        "keywordHit": true,
+        "ms": 4873
+      }
+    },
+    {
+      "id": "streaming",
+      "question": "How do I stream generated text?",
+      "answerable": true,
+      "expectedDoc": "pipelines",
+      "hitAt4": true,
+      "topScore": 0.5662284803624158,
+      "sources": [
+        {
+          "docId": "pipelines",
+          "heading": "Streaming",
+          "score": 0.5662284803624158
+        },
+        {
+          "docId": "integrations/vercel-ai-sdk",
+          "heading": "Streaming text",
+          "score": 0.5043880678131571
+        },
+        {
+          "docId": "pipelines",
+          "heading": "Streaming",
+          "score": 0.5586696701213897
+        },
+        {
+          "docId": "pipelines",
+          "heading": "Runtime parameters",
+          "score": 0.4166923231693401
+        }
+      ],
+      "grounded": {
+        "rawAnswer": "To stream generated text, you can use the `TextStreamer` class provided by the Transformers.js library.",
+        "status": "grounded",
+        "answer": "To stream generated text, you can use the `TextStreamer` class provided by the Transformers.js library. [1]",
+        "supportedCount": 1,
+        "totalCount": 1,
+        "removedCount": 0,
+        "citations": [
+          1
+        ],
+        "inferredCount": 1,
+        "correctedCount": 0,
+        "refused": false,
+        "keywordHit": true,
+        "ms": 5247
+      },
+      "ungrounded": {
+        "rawAnswer": "To stream generated text, you can use tools like Twitch Streamer or YouTube Live Streaming to stream the content of your choice. These platforms allow you to create and share your own content, including generated text. You can also use tools like Twitch Chat or YouTube Chat to chat with other viewers about the content.",
+        "status": "partially_grounded",
+        "answer": "These platforms allow you to create and share your own content, including generated text. [3]",
+        "supportedCount": 1,
+        "totalCount": 3,
+        "removedCount": 2,
+        "citations": [
+          3
+        ],
+        "inferredCount": 1,
+        "correctedCount": 0,
+        "refused": false,
+        "keywordHit": false,
+        "ms": 3732
+      }
+    },
+    {
+      "id": "pipeline-api",
+      "question": "What is the pipeline API?",
+      "answerable": true,
+      "expectedDoc": "pipelines",
+      "hitAt4": true,
+      "topScore": 0.7290401313118707,
+      "sources": [
+        {
+          "docId": "pipelines",
+          "heading": "Reinforcement Learning",
+          "score": 0.7290401313118707
+        },
+        {
+          "docId": "pipelines",
+          "heading": "The basics",
+          "score": 0.6919356084460531
+        },
+        {
+          "docId": "pipelines",
+          "heading": "Explanation:",
+          "score": 0.6828173376687674
+        },
+        {
+          "docId": "pipelines",
+          "heading": "The pipeline API",
+          "score": 0.6584098348411251
+        }
+      ],
+      "grounded": {
+        "rawAnswer": "The pipeline API is a convenient way to use a pretrained model for inference.",
+        "status": "grounded",
+        "answer": "The pipeline API is a convenient way to use a pretrained model for inference. [4]",
+        "supportedCount": 1,
+        "totalCount": 1,
+        "removedCount": 0,
+        "citations": [
+          4
+        ],
+        "inferredCount": 1,
+        "correctedCount": 0,
+        "refused": false,
+        "keywordHit": true,
+        "ms": 3050
+      },
+      "ungrounded": {
+        "rawAnswer": "The pipeline API is an API that provides a way to build and manage pipelines for data processing tasks. It allows developers to define, execute, and monitor data processing workflows.",
+        "status": "refused_after_filter",
+        "answer": "I don't have enough information in the provided documentation to answer that.",
+        "supportedCount": 0,
+        "totalCount": 2,
+        "removedCount": 2,
+        "citations": [],
+        "inferredCount": 0,
+        "correctedCount": 0,
+        "refused": true,
+        "keywordHit": false,
+        "ms": 1882
+      }
+    },
+    {
+      "id": "react",
+      "question": "How do I use Transformers.js in a React app?",
+      "answerable": true,
+      "expectedDoc": "tutorials/react",
+      "hitAt4": true,
+      "topScore": 0.6793914913538148,
+      "sources": [
+        {
+          "docId": "index",
+          "heading": "Reinforcement Learning",
+          "score": 0.6793914913538148
+        },
+        {
+          "docId": "tutorials/react",
+          "heading": "Step 2: Install and configure Transformers.js",
+          "score": 0.650940157969983
+        },
+        {
+          "docId": "tutorials/react",
+          "heading": "Building a React application",
+          "score": 0.6676614715188117
+        },
+        {
+          "docId": "installation",
+          "heading": "Installation",
+          "score": 0.6459482167116176
+        }
+      ],
+      "grounded": {
+        "rawAnswer": "To use Transformers.js in a React app, you can follow these steps:\n\n1. Install the library by running the following command:\n```bash\nnpm i @huggingface/transformers\n```\n\nAlternatively, you can use it in vanilla JS by importing it with the following code:\n```javascript\nimport { pipeline } from 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@4.3.2';\n```\n\nNote that you can also use a CDN or static hosting to include the library in your project.",
+        "status": "grounded",
+        "answer": "To use Transformers.js in a React app, you can follow these steps: [3] Install the library by running the following command: [4]\n\n```bash\nnpm i @huggingface/transformers\n```\n\nAlternatively, you can use it in vanilla JS by importing it with the following code: [4]\n\n```javascript\nimport { pipeline } from 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@4.3.2';\n```\n\nNote that you can also use a CDN or static hosting to include the library in your project. [4]",
+        "supportedCount": 6,
+        "totalCount": 6,
+        "removedCount": 0,
+        "citations": [
+          3,
+          4
+        ],
+        "inferredCount": 4,
+        "correctedCount": 0,
+        "refused": false,
+        "keywordHit": true,
+        "ms": 11693
+      },
+      "ungrounded": {
+        "rawAnswer": "To use Transformers.js in a React app, you can follow these steps:\n\n1. Install Transformers.js: First, you need to install Transformers.js using npm or yarn.\n   ```\n   npm install transformers\n   ```\n   Or\n   ```\n   yarn add transformers\n   ```\n\n2. Import Transformers.js in your React component:\n   ```javascript\n   import { Transformers } from 'transformers';\n\n   // Initialize Transformers with your API key\n   const apiKey = 'YOUR_API_KEY';\n   const transformers = new Transformers(apiKey);\n\n   // Use Transformers functions in your React component\n   ```\n\n3. Use Transformers functions in your React component:\n   ```javascript\n   function MyComponent() {\n       const data = await transformers.get('myData');\n       return <div>{data}</div",
+        "status": "partially_grounded",
+        "answer": "To use Transformers.js in a React app, you can follow these steps: [3]\n\n```\n   npm install transformers\n```\n\nImport Transformers.js in your React component: [3] Use Transformers functions in your React component: [3]",
+        "supportedCount": 4,
+        "totalCount": 12,
+        "removedCount": 8,
+        "citations": [
+          3,
+          4
+        ],
+        "inferredCount": 3,
+        "correctedCount": 0,
+        "refused": false,
+        "keywordHit": true,
+        "ms": 11897
+      }
+    },
+    {
+      "id": "npm-install",
+      "question": "How do I install Transformers.js with npm?",
+      "answerable": true,
+      "expectedDoc": "installation",
+      "hitAt4": true,
+      "topScore": 0.7527682078427193,
+      "sources": [
+        {
+          "docId": "installation",
+          "heading": "Installation",
+          "score": 0.7527682078427193
+        },
+        {
+          "docId": "index",
+          "heading": "Contents",
+          "score": 0.649918290263119
+        },
+        {
+          "docId": "integrations/vercel-ai-sdk",
+          "heading": "Installation",
+          "score": 0.6606904647308895
+        },
+        {
+          "docId": "guides/node-audio-processing",
+          "heading": "Getting started",
+          "score": 0.6098739662785121
+        }
+      ],
+      "grounded": {
+        "rawAnswer": "To install Transformers.js with npm, run:\n```bash\nnpm install @huggingface/transformers\n```",
+        "status": "grounded",
+        "answer": "To install Transformers.js with npm, run: [4]\n\n```bash\nnpm install @huggingface/transformers\n```",
+        "supportedCount": 2,
+        "totalCount": 2,
+        "removedCount": 0,
+        "citations": [
+          4,
+          1
+        ],
+        "inferredCount": 1,
+        "correctedCount": 0,
+        "refused": false,
+        "keywordHit": true,
+        "ms": 6665
+      },
+      "ungrounded": {
+        "rawAnswer": "To install Transformers.js with npm, you can use the following command in your terminal:\n\n```\nnpm install transformers\n```",
+        "status": "partially_grounded",
+        "answer": "```\nnpm install transformers\n```",
+        "supportedCount": 1,
+        "totalCount": 2,
+        "removedCount": 1,
+        "citations": [
+          1
+        ],
+        "inferredCount": 0,
+        "correctedCount": 0,
+        "refused": false,
+        "keywordHit": true,
+        "ms": 2074
+      }
+    },
+    {
+      "id": "onnx-conversion",
+      "question": "How do I convert a PyTorch model to ONNX?",
+      "answerable": true,
+      "expectedDoc": "custom_usage",
+      "hitAt4": true,
+      "topScore": 0.8703924855511549,
+      "sources": [
+        {
+          "docId": "custom_usage",
+          "heading": "Convert your models to ONNX",
+          "score": 0.8703924855511549
+        },
+        {
+          "docId": "index",
+          "heading": "Transformers.js",
+          "score": 0.539443723199546
+        },
+        {
+          "docId": "guides/dtypes",
+          "heading": "Per-module dtypes",
+          "score": 0.46281082008938756
+        },
+        {
+          "docId": "pipelines",
+          "heading": "The basics",
+          "score": 0.47067225472932916
+        }
+      ],
+      "grounded": {
+        "rawAnswer": "To convert a PyTorch model to ONNX, you can use the `@huggingface/transformers` library.",
+        "status": "grounded",
+        "answer": "To convert a PyTorch model to ONNX, you can use the `@huggingface/transformers` library. [2]",
+        "supportedCount": 1,
+        "totalCount": 1,
+        "removedCount": 0,
+        "citations": [
+          2
+        ],
+        "inferredCount": 1,
+        "correctedCount": 0,
+        "refused": false,
+        "keywordHit": true,
+        "ms": 8153
+      },
+      "ungrounded": {
+        "rawAnswer": "To convert a PyTorch model to ONNX, you can follow these steps:\n\n1. **Prepare Your Model**: Ensure your PyTorch model is ready for conversion. This includes defining the model architecture, loading the model weights, and optionally, the input and output tensors.\n\n2. **Convert the Model**: Use the `torch.onnx.export` function from ONNX library to export your PyTorch model to ONNX format. This function takes several arguments, including the model, the input data, and the output file path.\n\n3. **Generate the ONNX Model**: The `torch.onnx.export` function returns an ONNX graph that represents the structure of your model. You can use this graph to generate the ONNX model file.\n\n4. **Save the ONNX Model**:",
+        "status": "refused_after_filter",
+        "answer": "I don't have enough information in the provided documentation to answer that.",
+        "supportedCount": 0,
+        "totalCount": 8,
+        "removedCount": 8,
+        "citations": [],
+        "inferredCount": 0,
+        "correctedCount": 0,
+        "refused": true,
+        "keywordHit": false,
+        "ms": 15563
+      }
+    },
+    {
+      "id": "capital-france",
+      "question": "What is the capital of France?",
+      "answerable": false,
+      "expectedDoc": null,
+      "hitAt4": null,
+      "topScore": 0.1319672302008945,
+      "sources": [
+        {
+          "docId": "tutorials/react",
+          "heading": "Step 1: Initialize the project",
+          "score": 0.1319672302008945
+        },
+        {
+          "docId": "pipelines",
+          "heading": "Natural Language Processing",
+          "score": 0.04822107299989268
+        },
+        {
+          "docId": "guides/private",
+          "heading": "Step 2: Using the access token in Transformers.js",
+          "score": 0.08935995787572071
+        },
+        {
+          "docId": "tutorials/vanilla-js",
+          "heading": "Step 2: JavaScript setup",
+          "score": 0.0495056050323091
+        }
+      ],
+      "grounded": {
+        "rawAnswer": null,
+        "status": "refused",
+        "answer": "I don't have enough information in the provided documentation to answer that.",
+        "supportedCount": 0,
+        "totalCount": 0,
+        "removedCount": 0,
+        "citations": [],
+        "inferredCount": 0,
+        "correctedCount": 0,
+        "refused": true,
+        "refusedBeforeGeneration": true,
+        "keywordHit": null,
+        "ms": 0
+      },
+      "ungrounded": null
+    },
+    {
+      "id": "fine-tuning",
+      "question": "How do I fine-tune a model?",
+      "answerable": false,
+      "expectedDoc": null,
+      "hitAt4": null,
+      "topScore": 0.2678584022939374,
+      "sources": [
+        {
+          "docId": "pipelines",
+          "heading": "Loading",
+          "score": 0.2678584022939374
+        },
+        {
+          "docId": "custom_usage",
+          "heading": "Convert your models to ONNX",
+          "score": 0.20560631791856077
+        },
+        {
+          "docId": "guides/node-audio-processing",
+          "heading": "Creating the application",
+          "score": 0.1903664825116879
+        },
+        {
+          "docId": "guides/webgpu",
+          "heading": "Reporting bugs and providing feedback",
+          "score": 0.20534461310290203
+        }
+      ],
+      "grounded": {
+        "rawAnswer": null,
+        "status": "refused",
+        "answer": "I don't have enough information in the provided documentation to answer that.",
+        "supportedCount": 0,
+        "totalCount": 0,
+        "removedCount": 0,
+        "citations": [],
+        "inferredCount": 0,
+        "correctedCount": 0,
+        "refused": true,
+        "refusedBeforeGeneration": true,
+        "keywordHit": null,
+        "ms": 0
+      },
+      "ungrounded": null
+    },
+    {
+      "id": "world-cup",
+      "question": "Who won the 2022 World Cup?",
+      "answerable": false,
+      "expectedDoc": null,
+      "hitAt4": null,
+      "topScore": 0.19764464851061847,
+      "sources": [
+        {
+          "docId": "tutorials/next-ai-sdk",
+          "heading": "Step 5: Define tools",
+          "score": 0.19764464851061847
+        },
+        {
+          "docId": "guides/webgpu",
+          "heading": "Usage",
+          "score": 0.18432382807477574
+        },
+        {
+          "docId": "pipelines",
+          "heading": "Runtime parameters",
+          "score": 0.1591136462881235
+        },
+        {
+          "docId": "tutorials/vanilla-js",
+          "heading": "Building a Vanilla JavaScript Application",
+          "score": 0.15234452592893474
+        }
+      ],
+      "grounded": {
+        "rawAnswer": null,
+        "status": "refused",
+        "answer": "I don't have enough information in the provided documentation to answer that.",
+        "supportedCount": 0,
+        "totalCount": 0,
+        "removedCount": 0,
+        "citations": [],
+        "inferredCount": 0,
+        "correctedCount": 0,
+        "refused": true,
+        "refusedBeforeGeneration": true,
+        "keywordHit": null,
+        "ms": 0
+      },
+      "ungrounded": null
+    },
+    {
+      "id": "weather",
+      "question": "What is the weather in Paris?",
+      "answerable": false,
+      "expectedDoc": null,
+      "hitAt4": null,
+      "topScore": 0.1521426722606382,
+      "sources": [
+        {
+          "docId": "integrations/vercel-ai-sdk",
+          "heading": "Tool calling",
+          "score": 0.1521426722606382
+        },
+        {
+          "docId": "tutorials/vanilla-js",
+          "heading": "Step 2: JavaScript setup",
+          "score": 0.09335494776753106
+        },
+        {
+          "docId": "guides/webgpu",
+          "heading": "Running models on WebGPU",
+          "score": 0.07027262779483061
+        },
+        {
+          "docId": "tutorials/react",
+          "heading": "Step 3: Design the user interface",
+          "score": 0.06445993636330027
+        }
+      ],
+      "grounded": {
+        "rawAnswer": null,
+        "status": "refused",
+        "answer": "I don't have enough information in the provided documentation to answer that.",
+        "supportedCount": 0,
+        "totalCount": 0,
+        "removedCount": 0,
+        "citations": [],
+        "inferredCount": 0,
+        "correctedCount": 0,
+        "refused": true,
+        "refusedBeforeGeneration": true,
+        "keywordHit": null,
+        "ms": 0
+      },
+      "ungrounded": null
+    }
+  ]
+}
