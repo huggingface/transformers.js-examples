@@ -32,4 +32,4 @@ This project, bootstrapped using [`create-svelte`](https://github.com/sveltejs/k
    ```
 5. Open [http://localhost:5173](http://localhost:5173) with your browser to see the result.
 
-6. You can start editing the page by modifying `src/routes/+page.svelte` (SvelteKit) and `src/routes/api/classify/+server.js` (Transformers.js). The page auto-updates as you edit the file.
+6. You can start editing the page by modifying `src/routes/+page.svelte` (SvelteKit) and `src/routes/api/classify/+server.ts` (Transformers.js). The page auto-updates as you edit the file.
